@@ -1,8 +1,19 @@
-function addClickEventListener(button, f) {
-  button.addEventListener("click", f);
+import { TokenModel } from "../lib/TokenModel.js";
+import { TokenController } from "../lib/TokenController.js";
+
+function addEventListener(element, event, f) {
+  element.addEventListener(event, f);
 }
 
-function element() {
+function addClickEventListener(element, f) {
+  addEventListener(element, "click", f);
+}
+
+function addDragEventListener(element, f) {
+  addEventListener(element, "dragstart", f);
+}
+
+function documentElement() {
   return document.createElement("div");
 }
 
@@ -11,7 +22,7 @@ function pixelsString(a) {
 }
 
 function circleElementWithColor(color) {
-  const circle = element();
+  const circle = documentElement();
   const diameterPixels = 100;
   circle.style.height = pixelsString(diameterPixels);
   circle.style.width = pixelsString(diameterPixels);
@@ -22,7 +33,7 @@ function circleElementWithColor(color) {
 }
 
 function squareElementWithColor(color) {
-  const square = element();
+  const square = documentElement();
   const widthPixels = 100;
   square.style.height = pixelsString(widthPixels);
   square.style.width = pixelsString(widthPixels);
@@ -42,25 +53,43 @@ function clear(parent) {
   }
 }
 
-// https://stackoverflow.com/a/28191966
-function getKeyByValue(map, value) {
-  return Array.from(map.keys()).find((key) => map.get(key) === value);
-}
-
 class TokenControl {
   constructor(parent) {
     this.parent = parent;
-    const grid = element();
+    const grid = documentElement();
     grid.style.display = "grid";
     grid.style.gridTemplateColumns = "repeat(5, 1fr)";
     grid.style.gridTemplateRows = "repeat(2, 1fr)";
     this.redSquare = squareElementWithColor("red");
+    this.redSquare.draggable = true;
+    this.redCircle = circleElementWithColor("red");
+    this.redCircle.draggable = true;
+    this.greenSquare = squareElementWithColor("green");
+    this.greenSquare.draggable = true;
     adopt(parent, grid);
     this.redSquare.style.gridRow = 1;
-    this.redSquare.style.gridColumn = 2;
+    this.redSquare.style.gridColumn = 1;
     adopt(grid, this.redSquare);
+    this.redCircle.style.gridRow = 2;
+    this.redCircle.style.gridColumn = 1;
+    adopt(grid, this.redCircle);
+    this.greenSquare.style.gridRow = 1;
+    this.greenSquare.style.gridColumn = 2;
+    adopt(grid, this.greenSquare);
     addClickEventListener(this.redSquare, (e) => {
       this.observer.notifyThatRedSquareHasBeenClicked();
+    });
+    addDragEventListener(this.redCircle, (e) => {
+      e.dataTransfer.effectAllowed = "move";
+      this.observer.notifyThatRedCircleHasBeenDragged();
+    });
+    addEventListener(this.greenSquare, "dragover", (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = "move";
+    });
+    addEventListener(this.greenSquare, "drop", (e) => {
+      e.preventDefault();
+      this.observer.notifyThatGreenSquareHasBeenDroppedOnto();
     });
   }
 
@@ -78,6 +107,8 @@ export function plugin() {
     trial(display_element, trial) {
       clear(display_element);
       const control = new TokenControl(display_element);
+      const model = new TokenModel();
+      new TokenController(control, model);
     },
     info: {
       parameters: {},
