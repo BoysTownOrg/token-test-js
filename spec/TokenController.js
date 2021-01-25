@@ -1,4 +1,5 @@
 import { TokenController } from "../lib/TokenController.js";
+import { Action, Color } from "../lib/TokenModel.js";
 
 class TokenControlStub {
   clickRedSquare() {
@@ -10,10 +11,23 @@ class TokenControlStub {
   }
 }
 
+class TokenModelStub {
+  response() {
+    return this.response_;
+  }
+
+  submit(response_) {
+    this.response_ = response_;
+  }
+}
+
 describe("Controller", () => {
-  it("should do something when user clicks red square", () => {
+  it("should submit touch action when user clicks red square", () => {
     const control = new TokenControlStub();
-    const controller = new TokenController(control);
+    const model = new TokenModelStub();
+    new TokenController(control, model);
     control.clickRedSquare();
+    expect(model.response().action).toBe(Action.touch);
+    expect(model.response().color).toBe(Color.red);
   });
 });
