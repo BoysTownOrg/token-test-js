@@ -1,0 +1,7 @@
+{
+  "name": "token-test-js",
+  "version": "0.0.1",
+  "devDependencies": {
+    "jasmine": "^3.6.4"
+  }
+}
