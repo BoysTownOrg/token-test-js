@@ -16,7 +16,7 @@ class TokenModelStub {
     return this.response_;
   }
 
-  submit(response_) {
+  submitSingleTokenInteraction(response_) {
     this.response_ = response_;
   }
 }
