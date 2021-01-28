@@ -8,6 +8,18 @@ class TokenControlStub {
     this.observer.notifyThatTokenHasBeenClicked();
   }
 
+  dragRedCircle() {
+    this.tokenDraggedColor_ = "red";
+    this.tokenDraggedIsCircle_ = true;
+    this.observer.notifyThatTokenHasBeenDragged();
+  }
+
+  dropOntoGreenSquare() {
+    this.tokenDroppedOntoColor_ = "green";
+    this.tokenDroppedOntoIsCircle_ = false;
+    this.observer.notifyThatTokenHasBeenDroppedOnto();
+  }
+
   tokenClickedColor() {
     return this.tokenClickedColor_;
   }
@@ -30,18 +42,6 @@ class TokenControlStub {
 
   tokenDroppedOntoIsCircle() {
     return this.tokenDroppedOntoIsCircle_;
-  }
-
-  dragRedCircle() {
-    this.tokenDraggedColor_ = "red";
-    this.tokenDraggedIsCircle_ = true;
-    this.observer.notifyThatTokenHasBeenDragged();
-  }
-
-  dropOntoGreenSquare() {
-    this.tokenDroppedOntoColor_ = "green";
-    this.tokenDroppedOntoIsCircle_ = false;
-    this.observer.notifyThatTokenHasBeenDroppedOnto();
   }
 
   attach(observer) {
