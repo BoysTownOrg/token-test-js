@@ -3,7 +3,17 @@ import { Action, Color, Shape } from "../lib/TokenModel.js";
 
 class TokenControlStub {
   clickRedSquare() {
-    this.observer.notifyThatRedSquareHasBeenClicked();
+    this.tokenClickedColor_ = "red";
+    this.tokenClickedIsCircle_ = false;
+    this.observer.notifyThatTokenHasBeenClicked();
+  }
+
+  tokenClickedColor() {
+    return this.tokenClickedColor_;
+  }
+
+  tokenClickedIsCircle() {
+    return this.tokenClickedIsCircle_;
   }
 
   dragRedCircle() {
