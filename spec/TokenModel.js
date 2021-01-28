@@ -11,9 +11,12 @@ class TrialStub {
 }
 
 describe("Model", () => {
-  it("should submit correct trial", () => {
-    const trial = new TrialStub();
-    const model = new TokenModel(trial, [
+  beforeEach(function () {
+    this.trial = new TrialStub();
+  });
+
+  it("should submit correct trial", function () {
+    const model = new TokenModel(this.trial, [
       {
         token: {
           color: Color.red,
@@ -29,12 +32,11 @@ describe("Model", () => {
       },
       action: Action.touch,
     });
-    expect(trial.result().correct).toBeTrue();
+    expect(this.trial.result().correct).toBeTrue();
   });
 
-  it("should submit incorrect trial", () => {
-    const trial = new TrialStub();
-    const model = new TokenModel(trial, [
+  it("should submit incorrect trial", function () {
+    const model = new TokenModel(this.trial, [
       {
         token: {
           color: Color.red,
@@ -64,12 +66,11 @@ describe("Model", () => {
       },
       action: Action.touch,
     });
-    expect(trial.result().correct).toBeFalse();
+    expect(this.trial.result().correct).toBeFalse();
   });
 
-  it("should submit correct unordered trial", () => {
-    const trial = new TrialStub();
-    const model = new TokenModel(trial, [
+  it("should submit correct unordered trial", function () {
+    const model = new TokenModel(this.trial, [
       [
         {
           token: {
@@ -101,12 +102,11 @@ describe("Model", () => {
       },
       action: Action.touch,
     });
-    expect(trial.result().correct).toBeTrue();
+    expect(this.trial.result().correct).toBeTrue();
   });
 
-  it("should submit incorrect unordered trial", () => {
-    const trial = new TrialStub();
-    const model = new TokenModel(trial, [
+  it("should submit incorrect unordered trial", function () {
+    const model = new TokenModel(this.trial, [
       [
         {
           token: {
@@ -138,6 +138,6 @@ describe("Model", () => {
       },
       action: Action.touch,
     });
-    expect(trial.result().correct).toBeFalse();
+    expect(this.trial.result().correct).toBeFalse();
   });
 });
