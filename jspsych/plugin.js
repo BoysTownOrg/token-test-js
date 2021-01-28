@@ -26,7 +26,11 @@ function circleElementWithColor(color) {
   const diameterPixels = 100;
   circle.style.height = pixelsString(diameterPixels);
   circle.style.width = pixelsString(diameterPixels);
-  circle.style.borderRadius = pixelsString(diameterPixels / 2);
+  const borderWidthPixels = 2;
+  circle.style.borderRadius = pixelsString(
+    diameterPixels / 2 + borderWidthPixels
+  );
+  circle.style.border = `${pixelsString(borderWidthPixels)} solid black`;
   circle.style.margin = "auto";
   circle.style.backgroundColor = color;
   return circle;
@@ -37,6 +41,8 @@ function squareElementWithColor(color) {
   const widthPixels = 100;
   square.style.height = pixelsString(widthPixels);
   square.style.width = pixelsString(widthPixels);
+  const borderWidthPixels = 2;
+  square.style.border = `${pixelsString(borderWidthPixels)} solid black`;
   square.style.margin = "auto";
   square.style.backgroundColor = color;
   return square;
@@ -60,13 +66,14 @@ class TokenControl {
     grid.style.display = "grid";
     grid.style.gridTemplateColumns = "repeat(5, 1fr)";
     grid.style.gridTemplateRows = "repeat(2, 1fr)";
+    grid.style.gridGap = `${pixelsString(20)} ${pixelsString(20)}`;
     adopt(parent, grid);
     const circleColorsInOrder = ["red", "black", "yellow", "white", "green"];
     for (let i = 0; i < circleColorsInOrder.length; i += 1) {
       const circle = circleElementWithColor(circleColorsInOrder[i]);
       circle.draggable = true;
       circle.style.gridRow = 1;
-      circle.style.gridColumn = i;
+      circle.style.gridColumn = i + 1;
       adopt(grid, circle);
       addClickEventListener(circle, (e) => {
         this.tokenClicked = circle;
@@ -92,7 +99,7 @@ class TokenControl {
       const square = squareElementWithColor(squareColorsInOrder[i]);
       square.draggable = true;
       square.style.gridRow = 2;
-      square.style.gridColumn = i;
+      square.style.gridColumn = i + 1;
       adopt(grid, square);
       addClickEventListener(square, (e) => {
         this.tokenClicked = square;
