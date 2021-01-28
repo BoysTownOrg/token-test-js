@@ -20,11 +20,7 @@ function testModel(expectedInteractions, actualInteractions, expectedResult) {
 }
 
 describe("Model", () => {
-  beforeEach(function () {
-    this.trial = new TrialStub();
-  });
-
-  it("should submit correct trial", function () {
+  it("should submit correct trial", () => {
     testModel(
       [
         {
@@ -48,7 +44,7 @@ describe("Model", () => {
     );
   });
 
-  it("should submit incorrect trial", function () {
+  it("should submit incorrect trial", () => {
     testModel(
       [
         {
@@ -86,7 +82,7 @@ describe("Model", () => {
     );
   });
 
-  it("should submit correct unordered trial", function () {
+  it("should submit correct unordered trial", () => {
     testModel(
       [
         [
@@ -126,7 +122,7 @@ describe("Model", () => {
     );
   });
 
-  it("should submit incorrect unordered trial", function () {
+  it("should submit incorrect unordered trial", () => {
     testModel(
       [
         [
