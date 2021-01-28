@@ -10,75 +10,103 @@ class TrialStub {
   }
 }
 
+function testModel(expectedInteractions, actualInteractions, expectedResult) {
+  const trial = new TrialStub();
+  const model = new TokenModel(trial, expectedInteractions);
+  actualInteractions.forEach((interaction) =>
+    model.submitSingleTokenInteraction(interaction)
+  );
+  expect(trial.result().correct).toEqual(expectedResult);
+}
+
 describe("Model", () => {
   beforeEach(function () {
     this.trial = new TrialStub();
   });
 
   it("should submit correct trial", function () {
-    const model = new TokenModel(this.trial, [
-      {
-        token: {
-          color: Color.red,
-          shape: Shape.square,
+    testModel(
+      [
+        {
+          token: {
+            color: Color.red,
+            shape: Shape.square,
+          },
+          action: Action.touch,
         },
-        action: Action.touch,
-      },
-    ]);
-    model.submitSingleTokenInteraction({
-      token: {
-        color: Color.red,
-        shape: Shape.square,
-      },
-      action: Action.touch,
-    });
-    expect(this.trial.result().correct).toBeTrue();
+      ],
+      [
+        {
+          token: {
+            color: Color.red,
+            shape: Shape.square,
+          },
+          action: Action.touch,
+        },
+      ],
+      true
+    );
   });
 
   it("should submit incorrect trial", function () {
-    const model = new TokenModel(this.trial, [
-      {
-        token: {
-          color: Color.red,
-          shape: Shape.square,
+    testModel(
+      [
+        {
+          token: {
+            color: Color.red,
+            shape: Shape.square,
+          },
+          action: Action.touch,
         },
-        action: Action.touch,
-      },
-      {
-        token: {
-          color: Color.green,
-          shape: Shape.circle,
+        {
+          token: {
+            color: Color.green,
+            shape: Shape.circle,
+          },
+          action: Action.touch,
         },
-        action: Action.touch,
-      },
-    ]);
-    model.submitSingleTokenInteraction({
-      token: {
-        color: Color.red,
-        shape: Shape.square,
-      },
-      action: Action.touch,
-    });
-    model.submitSingleTokenInteraction({
-      token: {
-        color: Color.red,
-        shape: Shape.circle,
-      },
-      action: Action.touch,
-    });
-    expect(this.trial.result().correct).toBeFalse();
+      ],
+      [
+        {
+          token: {
+            color: Color.red,
+            shape: Shape.square,
+          },
+          action: Action.touch,
+        },
+        {
+          token: {
+            color: Color.red,
+            shape: Shape.circle,
+          },
+          action: Action.touch,
+        },
+      ],
+      false
+    );
   });
 
   it("should submit correct unordered trial", function () {
-    const model = new TokenModel(this.trial, [
+    testModel(
       [
-        {
-          token: {
-            color: Color.red,
-            shape: Shape.square,
+        [
+          {
+            token: {
+              color: Color.red,
+              shape: Shape.square,
+            },
+            action: Action.touch,
           },
-          action: Action.touch,
-        },
+          {
+            token: {
+              color: Color.green,
+              shape: Shape.circle,
+            },
+            action: Action.touch,
+          },
+        ],
+      ],
+      [
         {
           token: {
             color: Color.green,
@@ -86,35 +114,39 @@ describe("Model", () => {
           },
           action: Action.touch,
         },
+        {
+          token: {
+            color: Color.red,
+            shape: Shape.square,
+          },
+          action: Action.touch,
+        },
       ],
-    ]);
-    model.submitSingleTokenInteraction({
-      token: {
-        color: Color.green,
-        shape: Shape.circle,
-      },
-      action: Action.touch,
-    });
-    model.submitSingleTokenInteraction({
-      token: {
-        color: Color.red,
-        shape: Shape.square,
-      },
-      action: Action.touch,
-    });
-    expect(this.trial.result().correct).toBeTrue();
+      true
+    );
   });
 
   it("should submit incorrect unordered trial", function () {
-    const model = new TokenModel(this.trial, [
+    testModel(
       [
-        {
-          token: {
-            color: Color.red,
-            shape: Shape.square,
+        [
+          {
+            token: {
+              color: Color.red,
+              shape: Shape.square,
+            },
+            action: Action.touch,
           },
-          action: Action.touch,
-        },
+          {
+            token: {
+              color: Color.green,
+              shape: Shape.circle,
+            },
+            action: Action.touch,
+          },
+        ],
+      ],
+      [
         {
           token: {
             color: Color.green,
@@ -122,22 +154,15 @@ describe("Model", () => {
           },
           action: Action.touch,
         },
+        {
+          token: {
+            color: Color.red,
+            shape: Shape.circle,
+          },
+          action: Action.touch,
+        },
       ],
-    ]);
-    model.submitSingleTokenInteraction({
-      token: {
-        color: Color.green,
-        shape: Shape.circle,
-      },
-      action: Action.touch,
-    });
-    model.submitSingleTokenInteraction({
-      token: {
-        color: Color.red,
-        shape: Shape.circle,
-      },
-      action: Action.touch,
-    });
-    expect(this.trial.result().correct).toBeFalse();
+      false
+    );
   });
 });
