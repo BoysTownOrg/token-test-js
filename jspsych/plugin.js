@@ -60,37 +60,59 @@ class TokenControl {
     grid.style.display = "grid";
     grid.style.gridTemplateColumns = "repeat(5, 1fr)";
     grid.style.gridTemplateRows = "repeat(2, 1fr)";
-    this.redSquare = squareElementWithColor("red");
-    this.redSquare.draggable = true;
-    this.redCircle = circleElementWithColor("red");
-    this.redCircle.draggable = true;
-    this.greenSquare = squareElementWithColor("green");
-    this.greenSquare.draggable = true;
     adopt(parent, grid);
-    this.redSquare.style.gridRow = 1;
-    this.redSquare.style.gridColumn = 1;
-    adopt(grid, this.redSquare);
-    this.redCircle.style.gridRow = 2;
-    this.redCircle.style.gridColumn = 1;
-    adopt(grid, this.redCircle);
-    this.greenSquare.style.gridRow = 1;
-    this.greenSquare.style.gridColumn = 2;
-    adopt(grid, this.greenSquare);
-    addClickEventListener(this.redSquare, (e) => {
-      this.observer.notifyThatRedSquareHasBeenClicked();
-    });
-    addDragEventListener(this.redCircle, (e) => {
-      e.dataTransfer.effectAllowed = "move";
-      this.observer.notifyThatRedCircleHasBeenDragged();
-    });
-    addEventListener(this.greenSquare, "dragover", (e) => {
-      e.preventDefault();
-      e.dataTransfer.dropEffect = "move";
-    });
-    addEventListener(this.greenSquare, "drop", (e) => {
-      e.preventDefault();
-      this.observer.notifyThatGreenSquareHasBeenDroppedOnto();
-    });
+    const circleColorsInOrder = ["red", "black", "yellow", "white", "green"];
+    for (let i = 0; i < circleColorsInOrder.length; i += 1) {
+      const circle = circleElementWithColor(circleColorsInOrder[i]);
+      circle.draggable = true;
+      circle.style.gridRow = 1;
+      circle.style.gridColumn = i;
+      adopt(grid, circle);
+      addClickEventListener(circle, (e) => {
+        this.tokenClicked = circle;
+        this.observer.notifyThatTokenHasBeenClicked();
+      });
+      addDragEventListener(circle, (e) => {
+        e.dataTransfer.effectAllowed = "move";
+        this.tokenDragged = circle;
+        this.observer.notifyThatTokenHasBeenDragged();
+      });
+      addEventListener(circle, "dragover", (e) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = "move";
+      });
+      addEventListener(circle, "drop", (e) => {
+        e.preventDefault();
+        this.tokenDroppedOnto = circle;
+        this.observer.notifyThatTokenHasBeenDroppedOnto();
+      });
+    }
+    const squareColorsInOrder = ["black", "red", "white", "green", "yellow"];
+    for (let i = 0; i < squareColorsInOrder.length; i += 1) {
+      const square = squareElementWithColor(squareColorsInOrder[i]);
+      square.draggable = true;
+      square.style.gridRow = 2;
+      square.style.gridColumn = i;
+      adopt(grid, square);
+      addClickEventListener(square, (e) => {
+        this.tokenClicked = square;
+        this.observer.notifyThatTokenHasBeenClicked();
+      });
+      addDragEventListener(square, (e) => {
+        e.dataTransfer.effectAllowed = "move";
+        this.tokenDragged = square;
+        this.observer.notifyThatTokenHasBeenDragged();
+      });
+      addEventListener(square, "dragover", (e) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = "move";
+      });
+      addEventListener(square, "drop", (e) => {
+        e.preventDefault();
+        this.tokenDroppedOnto = square;
+        this.observer.notifyThatTokenHasBeenDroppedOnto();
+      });
+    }
   }
 
   attach(observer) {
