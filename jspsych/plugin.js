@@ -157,15 +157,16 @@ export function plugin() {
   return {
     trial(display_element, trial) {
       clear(display_element);
-      const control = new TokenControl(
-        display_element,
-        "Before touching the yellow circle, pick up the circle above the square that is next to the yellow square."
+      new TokenController(
+        new TokenControl(
+          display_element,
+          "Using the circle that is above the white square, touch the blue circle."
+        ),
+        new TokenModel(
+          new JsPsychTrial(),
+          parseTokenInteractions("use yellow circle to touch blue circle")
+        )
       );
-      const model = new TokenModel(
-        new JsPsychTrial(),
-        parseTokenInteractions("pick up white circle\ntouch yellow circle")
-      );
-      new TokenController(control, model);
     },
     info: {
       parameters: {},
