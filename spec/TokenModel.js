@@ -453,4 +453,61 @@ describe("Model", () => {
       submitDualTokenInteraction
     );
   });
+
+  it("should submit incorrect dual token interaction only unordered trial", () => {
+    testModel(
+      [
+        [
+          {
+            firstToken: {
+              color: Color.red,
+              shape: Shape.circle,
+            },
+            secondToken: {
+              color: Color.green,
+              shape: Shape.square,
+            },
+            action: Action.useToTouch,
+          },
+          {
+            firstToken: {
+              color: Color.yellow,
+              shape: Shape.square,
+            },
+            secondToken: {
+              color: Color.white,
+              shape: Shape.circle,
+            },
+            action: Action.useToTouch,
+          },
+        ],
+      ],
+      [
+        {
+          firstToken: {
+            color: Color.yellow,
+            shape: Shape.square,
+          },
+          secondToken: {
+            color: Color.white,
+            shape: Shape.circle,
+          },
+          action: Action.useToTouch,
+        },
+        {
+          firstToken: {
+            color: Color.yellow,
+            shape: Shape.square,
+          },
+          secondToken: {
+            color: Color.white,
+            shape: Shape.circle,
+          },
+          action: Action.useToTouch,
+        },
+      ],
+      false,
+      submitDualTokenInteraction
+    );
+  });
 });
