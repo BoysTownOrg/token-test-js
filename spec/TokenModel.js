@@ -598,4 +598,45 @@ describe("Model", () => {
     });
     expect(trial.result().correct).toEqual(true);
   });
+
+  it("should submit incorrect mixed token interaction unordered trial", () => {
+    const trial = new TrialStub();
+    const model = new TokenModel(trial, [
+      [
+        {
+          token: {
+            color: Color.red,
+            shape: Shape.square,
+          },
+          action: Action.touch,
+        },
+        {
+          firstToken: {
+            color: Color.yellow,
+            shape: Shape.square,
+          },
+          secondToken: {
+            color: Color.white,
+            shape: Shape.circle,
+          },
+          action: Action.useToTouch,
+        },
+      ],
+    ]);
+    model.submitSingleTokenInteraction({
+      token: {
+        color: Color.red,
+        shape: Shape.square,
+      },
+      action: Action.touch,
+    });
+    model.submitSingleTokenInteraction({
+      token: {
+        color: Color.red,
+        shape: Shape.square,
+      },
+      action: Action.touch,
+    });
+    expect(trial.result().correct).toEqual(false);
+  });
 });
