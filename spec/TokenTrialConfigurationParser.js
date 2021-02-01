@@ -73,4 +73,35 @@ describe("Parser", () => {
       "touch red square, touch yellow circle"
     );
   });
+
+  it("should parse partially unordered single token interactions", () => {
+    expectYields(
+      [
+        [
+          {
+            token: {
+              color: Color.red,
+              shape: Shape.square,
+            },
+            action: Action.touch,
+          },
+          {
+            token: {
+              color: Color.yellow,
+              shape: Shape.circle,
+            },
+            action: Action.touch,
+          },
+        ],
+        {
+          token: {
+            color: Color.white,
+            shape: Shape.circle,
+          },
+          action: Action.pickUp,
+        },
+      ],
+      "touch red square, touch yellow circle\npick up white circle"
+    );
+  });
 });
