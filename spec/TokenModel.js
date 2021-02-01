@@ -19,6 +19,19 @@ function testModel(expectedInteractions, actualInteractions, expectedResult) {
   expect(trial.result().correct).toEqual(expectedResult);
 }
 
+function testModelUsingDualTokenInteractions(
+  expectedInteractions,
+  actualInteractions,
+  expectedResult
+) {
+  const trial = new TrialStub();
+  const model = new TokenModel(trial, expectedInteractions);
+  actualInteractions.forEach((interaction) =>
+    model.submitDualTokenInteraction(interaction)
+  );
+  expect(trial.result().correct).toEqual(expectedResult);
+}
+
 describe("Model", () => {
   it("should submit correct trial", () => {
     testModel(
@@ -267,6 +280,60 @@ describe("Model", () => {
         },
       ],
       false
+    );
+  });
+
+  it("should submit correct dual token interaction only trial", () => {
+    testModelUsingDualTokenInteractions(
+      [
+        {
+          firstToken: {
+            color: Color.red,
+            shape: Shape.circle,
+          },
+          secondToken: {
+            color: Color.green,
+            shape: Shape.square,
+          },
+          action: Action.useToTouch,
+        },
+        {
+          firstToken: {
+            color: Color.yellow,
+            shape: Shape.square,
+          },
+          secondToken: {
+            color: Color.white,
+            shape: Shape.circle,
+          },
+          action: Action.useToTouch,
+        },
+      ],
+      [
+        {
+          firstToken: {
+            color: Color.red,
+            shape: Shape.circle,
+          },
+          secondToken: {
+            color: Color.green,
+            shape: Shape.square,
+          },
+          action: Action.useToTouch,
+        },
+        {
+          firstToken: {
+            color: Color.yellow,
+            shape: Shape.square,
+          },
+          secondToken: {
+            color: Color.white,
+            shape: Shape.circle,
+          },
+          action: Action.useToTouch,
+        },
+      ],
+      true
     );
   });
 });
