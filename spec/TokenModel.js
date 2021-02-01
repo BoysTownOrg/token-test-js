@@ -510,4 +510,47 @@ describe("Model", () => {
       submitDualTokenInteraction
     );
   });
+
+  it("should submit correct mixed token interaction trial", () => {
+    const trial = new TrialStub();
+    const model = new TokenModel(trial, [
+      {
+        token: {
+          color: Color.red,
+          shape: Shape.square,
+        },
+        action: Action.touch,
+      },
+      {
+        firstToken: {
+          color: Color.yellow,
+          shape: Shape.square,
+        },
+        secondToken: {
+          color: Color.white,
+          shape: Shape.circle,
+        },
+        action: Action.useToTouch,
+      },
+    ]);
+    model.submitSingleTokenInteraction({
+      token: {
+        color: Color.red,
+        shape: Shape.square,
+      },
+      action: Action.touch,
+    });
+    model.submitDualTokenInteraction({
+      firstToken: {
+        color: Color.yellow,
+        shape: Shape.square,
+      },
+      secondToken: {
+        color: Color.white,
+        shape: Shape.circle,
+      },
+      action: Action.useToTouch,
+    });
+    expect(trial.result().correct).toEqual(true);
+  });
 });
