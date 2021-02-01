@@ -10,25 +10,23 @@ class TrialStub {
   }
 }
 
-function testModel(expectedInteractions, actualInteractions, expectedResult) {
-  const trial = new TrialStub();
-  const model = new TokenModel(trial, expectedInteractions);
-  actualInteractions.forEach((interaction) =>
-    model.submitSingleTokenInteraction(interaction)
-  );
-  expect(trial.result().correct).toEqual(expectedResult);
+function submitDualTokenInteraction(model, interaction) {
+  model.submitDualTokenInteraction(interaction);
 }
 
-function testModelUsingDualTokenInteractions(
+function submitSingleTokenInteraction(model, interaction) {
+  model.submitSingleTokenInteraction(interaction);
+}
+
+function testModel(
   expectedInteractions,
   actualInteractions,
-  expectedResult
+  expectedResult,
+  submit
 ) {
   const trial = new TrialStub();
   const model = new TokenModel(trial, expectedInteractions);
-  actualInteractions.forEach((interaction) =>
-    model.submitDualTokenInteraction(interaction)
-  );
+  actualInteractions.forEach((interaction) => submit(model, interaction));
   expect(trial.result().correct).toEqual(expectedResult);
 }
 
@@ -53,7 +51,8 @@ describe("Model", () => {
           action: Action.touch,
         },
       ],
-      true
+      true,
+      submitSingleTokenInteraction
     );
   });
 
@@ -91,7 +90,8 @@ describe("Model", () => {
           action: Action.touch,
         },
       ],
-      false
+      false,
+      submitSingleTokenInteraction
     );
   });
 
@@ -131,7 +131,8 @@ describe("Model", () => {
           action: Action.touch,
         },
       ],
-      true
+      true,
+      submitSingleTokenInteraction
     );
   });
 
@@ -171,7 +172,8 @@ describe("Model", () => {
           action: Action.touch,
         },
       ],
-      false
+      false,
+      submitSingleTokenInteraction
     );
   });
 
@@ -225,7 +227,8 @@ describe("Model", () => {
           action: Action.touch,
         },
       ],
-      true
+      true,
+      submitSingleTokenInteraction
     );
   });
 
@@ -279,12 +282,13 @@ describe("Model", () => {
           action: Action.touch,
         },
       ],
-      false
+      false,
+      submitSingleTokenInteraction
     );
   });
 
   it("should submit correct dual token interaction only trial", () => {
-    testModelUsingDualTokenInteractions(
+    testModel(
       [
         {
           firstToken: {
@@ -333,7 +337,8 @@ describe("Model", () => {
           action: Action.useToTouch,
         },
       ],
-      true
+      true,
+      submitDualTokenInteraction
     );
   });
 });
