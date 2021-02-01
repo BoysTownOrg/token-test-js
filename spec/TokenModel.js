@@ -215,4 +215,58 @@ describe("Model", () => {
       true
     );
   });
+
+  it("should submit incorrect partially unordered trial", () => {
+    testModel(
+      [
+        [
+          {
+            token: {
+              color: Color.red,
+              shape: Shape.square,
+            },
+            action: Action.touch,
+          },
+          {
+            token: {
+              color: Color.green,
+              shape: Shape.circle,
+            },
+            action: Action.touch,
+          },
+        ],
+        {
+          token: {
+            color: Color.yellow,
+            shape: Shape.circle,
+          },
+          action: Action.touch,
+        },
+      ],
+      [
+        {
+          token: {
+            color: Color.green,
+            shape: Shape.circle,
+          },
+          action: Action.touch,
+        },
+        {
+          token: {
+            color: Color.red,
+            shape: Shape.square,
+          },
+          action: Action.touch,
+        },
+        {
+          token: {
+            color: Color.yellow,
+            shape: Shape.square,
+          },
+          action: Action.touch,
+        },
+      ],
+      false
+    );
+  });
 });
