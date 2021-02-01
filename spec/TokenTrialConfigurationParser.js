@@ -49,4 +49,28 @@ describe("Parser", () => {
       "touch red square\ntouch yellow circle\npick up green square"
     );
   });
+
+  it("should parse unordered single token interactions", () => {
+    expectYields(
+      [
+        [
+          {
+            token: {
+              color: Color.red,
+              shape: Shape.square,
+            },
+            action: Action.touch,
+          },
+          {
+            token: {
+              color: Color.yellow,
+              shape: Shape.circle,
+            },
+            action: Action.touch,
+          },
+        ],
+      ],
+      "touch red square, touch yellow circle"
+    );
+  });
 });
