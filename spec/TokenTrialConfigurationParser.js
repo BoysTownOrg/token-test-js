@@ -104,4 +104,23 @@ describe("Parser", () => {
       "touch red square, touch yellow circle\npick up white circle"
     );
   });
+
+  it("should parse one dual token interaction", () => {
+    expectYields(
+      [
+        {
+          firstToken: {
+            color: Color.white,
+            shape: Shape.square,
+          },
+          secondToken: {
+            color: Color.yellow,
+            shape: Shape.circle,
+          },
+          action: Action.useToTouch,
+        },
+      ],
+      "use white square to touch yellow circle"
+    );
+  });
 });
