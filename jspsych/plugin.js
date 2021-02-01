@@ -1,5 +1,6 @@
 import { TokenModel } from "../lib/TokenModel.js";
 import { TokenController } from "../lib/TokenController.js";
+import { parseTokenInteractions } from "../lib/TokenTrialConfigurationParser.js";
 
 function addEventListener(element, event, f) {
   element.addEventListener(event, f);
@@ -60,8 +61,11 @@ function clear(parent) {
 }
 
 class TokenControl {
-  constructor(parent) {
+  constructor(parent, instructionMessage) {
     this.parent = parent;
+    const instructions = documentElement();
+    instructions.textContent = instructionMessage;
+    adopt(parent, instructions);
     const grid = documentElement();
     grid.style.display = "grid";
     grid.style.gridTemplateColumns = "repeat(5, 1fr)";
@@ -118,6 +122,22 @@ class TokenControl {
     return this.tokenClicked.style.borderRadius !== "";
   }
 
+  tokenDraggedColor() {
+    return this.tokenDragged.style.backgroundColor;
+  }
+
+  tokenDraggedIsCircle() {
+    return this.tokenDragged.style.borderRadius !== "";
+  }
+
+  tokenDroppedOntoColor() {
+    return this.tokenDroppedOnto.style.backgroundColor;
+  }
+
+  tokenDroppedOntoIsCircle() {
+    return this.tokenDroppedOnto.style.borderRadius !== "";
+  }
+
   attach(observer) {
     this.observer = observer;
   }
@@ -127,12 +147,24 @@ class TokenControl {
   }
 }
 
+class JsPsychTrial {
+  conclude(result) {
+    jsPsych.finishTrial(result);
+  }
+}
+
 export function plugin() {
   return {
     trial(display_element, trial) {
       clear(display_element);
-      const control = new TokenControl(display_element);
-      const model = new TokenModel();
+      const control = new TokenControl(
+        display_element,
+        "Before touching the yellow circle, pick up the circle above the square that is next to the yellow square."
+      );
+      const model = new TokenModel(
+        new JsPsychTrial(),
+        parseTokenInteractions("pick up white circle\ntouch yellow circle")
+      );
       new TokenController(control, model);
     },
     info: {
