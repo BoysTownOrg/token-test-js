@@ -75,13 +75,13 @@ class TokenControl {
     this.addTokenRow(
       grid,
       1,
-      ["red", "black", "yellow", "white", "green"],
+      ["red", "blue", "yellow", "white", "green"],
       circleElementWithColor
     );
     this.addTokenRow(
       grid,
       2,
-      ["black", "red", "white", "green", "yellow"],
+      ["blue", "red", "white", "green", "yellow"],
       squareElementWithColor
     );
   }
