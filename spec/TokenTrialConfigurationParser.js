@@ -20,4 +20,33 @@ describe("Parser", () => {
       "touch red square"
     );
   });
+
+  it("should parse multiple single token interactions", () => {
+    expectYields(
+      [
+        {
+          token: {
+            color: Color.red,
+            shape: Shape.square,
+          },
+          action: Action.touch,
+        },
+        {
+          token: {
+            color: Color.yellow,
+            shape: Shape.circle,
+          },
+          action: Action.touch,
+        },
+        {
+          token: {
+            color: Color.green,
+            shape: Shape.square,
+          },
+          action: Action.pickUp,
+        },
+      ],
+      "touch red square\ntouch yellow circle\npick up green square"
+    );
+  });
 });
