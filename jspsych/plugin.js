@@ -129,18 +129,21 @@ function addTokenRow(
   }
 }
 
+function gridWithRows(n) {
+  const grid = divElement();
+  grid.style.display = "grid";
+  grid.style.gridTemplateColumns = "repeat(5, 1fr)";
+  grid.style.gridTemplateRows = `repeat(${n}, 1fr)`;
+  grid.style.gridGap = `${pixelsString(60)} ${pixelsString(60)}`;
+  return grid;
+}
+
 class TokenControl {
   constructor(parent, instructionMessage) {
-    this.parent = parent;
     const instructions = divElement();
     instructions.textContent = instructionMessage;
     adopt(parent, instructions);
-    const grid = divElement();
-    grid.style.display = "grid";
-    grid.style.gridTemplateColumns = "repeat(5, 1fr)";
-    grid.style.gridTemplateRows = "repeat(2, 1fr)";
-    grid.style.gridGap = `${pixelsString(60)} ${pixelsString(60)}`;
-    adopt(parent, grid);
+    const grid = gridWithRows(2);
     this.addTokenRow(
       grid,
       1,
@@ -153,6 +156,8 @@ class TokenControl {
       ["black", "red", "white", "green", "yellow"],
       squareElementWithColor
     );
+    adopt(parent, grid);
+    this.parent = parent;
   }
 
   addTokenRow(grid, row, colors, create) {
@@ -207,16 +212,10 @@ class TokenControl {
 
 class SizedTokenControl {
   constructor(parent, instructionMessage) {
-    this.parent = parent;
     const instructions = divElement();
     instructions.textContent = instructionMessage;
     adopt(parent, instructions);
-    const grid = divElement();
-    grid.style.display = "grid";
-    grid.style.gridTemplateColumns = "repeat(5, 1fr)";
-    grid.style.gridTemplateRows = "repeat(4, 1fr)";
-    grid.style.gridGap = `${pixelsString(60)} ${pixelsString(60)}`;
-    adopt(parent, grid);
+    const grid = gridWithRows(4);
     this.addTokenRow(
       grid,
       1,
@@ -241,6 +240,8 @@ class SizedTokenControl {
       ["yellow", "green", "red", "black", "white"],
       smallSquareElementWithColor
     );
+    adopt(parent, grid);
+    this.parent = parent;
   }
 
   addTokenRow(grid, row, colors, create) {
