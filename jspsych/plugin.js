@@ -100,18 +100,18 @@ function addTokenRow(
   grid,
   row,
   colors,
-  create,
+  createTokenWithColor,
   onClicked,
   onDragged,
   onDroppedOnto
 ) {
   for (let i = 0; i < colors.length; i += 1) {
-    const token = create(colors[i]);
+    const token = createTokenWithColor(colors[i]);
     token.draggable = true;
     token.style.gridRow = row;
     token.style.gridColumn = i + 1;
     adopt(grid, token);
-    addClickEventListener(token, (e) => {
+    addClickEventListener(token, () => {
       onClicked(token);
     });
     addDragEventListener(token, (e) => {
@@ -129,7 +129,7 @@ function addTokenRow(
   }
 }
 
-function gridWithRows(n) {
+function tokenGridWithRows(n) {
   const grid = divElement();
   grid.style.display = "grid";
   grid.style.gridTemplateColumns = "repeat(5, 1fr)";
@@ -143,7 +143,7 @@ class TokenControl {
     const instructions = divElement();
     instructions.textContent = instructionMessage;
     adopt(parent, instructions);
-    const grid = gridWithRows(2);
+    const grid = tokenGridWithRows(2);
     this.addTokenRow(
       grid,
       1,
@@ -215,7 +215,7 @@ class SizedTokenControl {
     const instructions = divElement();
     instructions.textContent = instructionMessage;
     adopt(parent, instructions);
-    const grid = gridWithRows(4);
+    const grid = tokenGridWithRows(4);
     this.addTokenRow(
       grid,
       1,
@@ -312,12 +312,15 @@ class JsPsychTrial {
   }
 }
 
-export function plugin() {
+function pluginUsingControllerAndControlFactories(
+  createTokenController,
+  createTokenControl
+) {
   return {
     trial(display_element, trial) {
       clear(display_element);
-      new TokenController(
-        new TokenControl(display_element, trial.sentence),
+      createTokenController(
+        createTokenControl(display_element, trial.sentence),
         new TokenModel(
           new JsPsychTrial(),
           parseTokenInteractions(trial.commandString)
@@ -330,20 +333,17 @@ export function plugin() {
   };
 }
 
+export function plugin() {
+  return pluginUsingControllerAndControlFactories(
+    (control, model) => new TokenController(control, model),
+    (display_element, sentence) => new TokenControl(display_element, sentence)
+  );
+}
+
 export function twoSizesPlugin() {
-  return {
-    trial(display_element, trial) {
-      clear(display_element);
-      new SizedTokenController(
-        new SizedTokenControl(display_element, trial.sentence),
-        new TokenModel(
-          new JsPsychTrial(),
-          parseTokenInteractions(trial.commandString)
-        )
-      );
-    },
-    info: {
-      parameters: {},
-    },
-  };
+  return pluginUsingControllerAndControlFactories(
+    (control, model) => new SizedTokenController(control, model),
+    (display_element, sentence) =>
+      new SizedTokenControl(display_element, sentence)
+  );
 }
