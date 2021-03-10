@@ -205,13 +205,13 @@ class SizedTokenControl {
     this.addTokenRow(
       grid,
       3,
-      ["red", "black", "yellow", "white", "green"],
+      ["white", "black", "yellow", "red", "green"],
       smallCircleElementWithColor
     );
     this.addTokenRow(
       grid,
       4,
-      ["black", "red", "white", "green", "yellow"],
+      ["yellow", "green", "red", "black", "white"],
       smallSquareElementWithColor
     );
   }
