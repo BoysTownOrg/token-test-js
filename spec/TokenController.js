@@ -1,5 +1,8 @@
-import { TokenController } from "../lib/TokenController.js";
-import { Action, Color, Shape } from "../lib/TokenModel.js";
+import {
+  TokenController,
+  SizedTokenController,
+} from "../lib/TokenController.js";
+import { Action, Color, Shape, Size } from "../lib/TokenModel.js";
 
 class TokenControlStub {
   clickRedSquare() {
@@ -49,6 +52,31 @@ class TokenControlStub {
   }
 }
 
+class SizedTokenControlStub {
+  clickSmallRedSquare() {
+    this.tokenClickedColor_ = "red";
+    this.tokenClickedIsCircle_ = false;
+    this.tokenClickedIsSmall_ = true;
+    this.observer.notifyThatTokenHasBeenClicked();
+  }
+
+  tokenClickedColor() {
+    return this.tokenClickedColor_;
+  }
+
+  tokenClickedIsCircle() {
+    return this.tokenClickedIsCircle_;
+  }
+
+  tokenClickedIsSmall() {
+    return this.tokenClickedIsSmall_;
+  }
+
+  attach(observer) {
+    this.observer = observer;
+  }
+}
+
 class TokenModelStub {
   singleTokenInteraction() {
     return this.singleTokenInteraction_;
@@ -58,6 +86,10 @@ class TokenModelStub {
     return this.dualTokenInteraction_;
   }
 
+  singleSizedTokenInteraction() {
+    return this.singleSizedTokenInteraction_;
+  }
+
   submitSingleTokenInteraction(singleTokenInteraction_) {
     this.singleTokenInteraction_ = singleTokenInteraction_;
   }
@@ -65,9 +97,13 @@ class TokenModelStub {
   submitDualTokenInteraction(dualTokenInteraction_) {
     this.dualTokenInteraction_ = dualTokenInteraction_;
   }
+
+  submitSingleSizedTokenInteraction(singleSizedTokenInteraction_) {
+    this.singleSizedTokenInteraction_ = singleSizedTokenInteraction_;
+  }
 }
 
-describe("Controller", () => {
+describe("TokenController", () => {
   beforeEach(function () {
     this.control = new TokenControlStub();
     this.model = new TokenModelStub();
@@ -94,6 +130,28 @@ describe("Controller", () => {
     );
     expect(this.model.dualTokenInteraction().secondToken.shape).toBe(
       Shape.square
+    );
+  });
+});
+
+describe("SizedTokenController", () => {
+  beforeEach(function () {
+    this.control = new SizedTokenControlStub();
+    this.model = new TokenModelStub();
+    new SizedTokenController(this.control, this.model);
+  });
+
+  it("should submit touch action when user clicks small red square", function () {
+    this.control.clickSmallRedSquare();
+    expect(this.model.singleSizedTokenInteraction().action).toBe(Action.touch);
+    expect(this.model.singleSizedTokenInteraction().token.color).toBe(
+      Color.red
+    );
+    expect(this.model.singleSizedTokenInteraction().token.shape).toBe(
+      Shape.square
+    );
+    expect(this.model.singleSizedTokenInteraction().token.size).toBe(
+      Size.small
     );
   });
 });
