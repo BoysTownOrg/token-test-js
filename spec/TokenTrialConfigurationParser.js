@@ -1,4 +1,4 @@
-import { Action, Color, Shape } from "../lib/TokenModel.js";
+import { Action, Color, Shape, Size } from "../lib/TokenModel.js";
 import { parseTokenInteractions } from "../lib/TokenTrialConfigurationParser.js";
 
 function expectYields(interactions, text) {
@@ -18,6 +18,22 @@ describe("Parser", () => {
         },
       ],
       "touch red square"
+    );
+  });
+
+  it("should parse one single sized token interaction", () => {
+    expectYields(
+      [
+        {
+          token: {
+            color: Color.red,
+            shape: Shape.square,
+            size: Size.small,
+          },
+          action: Action.touch,
+        },
+      ],
+      "touch small red square"
     );
   });
 
