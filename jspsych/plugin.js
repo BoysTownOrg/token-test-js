@@ -32,9 +32,8 @@ function tokenBorder(borderWidthPixels) {
   return `${pixelsString(borderWidthPixels)} solid black`;
 }
 
-function circleElementWithColor(color) {
+function circleElementWithColorAndDiameterPixels(color, diameterPixels) {
   const circle = divElement();
-  const diameterPixels = tokenWidthPixels;
   circle.style.height = pixelsString(diameterPixels);
   circle.style.width = pixelsString(diameterPixels);
   const borderWidthPixels = tokenBorderWidthPixels;
@@ -45,43 +44,32 @@ function circleElementWithColor(color) {
   circle.style.margin = "auto";
   circle.style.backgroundColor = color;
   return circle;
+}
+
+function circleElementWithColor(color) {
+  return circleElementWithColorAndDiameterPixels(color, tokenWidthPixels);
 }
 
 function smallCircleElementWithColor(color) {
-  const circle = divElement();
-  const diameterPixels = smallTokenWidthPixels;
-  circle.style.height = pixelsString(diameterPixels);
-  circle.style.width = pixelsString(diameterPixels);
-  const borderWidthPixels = tokenBorderWidthPixels;
-  circle.style.borderRadius = pixelsString(
-    diameterPixels / 2 + borderWidthPixels
-  );
-  circle.style.border = tokenBorder(borderWidthPixels);
-  circle.style.margin = "auto";
-  circle.style.backgroundColor = color;
-  return circle;
+  return circleElementWithColorAndDiameterPixels(color, smallTokenWidthPixels);
+}
+
+function squareElementWithColorAndWidthPixels(color, widthPixels) {
+  const square = divElement();
+  square.style.height = pixelsString(widthPixels);
+  square.style.width = pixelsString(widthPixels);
+  square.style.border = tokenBorder(tokenBorderWidthPixels);
+  square.style.margin = "auto";
+  square.style.backgroundColor = color;
+  return square;
 }
 
 function squareElementWithColor(color) {
-  const square = divElement();
-  const widthPixels = tokenWidthPixels;
-  square.style.height = pixelsString(widthPixels);
-  square.style.width = pixelsString(widthPixels);
-  square.style.border = tokenBorder(tokenBorderWidthPixels);
-  square.style.margin = "auto";
-  square.style.backgroundColor = color;
-  return square;
+  return squareElementWithColorAndWidthPixels(color, tokenWidthPixels);
 }
 
 function smallSquareElementWithColor(color) {
-  const square = divElement();
-  const widthPixels = smallTokenWidthPixels;
-  square.style.height = pixelsString(widthPixels);
-  square.style.width = pixelsString(widthPixels);
-  square.style.border = tokenBorder(tokenBorderWidthPixels);
-  square.style.margin = "auto";
-  square.style.backgroundColor = color;
-  return square;
+  return squareElementWithColorAndWidthPixels(color, smallTokenWidthPixels);
 }
 
 function adopt(parent, child) {
@@ -93,6 +81,18 @@ function clear(parent) {
   while (parent.firstChild) {
     parent.removeChild(parent.lastChild);
   }
+}
+
+function backgroundColor(token) {
+  return token.style.backgroundColor;
+}
+
+function isCircle(token) {
+  return token.style.borderRadius !== "";
+}
+
+function isSmall(token) {
+  return token.style.width === pixelsString(smallTokenWidthPixels);
 }
 
 class TokenControl {
@@ -150,27 +150,27 @@ class TokenControl {
   }
 
   tokenClickedColor() {
-    return this.tokenClicked.style.backgroundColor;
+    return backgroundColor(this.tokenClicked);
   }
 
   tokenClickedIsCircle() {
-    return this.tokenClicked.style.borderRadius !== "";
+    return isCircle(this.tokenClicked);
   }
 
   tokenDraggedColor() {
-    return this.tokenDragged.style.backgroundColor;
+    return backgroundColor(this.tokenDragged);
   }
 
   tokenDraggedIsCircle() {
-    return this.tokenDragged.style.borderRadius !== "";
+    return isCircle(this.tokenDragged);
   }
 
   tokenDroppedOntoColor() {
-    return this.tokenDroppedOnto.style.backgroundColor;
+    return backgroundColor(this.tokenDroppedOnto);
   }
 
   tokenDroppedOntoIsCircle() {
-    return this.tokenDroppedOnto.style.borderRadius !== "";
+    return isCircle(this.tokenDroppedOnto);
   }
 
   attach(observer) {
@@ -245,45 +245,39 @@ class SizedTokenControl {
   }
 
   tokenClickedColor() {
-    return this.tokenClicked.style.backgroundColor;
+    return backgroundColor(this.tokenClicked);
   }
 
   tokenClickedIsCircle() {
-    return this.tokenClicked.style.borderRadius !== "";
+    return isCircle(this.tokenClicked);
   }
 
   tokenClickedIsSmall() {
-    return (
-      this.tokenClicked.style.width === pixelsString(smallTokenWidthPixels)
-    );
+    return isSmall(this.tokenClicked);
   }
 
   tokenDraggedColor() {
-    return this.tokenDragged.style.backgroundColor;
+    return backgroundColor(this.tokenDragged);
   }
 
   tokenDraggedIsCircle() {
-    return this.tokenDragged.style.borderRadius !== "";
+    return isCircle(this.tokenDragged);
   }
 
   tokenDraggedIsSmall() {
-    return (
-      this.tokenDragged.style.width === pixelsString(smallTokenWidthPixels)
-    );
+    return isSmall(this.tokenDragged);
   }
 
   tokenDroppedOntoColor() {
-    return this.tokenDroppedOnto.style.backgroundColor;
+    return backgroundColor(this.tokenDroppedOnto);
   }
 
   tokenDroppedOntoIsCircle() {
-    return this.tokenDroppedOnto.style.borderRadius !== "";
+    return isCircle(this.tokenDroppedOnto);
   }
 
   tokenDroppedOntoIsSmall() {
-    return (
-      this.tokenDroppedOnto.style.width === pixelsString(smallTokenWidthPixels)
-    );
+    return isSmall(this.tokenDroppedOnto);
   }
 
   attach(observer) {
