@@ -75,7 +75,7 @@ function squareElementWithColor(color) {
 
 function smallSquareElementWithColor(color) {
   const square = divElement();
-  const widthPixels = tokenWidthPixels;
+  const widthPixels = smallTokenWidthPixels;
   square.style.height = pixelsString(widthPixels);
   square.style.width = pixelsString(widthPixels);
   square.style.border = tokenBorder(tokenBorderWidthPixels);
