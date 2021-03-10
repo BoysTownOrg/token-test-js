@@ -22,6 +22,10 @@ function submitSingleSizedTokenInteraction(model, interaction) {
   model.submitSingleSizedTokenInteraction(interaction);
 }
 
+function submitDualSizedTokenInteraction(model, interaction) {
+  model.submitDualSizedTokenInteraction(interaction);
+}
+
 function testModel(
   expectedInteractions,
   actualInteractions,
@@ -370,6 +374,43 @@ describe("Model", () => {
       ],
       true,
       submitDualTokenInteraction
+    );
+  });
+
+  it("should submit correct dual sized token interaction trial", () => {
+    testModel(
+      [
+        {
+          firstToken: {
+            color: Color.red,
+            shape: Shape.circle,
+            size: Size.small,
+          },
+          secondToken: {
+            color: Color.green,
+            shape: Shape.square,
+            size: Size.large,
+          },
+          action: Action.useToTouch,
+        },
+      ],
+      [
+        {
+          firstToken: {
+            color: Color.red,
+            shape: Shape.circle,
+            size: Size.small,
+          },
+          secondToken: {
+            color: Color.green,
+            shape: Shape.square,
+            size: Size.large,
+          },
+          action: Action.useToTouch,
+        },
+      ],
+      true,
+      submitDualSizedTokenInteraction
     );
   });
 
