@@ -60,6 +60,44 @@ class SizedTokenControlStub {
     this.observer.notifyThatTokenHasBeenClicked();
   }
 
+  dragSmallRedCircle() {
+    this.tokenDraggedColor_ = "red";
+    this.tokenDraggedIsCircle_ = true;
+    this.tokenDraggedIsSmall_ = true;
+    this.observer.notifyThatTokenHasBeenDragged();
+  }
+
+  dropOntoLargeGreenSquare() {
+    this.tokenDroppedOntoColor_ = "green";
+    this.tokenDroppedOntoIsCircle_ = false;
+    this.tokenDroppedOntoIsSmall_ = false;
+    this.observer.notifyThatTokenHasBeenDroppedOnto();
+  }
+
+  tokenDraggedColor() {
+    return this.tokenDraggedColor_;
+  }
+
+  tokenDraggedIsCircle() {
+    return this.tokenDraggedIsCircle_;
+  }
+
+  tokenDroppedOntoColor() {
+    return this.tokenDroppedOntoColor_;
+  }
+
+  tokenDroppedOntoIsCircle() {
+    return this.tokenDroppedOntoIsCircle_;
+  }
+
+  tokenDraggedIsSmall() {
+    return this.tokenDraggedIsSmall_;
+  }
+
+  tokenDroppedOntoIsSmall() {
+    return this.tokenDroppedOntoIsSmall_;
+  }
+
   tokenClickedColor() {
     return this.tokenClickedColor_;
   }
@@ -90,6 +128,10 @@ class TokenModelStub {
     return this.singleSizedTokenInteraction_;
   }
 
+  dualSizedTokenInteraction() {
+    return this.dualSizedTokenInteraction_;
+  }
+
   submitSingleTokenInteraction(singleTokenInteraction_) {
     this.singleTokenInteraction_ = singleTokenInteraction_;
   }
@@ -100,6 +142,10 @@ class TokenModelStub {
 
   submitSingleSizedTokenInteraction(singleSizedTokenInteraction_) {
     this.singleSizedTokenInteraction_ = singleSizedTokenInteraction_;
+  }
+
+  submitDualSizedTokenInteraction(dualSizedTokenInteraction_) {
+    this.dualSizedTokenInteraction_ = dualSizedTokenInteraction_;
   }
 }
 
@@ -152,6 +198,32 @@ describe("SizedTokenController", () => {
     );
     expect(this.model.singleSizedTokenInteraction().token.size).toBe(
       Size.small
+    );
+  });
+
+  it("should submit use-to-touch action when user drags small red circle onto large green square", function () {
+    this.control.dragSmallRedCircle();
+    this.control.dropOntoLargeGreenSquare();
+    expect(this.model.dualSizedTokenInteraction().action).toBe(
+      Action.useToTouch
+    );
+    expect(this.model.dualSizedTokenInteraction().firstToken.color).toBe(
+      Color.red
+    );
+    expect(this.model.dualSizedTokenInteraction().firstToken.shape).toBe(
+      Shape.circle
+    );
+    expect(this.model.dualSizedTokenInteraction().firstToken.size).toBe(
+      Size.small
+    );
+    expect(this.model.dualSizedTokenInteraction().secondToken.color).toBe(
+      Color.green
+    );
+    expect(this.model.dualSizedTokenInteraction().secondToken.shape).toBe(
+      Shape.square
+    );
+    expect(this.model.dualSizedTokenInteraction().secondToken.size).toBe(
+      Size.large
     );
   });
 });
