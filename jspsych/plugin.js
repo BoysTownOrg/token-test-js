@@ -24,7 +24,7 @@ function pixelsString(a) {
 
 function circleElementWithColor(color) {
   const circle = documentElement();
-  const diameterPixels = 100;
+  const diameterPixels = 150;
   circle.style.height = pixelsString(diameterPixels);
   circle.style.width = pixelsString(diameterPixels);
   const borderWidthPixels = 2;
@@ -39,7 +39,7 @@ function circleElementWithColor(color) {
 
 function squareElementWithColor(color) {
   const square = documentElement();
-  const widthPixels = 100;
+  const widthPixels = 150;
   square.style.height = pixelsString(widthPixels);
   square.style.width = pixelsString(widthPixels);
   const borderWidthPixels = 2;
@@ -70,7 +70,7 @@ class TokenControl {
     grid.style.display = "grid";
     grid.style.gridTemplateColumns = "repeat(5, 1fr)";
     grid.style.gridTemplateRows = "repeat(2, 1fr)";
-    grid.style.gridGap = `${pixelsString(20)} ${pixelsString(20)}`;
+    grid.style.gridGap = `${pixelsString(40)} ${pixelsString(40)}`;
     adopt(parent, grid);
     this.addTokenRow(
       grid,
@@ -158,10 +158,7 @@ export function plugin() {
     trial(display_element, trial) {
       clear(display_element);
       new TokenController(
-        new TokenControl(
-          display_element,
-          trial.sentence
-        ),
+        new TokenControl(display_element, trial.sentence),
         new TokenModel(
           new JsPsychTrial(),
           parseTokenInteractions(trial.commandString)
