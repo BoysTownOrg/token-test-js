@@ -28,6 +28,7 @@ function pixelsString(a) {
 const tokenWidthPixels = 150;
 const smallTokenWidthPixels = 100;
 const tokenBorderWidthPixels = 2;
+
 function tokenBorder(borderWidthPixels) {
   return `${pixelsString(borderWidthPixels)} solid black`;
 }
@@ -95,6 +96,39 @@ function isSmall(token) {
   return token.style.width === pixelsString(smallTokenWidthPixels);
 }
 
+function addTokenRow(
+  grid,
+  row,
+  colors,
+  create,
+  onClicked,
+  onDragged,
+  onDroppedOnto
+) {
+  for (let i = 0; i < colors.length; i += 1) {
+    const token = create(colors[i]);
+    token.draggable = true;
+    token.style.gridRow = row;
+    token.style.gridColumn = i + 1;
+    adopt(grid, token);
+    addClickEventListener(token, (e) => {
+      onClicked(token);
+    });
+    addDragEventListener(token, (e) => {
+      e.dataTransfer.effectAllowed = "move";
+      onDragged(token);
+    });
+    addEventListener(token, "dragover", (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = "move";
+    });
+    addEventListener(token, "drop", (e) => {
+      e.preventDefault();
+      onDroppedOnto(token);
+    });
+  }
+}
+
 class TokenControl {
   constructor(parent, instructionMessage) {
     this.parent = parent;
@@ -122,31 +156,24 @@ class TokenControl {
   }
 
   addTokenRow(grid, row, colors, create) {
-    for (let i = 0; i < colors.length; i += 1) {
-      const token = create(colors[i]);
-      token.draggable = true;
-      token.style.gridRow = row;
-      token.style.gridColumn = i + 1;
-      adopt(grid, token);
-      addClickEventListener(token, (e) => {
+    addTokenRow(
+      grid,
+      row,
+      colors,
+      create,
+      (token) => {
         this.tokenClicked = token;
         this.observer.notifyThatTokenHasBeenClicked();
-      });
-      addDragEventListener(token, (e) => {
-        e.dataTransfer.effectAllowed = "move";
+      },
+      (token) => {
         this.tokenDragged = token;
         this.observer.notifyThatTokenHasBeenDragged();
-      });
-      addEventListener(token, "dragover", (e) => {
-        e.preventDefault();
-        e.dataTransfer.dropEffect = "move";
-      });
-      addEventListener(token, "drop", (e) => {
-        e.preventDefault();
+      },
+      (token) => {
         this.tokenDroppedOnto = token;
         this.observer.notifyThatTokenHasBeenDroppedOnto();
-      });
-    }
+      }
+    );
   }
 
   tokenClickedColor() {
@@ -217,31 +244,24 @@ class SizedTokenControl {
   }
 
   addTokenRow(grid, row, colors, create) {
-    for (let i = 0; i < colors.length; i += 1) {
-      const token = create(colors[i]);
-      token.draggable = true;
-      token.style.gridRow = row;
-      token.style.gridColumn = i + 1;
-      adopt(grid, token);
-      addClickEventListener(token, (e) => {
+    addTokenRow(
+      grid,
+      row,
+      colors,
+      create,
+      (token) => {
         this.tokenClicked = token;
         this.observer.notifyThatTokenHasBeenClicked();
-      });
-      addDragEventListener(token, (e) => {
-        e.dataTransfer.effectAllowed = "move";
+      },
+      (token) => {
         this.tokenDragged = token;
         this.observer.notifyThatTokenHasBeenDragged();
-      });
-      addEventListener(token, "dragover", (e) => {
-        e.preventDefault();
-        e.dataTransfer.dropEffect = "move";
-      });
-      addEventListener(token, "drop", (e) => {
-        e.preventDefault();
+      },
+      (token) => {
         this.tokenDroppedOnto = token;
         this.observer.notifyThatTokenHasBeenDroppedOnto();
-      });
-    }
+      }
+    );
   }
 
   tokenClickedColor() {
