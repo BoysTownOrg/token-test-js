@@ -1,4 +1,4 @@
-import { TokenModel, Action, Color, Shape } from "../lib/TokenModel.js";
+import { TokenModel, Action, Color, Shape, Size } from "../lib/TokenModel.js";
 
 class TrialStub {
   conclude(result) {
@@ -16,6 +16,10 @@ function submitDualTokenInteraction(model, interaction) {
 
 function submitSingleTokenInteraction(model, interaction) {
   model.submitSingleTokenInteraction(interaction);
+}
+
+function submitSingleSizedTokenInteraction(model, interaction) {
+  model.submitSingleSizedTokenInteraction(interaction);
 }
 
 function testModel(
@@ -53,6 +57,33 @@ describe("Model", () => {
       ],
       true,
       submitSingleTokenInteraction
+    );
+  });
+
+  it("should submit correct single sized token trial ", () => {
+    testModel(
+      [
+        {
+          token: {
+            color: Color.red,
+            shape: Shape.square,
+            size: Size.small,
+          },
+          action: Action.touch,
+        },
+      ],
+      [
+        {
+          token: {
+            color: Color.red,
+            shape: Shape.square,
+            size: Size.small,
+          },
+          action: Action.touch,
+        },
+      ],
+      true,
+      submitSingleSizedTokenInteraction
     );
   });
 
