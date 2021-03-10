@@ -160,11 +160,11 @@ export function plugin() {
       new TokenController(
         new TokenControl(
           display_element,
-          "Using the circle that is above the white square, touch the blue circle."
+          trial.sentence
         ),
         new TokenModel(
           new JsPsychTrial(),
-          parseTokenInteractions("use yellow circle to touch blue circle")
+          parseTokenInteractions(trial.commandString)
         )
       );
     },
