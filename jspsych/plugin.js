@@ -14,7 +14,7 @@ function addDragEventListener(element, f) {
   addEventListener(element, "dragstart", f);
 }
 
-function documentElement() {
+function divElement() {
   return document.createElement("div");
 }
 
@@ -22,28 +22,33 @@ function pixelsString(a) {
   return `${a}px`;
 }
 
+const tokenWidthPixels = 150;
+const tokenBorderWidthPixels = 2;
+function tokenBorder(borderWidthPixels) {
+  return `${pixelsString(borderWidthPixels)} solid black`;
+}
+
 function circleElementWithColor(color) {
-  const circle = documentElement();
-  const diameterPixels = 150;
+  const circle = divElement();
+  const diameterPixels = tokenWidthPixels;
   circle.style.height = pixelsString(diameterPixels);
   circle.style.width = pixelsString(diameterPixels);
-  const borderWidthPixels = 2;
+  const borderWidthPixels = tokenBorderWidthPixels;
   circle.style.borderRadius = pixelsString(
     diameterPixels / 2 + borderWidthPixels
   );
-  circle.style.border = `${pixelsString(borderWidthPixels)} solid black`;
+  circle.style.border = tokenBorder(borderWidthPixels);
   circle.style.margin = "auto";
   circle.style.backgroundColor = color;
   return circle;
 }
 
 function squareElementWithColor(color) {
-  const square = documentElement();
-  const widthPixels = 150;
+  const square = divElement();
+  const widthPixels = tokenWidthPixels;
   square.style.height = pixelsString(widthPixels);
   square.style.width = pixelsString(widthPixels);
-  const borderWidthPixels = 2;
-  square.style.border = `${pixelsString(borderWidthPixels)} solid black`;
+  square.style.border = tokenBorder(tokenBorderWidthPixels);
   square.style.margin = "auto";
   square.style.backgroundColor = color;
   return square;
@@ -63,14 +68,14 @@ function clear(parent) {
 class TokenControl {
   constructor(parent, instructionMessage) {
     this.parent = parent;
-    const instructions = documentElement();
+    const instructions = divElement();
     instructions.textContent = instructionMessage;
     adopt(parent, instructions);
-    const grid = documentElement();
+    const grid = divElement();
     grid.style.display = "grid";
     grid.style.gridTemplateColumns = "repeat(5, 1fr)";
     grid.style.gridTemplateRows = "repeat(2, 1fr)";
-    grid.style.gridGap = `${pixelsString(40)} ${pixelsString(40)}`;
+    grid.style.gridGap = `${pixelsString(60)} ${pixelsString(60)}`;
     adopt(parent, grid);
     this.addTokenRow(
       grid,
