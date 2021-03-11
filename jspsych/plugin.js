@@ -4,6 +4,7 @@ import {
   TokenController,
 } from "../lib/TokenController.js";
 import { parseTokenInteractions } from "../lib/TokenTrialConfigurationParser.js";
+import interact from "https://cdn.interactjs.io/v1.10.8/interactjs/index.js";
 
 function addEventListener(element, event, f) {
   element.addEventListener(event, f);
@@ -11,10 +12,6 @@ function addEventListener(element, event, f) {
 
 function addClickEventListener(element, f) {
   addEventListener(element, "click", f);
-}
-
-function addDragEventListener(element, f) {
-  addEventListener(element, "dragstart", f);
 }
 
 function divElement() {
@@ -107,25 +104,33 @@ function addTokenRow(
 ) {
   for (let i = 0; i < colors.length; i += 1) {
     const token = createTokenWithColor(colors[i]);
-    token.draggable = true;
     token.style.gridRow = row;
     token.style.gridColumn = i + 1;
+    token.style.touchAction = "none";
     adopt(grid, token);
     addClickEventListener(token, () => {
       onClicked(token);
     });
-    addDragEventListener(token, (e) => {
-      e.dataTransfer.effectAllowed = "move";
-      onDragged(token);
-    });
-    addEventListener(token, "dragover", (e) => {
-      e.preventDefault();
-      e.dataTransfer.dropEffect = "move";
-    });
-    addEventListener(token, "drop", (e) => {
-      e.preventDefault();
-      onDroppedOnto(token);
-    });
+    const position = { x: 0, y: 0 };
+    interact(token)
+      .draggable({
+        listeners: {
+          start() {
+            onDragged(token);
+          },
+          move(event) {
+            position.x += event.dx;
+            position.y += event.dy;
+
+            event.target.style.transform = `translate(${position.x}px, ${position.y}px)`;
+          },
+        },
+      })
+      .dropzone({
+        ondrop() {
+          onDroppedOnto(token);
+        },
+      });
   }
 }
 
