@@ -25,16 +25,33 @@ function submitSingleTokenInteraction(model, interaction) {
   model.submitSingleTokenInteraction(interaction);
 }
 
-function testModel(
+function testModelWithFactory(
+  create,
   expectedInteractions,
   actualInteractions,
   expectedResult,
   submit
 ) {
   const trial = new TrialStub();
-  const model = new TokenModel(trial, expectedInteractions);
+  const model = create(trial, expectedInteractions);
   actualInteractions.forEach((interaction) => submit(model, interaction));
   expect(trial.result().correct).toEqual(expectedResult);
+}
+
+function testModel(
+  expectedInteractions,
+  actualInteractions,
+  expectedResult,
+  submit
+) {
+  testModelWithFactory(
+    (trial, expectedInteractions_) =>
+      new TokenModel(trial, expectedInteractions_),
+    expectedInteractions,
+    actualInteractions,
+    expectedResult,
+    submit
+  );
 }
 
 function testSizedModel(
@@ -43,10 +60,14 @@ function testSizedModel(
   expectedResult,
   submit
 ) {
-  const trial = new TrialStub();
-  const model = new SizedTokenModel(trial, expectedInteractions);
-  actualInteractions.forEach((interaction) => submit(model, interaction));
-  expect(trial.result().correct).toEqual(expectedResult);
+  testModelWithFactory(
+    (trial, expectedInteractions_) =>
+      new SizedTokenModel(trial, expectedInteractions_),
+    expectedInteractions,
+    actualInteractions,
+    expectedResult,
+    submit
+  );
 }
 
 describe("TokenModel", () => {
