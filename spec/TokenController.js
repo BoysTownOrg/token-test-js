@@ -124,28 +124,12 @@ class TokenModelStub {
     return this.dualTokenInteraction_;
   }
 
-  singleSizedTokenInteraction() {
-    return this.singleSizedTokenInteraction_;
-  }
-
-  dualSizedTokenInteraction() {
-    return this.dualSizedTokenInteraction_;
-  }
-
   submitSingleTokenInteraction(singleTokenInteraction_) {
     this.singleTokenInteraction_ = singleTokenInteraction_;
   }
 
   submitDualTokenInteraction(dualTokenInteraction_) {
     this.dualTokenInteraction_ = dualTokenInteraction_;
-  }
-
-  submitSingleSizedTokenInteraction(singleSizedTokenInteraction_) {
-    this.singleSizedTokenInteraction_ = singleSizedTokenInteraction_;
-  }
-
-  submitDualSizedTokenInteraction(dualSizedTokenInteraction_) {
-    this.dualSizedTokenInteraction_ = dualSizedTokenInteraction_;
   }
 }
 
@@ -189,41 +173,27 @@ describe("SizedTokenController", () => {
 
   it("should submit touch action when user clicks small red square", function () {
     this.control.clickSmallRedSquare();
-    expect(this.model.singleSizedTokenInteraction().action).toBe(Action.touch);
-    expect(this.model.singleSizedTokenInteraction().token.color).toBe(
-      Color.red
-    );
-    expect(this.model.singleSizedTokenInteraction().token.shape).toBe(
-      Shape.square
-    );
-    expect(this.model.singleSizedTokenInteraction().token.size).toBe(
-      Size.small
-    );
+    expect(this.model.singleTokenInteraction().action).toBe(Action.touch);
+    expect(this.model.singleTokenInteraction().token.color).toBe(Color.red);
+    expect(this.model.singleTokenInteraction().token.shape).toBe(Shape.square);
+    expect(this.model.singleTokenInteraction().token.size).toBe(Size.small);
   });
 
   it("should submit use-to-touch action when user drags small red circle onto large green square", function () {
     this.control.dragSmallRedCircle();
     this.control.dropOntoLargeGreenSquare();
-    expect(this.model.dualSizedTokenInteraction().action).toBe(
-      Action.useToTouch
-    );
-    expect(this.model.dualSizedTokenInteraction().firstToken.color).toBe(
-      Color.red
-    );
-    expect(this.model.dualSizedTokenInteraction().firstToken.shape).toBe(
+    expect(this.model.dualTokenInteraction().action).toBe(Action.useToTouch);
+    expect(this.model.dualTokenInteraction().firstToken.color).toBe(Color.red);
+    expect(this.model.dualTokenInteraction().firstToken.shape).toBe(
       Shape.circle
     );
-    expect(this.model.dualSizedTokenInteraction().firstToken.size).toBe(
-      Size.small
-    );
-    expect(this.model.dualSizedTokenInteraction().secondToken.color).toBe(
+    expect(this.model.dualTokenInteraction().firstToken.size).toBe(Size.small);
+    expect(this.model.dualTokenInteraction().secondToken.color).toBe(
       Color.green
     );
-    expect(this.model.dualSizedTokenInteraction().secondToken.shape).toBe(
+    expect(this.model.dualTokenInteraction().secondToken.shape).toBe(
       Shape.square
     );
-    expect(this.model.dualSizedTokenInteraction().secondToken.size).toBe(
-      Size.large
-    );
+    expect(this.model.dualTokenInteraction().secondToken.size).toBe(Size.large);
   });
 });
