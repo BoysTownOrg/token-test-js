@@ -32,16 +32,16 @@ jsPsych.init({
     {
       type: tokenTestPluginId,
       sentence:
-        "Using the circle that is above the white square, touch the blue circle.",
-      commandString: "use yellow circle to touch blue circle",
+        "Using the circle that is above the white square, touch the black circle.",
+      commandString: "use yellow circle to touch black circle",
     },
     feedback,
     {
       type: tokenTestPluginId,
       sentence:
-        "Touch the blue circle and the white square and the green square and the red circle.",
+        "Touch the black circle and the white square and the green square and the red circle.",
       commandString:
-        "touch blue circle, touch white square, touch green square, touch red circle",
+        "touch black circle, touch white square, touch green square, touch red circle",
     },
     feedback,
     {
