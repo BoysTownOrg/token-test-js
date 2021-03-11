@@ -1,4 +1,4 @@
-import { TokenModel } from "../lib/TokenModel.js";
+import { SizedTokenModel, TokenModel } from "../lib/TokenModel.js";
 import {
   SizedTokenController,
   TokenController,
@@ -314,14 +314,15 @@ class JsPsychTrial {
 
 function pluginUsingControllerAndControlFactories(
   createTokenController,
-  createTokenControl
+  createTokenControl,
+  createTokenModel
 ) {
   return {
     trial(display_element, trial) {
       clear(display_element);
       createTokenController(
         createTokenControl(display_element, trial.sentence),
-        new TokenModel(
+        createTokenModel(
           new JsPsychTrial(),
           parseTokenInteractions(trial.commandString)
         )
@@ -336,7 +337,8 @@ function pluginUsingControllerAndControlFactories(
 export function plugin() {
   return pluginUsingControllerAndControlFactories(
     (control, model) => new TokenController(control, model),
-    (display_element, sentence) => new TokenControl(display_element, sentence)
+    (display_element, sentence) => new TokenControl(display_element, sentence),
+    (trial, tokenInteractions) => new TokenModel(trial, tokenInteractions)
   );
 }
 
@@ -344,6 +346,7 @@ export function twoSizesPlugin() {
   return pluginUsingControllerAndControlFactories(
     (control, model) => new SizedTokenController(control, model),
     (display_element, sentence) =>
-      new SizedTokenControl(display_element, sentence)
+      new SizedTokenControl(display_element, sentence),
+    (trial, tokenInteractions) => new SizedTokenModel(trial, tokenInteractions)
   );
 }
