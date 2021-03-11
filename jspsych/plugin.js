@@ -130,6 +130,12 @@ function addTokenRow(
         ondrop() {
           onDroppedOnto(token);
         },
+        ondragenter() {
+          token.style.borderColor = "#22e";
+        },
+        ondragleave() {
+          token.style.borderColor = "black";
+        },
       });
   }
 }
