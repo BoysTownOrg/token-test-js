@@ -1,4 +1,11 @@
-import { TokenModel, Action, Color, Shape, Size } from "../lib/TokenModel.js";
+import {
+  TokenModel,
+  SizedTokenModel,
+  Action,
+  Color,
+  Shape,
+  Size,
+} from "../lib/TokenModel.js";
 
 class TrialStub {
   conclude(result) {
@@ -18,14 +25,6 @@ function submitSingleTokenInteraction(model, interaction) {
   model.submitSingleTokenInteraction(interaction);
 }
 
-function submitSingleSizedTokenInteraction(model, interaction) {
-  model.submitSingleSizedTokenInteraction(interaction);
-}
-
-function submitDualSizedTokenInteraction(model, interaction) {
-  model.submitDualSizedTokenInteraction(interaction);
-}
-
 function testModel(
   expectedInteractions,
   actualInteractions,
@@ -38,7 +37,19 @@ function testModel(
   expect(trial.result().correct).toEqual(expectedResult);
 }
 
-describe("Model", () => {
+function testSizedModel(
+  expectedInteractions,
+  actualInteractions,
+  expectedResult,
+  submit
+) {
+  const trial = new TrialStub();
+  const model = new SizedTokenModel(trial, expectedInteractions);
+  actualInteractions.forEach((interaction) => submit(model, interaction));
+  expect(trial.result().correct).toEqual(expectedResult);
+}
+
+describe("TokenModel", () => {
   it("should submit correct trial", () => {
     testModel(
       [
@@ -61,33 +72,6 @@ describe("Model", () => {
       ],
       true,
       submitSingleTokenInteraction
-    );
-  });
-
-  it("should submit correct single sized token trial ", () => {
-    testModel(
-      [
-        {
-          token: {
-            color: Color.red,
-            shape: Shape.square,
-            size: Size.small,
-          },
-          action: Action.touch,
-        },
-      ],
-      [
-        {
-          token: {
-            color: Color.red,
-            shape: Shape.square,
-            size: Size.small,
-          },
-          action: Action.touch,
-        },
-      ],
-      true,
-      submitSingleSizedTokenInteraction
     );
   });
 
@@ -374,43 +358,6 @@ describe("Model", () => {
       ],
       true,
       submitDualTokenInteraction
-    );
-  });
-
-  it("should submit correct dual sized token interaction trial", () => {
-    testModel(
-      [
-        {
-          firstToken: {
-            color: Color.red,
-            shape: Shape.circle,
-            size: Size.small,
-          },
-          secondToken: {
-            color: Color.green,
-            shape: Shape.square,
-            size: Size.large,
-          },
-          action: Action.useToTouch,
-        },
-      ],
-      [
-        {
-          firstToken: {
-            color: Color.red,
-            shape: Shape.circle,
-            size: Size.small,
-          },
-          secondToken: {
-            color: Color.green,
-            shape: Shape.square,
-            size: Size.large,
-          },
-          action: Action.useToTouch,
-        },
-      ],
-      true,
-      submitDualSizedTokenInteraction
     );
   });
 
@@ -710,5 +657,71 @@ describe("Model", () => {
       action: Action.touch,
     });
     expect(trial.result().correct).toEqual(false);
+  });
+});
+
+describe("SizedTokenModel", () => {
+  it("should submit correct single token trial ", () => {
+    testSizedModel(
+      [
+        {
+          token: {
+            color: Color.red,
+            shape: Shape.square,
+            size: Size.small,
+          },
+          action: Action.touch,
+        },
+      ],
+      [
+        {
+          token: {
+            color: Color.red,
+            shape: Shape.square,
+            size: Size.small,
+          },
+          action: Action.touch,
+        },
+      ],
+      true,
+      submitSingleTokenInteraction
+    );
+  });
+
+  it("should submit correct dual token interaction trial", () => {
+    testModel(
+      [
+        {
+          firstToken: {
+            color: Color.red,
+            shape: Shape.circle,
+            size: Size.small,
+          },
+          secondToken: {
+            color: Color.green,
+            shape: Shape.square,
+            size: Size.large,
+          },
+          action: Action.useToTouch,
+        },
+      ],
+      [
+        {
+          firstToken: {
+            color: Color.red,
+            shape: Shape.circle,
+            size: Size.small,
+          },
+          secondToken: {
+            color: Color.green,
+            shape: Shape.square,
+            size: Size.large,
+          },
+          action: Action.useToTouch,
+        },
+      ],
+      true,
+      submitDualTokenInteraction
+    );
   });
 });
