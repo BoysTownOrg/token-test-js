@@ -90,6 +90,32 @@ describe("Parser", () => {
     );
   });
 
+  it("should parse unordered single sized token interactions", () => {
+    expectYields(
+      [
+        [
+          {
+            token: {
+              color: Color.red,
+              shape: Shape.square,
+              size: Size.small,
+            },
+            action: Action.touch,
+          },
+          {
+            token: {
+              color: Color.yellow,
+              shape: Shape.circle,
+              size: Size.large,
+            },
+            action: Action.touch,
+          },
+        ],
+      ],
+      "touch small red square, touch large yellow circle"
+    );
+  });
+
   it("should parse partially unordered single token interactions", () => {
     expectYields(
       [
