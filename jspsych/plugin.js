@@ -98,7 +98,7 @@ function addTokenRow(
   row,
   colors,
   createTokenWithColor,
-  onClicked,
+  onReleased,
   onDragged,
   onDroppedOnto
 ) {
@@ -109,7 +109,7 @@ function addTokenRow(
     token.style.touchAction = "none";
     adopt(grid, token);
     addClickEventListener(token, () => {
-      onClicked(token);
+      onReleased(token);
     });
     const position = { x: 0, y: 0 };
     interact(token)
@@ -200,8 +200,8 @@ class TokenControl {
       colors,
       create,
       (token) => {
-        this.tokenClicked = token;
-        this.observer.notifyThatTokenHasBeenClicked();
+        this.tokenReleased = token;
+        this.observer.notifyThatTokenHasBeenReleased();
       },
       (token) => {
         this.tokenDragged = token;
@@ -214,12 +214,12 @@ class TokenControl {
     );
   }
 
-  tokenClickedColor() {
-    return backgroundColor(this.tokenClicked);
+  tokenReleasedColor() {
+    return backgroundColor(this.tokenReleased);
   }
 
-  tokenClickedIsCircle() {
-    return isCircle(this.tokenClicked);
+  tokenReleasedIsCircle() {
+    return isCircle(this.tokenReleased);
   }
 
   tokenDraggedColor() {
@@ -284,8 +284,8 @@ class SizedTokenControl {
       colors,
       create,
       (token) => {
-        this.tokenClicked = token;
-        this.observer.notifyThatTokenHasBeenClicked();
+        this.tokenReleased = token;
+        this.observer.notifyThatTokenHasBeenReleased();
       },
       (token) => {
         this.tokenDragged = token;
@@ -298,16 +298,16 @@ class SizedTokenControl {
     );
   }
 
-  tokenClickedColor() {
-    return backgroundColor(this.tokenClicked);
+  tokenReleasedColor() {
+    return backgroundColor(this.tokenReleased);
   }
 
-  tokenClickedIsCircle() {
-    return isCircle(this.tokenClicked);
+  tokenReleasedIsCircle() {
+    return isCircle(this.tokenReleased);
   }
 
-  tokenClickedIsSmall() {
-    return isSmall(this.tokenClicked);
+  tokenReleasedIsSmall() {
+    return isSmall(this.tokenReleased);
   }
 
   tokenDraggedColor() {
