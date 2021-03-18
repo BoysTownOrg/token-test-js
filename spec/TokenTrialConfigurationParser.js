@@ -21,6 +21,21 @@ describe("Parser", () => {
     );
   });
 
+  it("should parse one pick-up token interaction", () => {
+    expectYields(
+      [
+        {
+          token: {
+            color: Color.red,
+            shape: Shape.square,
+          },
+          action: Action.pickUp,
+        },
+      ],
+      "pick up red square"
+    );
+  });
+
   it("should parse one single sized token interaction", () => {
     expectYields(
       [
