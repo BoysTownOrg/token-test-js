@@ -5,10 +5,10 @@ import {
 import { Action, Color, Shape, Size } from "../lib/TokenModel.js";
 
 class TokenControlStub {
-  clickRedSquare() {
-    this.tokenClickedColor_ = "red";
-    this.tokenClickedIsCircle_ = false;
-    this.observer.notifyThatTokenHasBeenClicked();
+  releaseRedSquare() {
+    this.tokenReleasedColor_ = "red";
+    this.tokenReleasedIsCircle_ = false;
+    this.observer.notifyThatTokenHasBeenReleased();
   }
 
   dragRedCircle() {
@@ -25,14 +25,15 @@ class TokenControlStub {
 
   dropOntoHoldingArea() {
     this.observer.notifyThatHoldingAreaHasBeenDroppedOnto();
+    this.observer.notifyThatTokenHasBeenReleased();
   }
 
-  tokenClickedColor() {
-    return this.tokenClickedColor_;
+  tokenReleasedColor() {
+    return this.tokenReleasedColor_;
   }
 
-  tokenClickedIsCircle() {
-    return this.tokenClickedIsCircle_;
+  tokenReleasedIsCircle() {
+    return this.tokenReleasedIsCircle_;
   }
 
   tokenDraggedColor() {
@@ -57,11 +58,11 @@ class TokenControlStub {
 }
 
 class SizedTokenControlStub {
-  clickSmallRedSquare() {
-    this.tokenClickedColor_ = "red";
-    this.tokenClickedIsCircle_ = false;
-    this.tokenClickedIsSmall_ = true;
-    this.observer.notifyThatTokenHasBeenClicked();
+  releaseSmallRedSquare() {
+    this.tokenReleasedColor_ = "red";
+    this.tokenReleasedIsCircle_ = false;
+    this.tokenReleasedIsSmall_ = true;
+    this.observer.notifyThatTokenHasBeenReleased();
   }
 
   dragSmallRedCircle() {
@@ -102,16 +103,16 @@ class SizedTokenControlStub {
     return this.tokenDroppedOntoIsSmall_;
   }
 
-  tokenClickedColor() {
-    return this.tokenClickedColor_;
+  tokenReleasedColor() {
+    return this.tokenReleasedColor_;
   }
 
-  tokenClickedIsCircle() {
-    return this.tokenClickedIsCircle_;
+  tokenReleasedIsCircle() {
+    return this.tokenReleasedIsCircle_;
   }
 
-  tokenClickedIsSmall() {
-    return this.tokenClickedIsSmall_;
+  tokenReleasedIsSmall() {
+    return this.tokenReleasedIsSmall_;
   }
 
   attach(observer) {
@@ -144,8 +145,8 @@ describe("TokenController", () => {
     new TokenController(this.control, this.model);
   });
 
-  it("should submit touch action when user clicks red square", function () {
-    this.control.clickRedSquare();
+  it("should submit touch action when user releases red square", function () {
+    this.control.releaseRedSquare();
     expect(this.model.singleTokenInteraction().action).toBe(Action.touch);
     expect(this.model.singleTokenInteraction().token.color).toBe(Color.red);
     expect(this.model.singleTokenInteraction().token.shape).toBe(Shape.square);
@@ -183,8 +184,8 @@ describe("SizedTokenController", () => {
     new SizedTokenController(this.control, this.model);
   });
 
-  it("should submit touch action when user clicks small red square", function () {
-    this.control.clickSmallRedSquare();
+  it("should submit touch action when user releases small red square", function () {
+    this.control.releaseSmallRedSquare();
     expect(this.model.singleTokenInteraction().action).toBe(Action.touch);
     expect(this.model.singleTokenInteraction().token.color).toBe(Color.red);
     expect(this.model.singleTokenInteraction().token.shape).toBe(Shape.square);
