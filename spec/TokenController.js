@@ -23,6 +23,10 @@ class TokenControlStub {
     this.observer.notifyThatTokenHasBeenDroppedOnto();
   }
 
+  dropOntoHoldingArea() {
+    this.observer.notifyThatHoldingAreaHasBeenDroppedOnto();
+  }
+
   tokenClickedColor() {
     return this.tokenClickedColor_;
   }
@@ -161,6 +165,14 @@ describe("TokenController", () => {
     expect(this.model.dualTokenInteraction().secondToken.shape).toBe(
       Shape.square
     );
+  });
+
+  it("should submit pick-up action when user drags red circle onto holding area", function () {
+    this.control.dragRedCircle();
+    this.control.dropOntoHoldingArea();
+    expect(this.model.singleTokenInteraction().action).toBe(Action.pickUp);
+    expect(this.model.singleTokenInteraction().token.color).toBe(Color.red);
+    expect(this.model.singleTokenInteraction().token.shape).toBe(Shape.circle);
   });
 });
 
