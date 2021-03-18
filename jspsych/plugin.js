@@ -181,6 +181,7 @@ class TokenControl {
     interact(holdingArea).dropzone({
       ondrop() {
         onHoldingAreaDrop();
+        holdingArea.style.borderColor = "black";
       },
       ondragenter() {
         holdingArea.style.borderColor = "#22e";
