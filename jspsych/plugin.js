@@ -151,8 +151,16 @@ function tokenGridWithRows(n) {
 
 class TokenControl {
   constructor(parent, instructionMessage) {
+    const holdingArea = divElement();
+    holdingArea.style.height = pixelsString(300);
+    holdingArea.style.width = pixelsString(5 * 150);
+    holdingArea.style.border = `${pixelsString(2)} solid black`;
+    holdingArea.style.margin = "5% auto";
+    holdingArea.style.backgroundColor = "lightgrey";
+    adopt(parent, holdingArea);
     const instructions = divElement();
     instructions.textContent = instructionMessage;
+    instructions.style.margin = "5% auto";
     adopt(parent, instructions);
     const grid = tokenGridWithRows(2);
     this.addTokenRow(
@@ -167,6 +175,20 @@ class TokenControl {
       ["black", "red", "white", "green", "yellow"],
       squareElementWithColor
     );
+    const onHoldingAreaDrop = () => {
+      this.observer.notifyThatHoldingAreaHasBeenDroppedOnto();
+    };
+    interact(holdingArea).dropzone({
+      ondrop() {
+        onHoldingAreaDrop();
+      },
+      ondragenter() {
+        holdingArea.style.borderColor = "#22e";
+      },
+      ondragleave() {
+        holdingArea.style.borderColor = "black";
+      },
+    });
     adopt(parent, grid);
     this.parent = parent;
   }
