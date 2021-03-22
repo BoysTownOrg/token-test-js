@@ -96,6 +96,35 @@ describe("TokenModel", () => {
     );
   });
 
+  it("should record one single token interaction", () => {
+    const trial = new TrialStub();
+    const model = new TokenModel(trial, [
+      {
+        token: {
+          color: Color.green,
+          shape: Shape.circle,
+        },
+        action: Action.pickUp,
+      },
+    ]);
+    submitSingleTokenInteraction(model, {
+      token: {
+        color: Color.red,
+        shape: Shape.square,
+      },
+      action: Action.touch,
+    });
+    expect(trial.result().tokenInteractions).toEqual([
+      {
+        token: {
+          color: Color.red,
+          shape: Shape.square,
+        },
+        action: Action.touch,
+      },
+    ]);
+  });
+
   it("should submit incorrect trial", () => {
     testModel(
       [
