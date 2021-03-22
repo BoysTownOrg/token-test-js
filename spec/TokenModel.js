@@ -17,6 +17,16 @@ class TrialStub {
   }
 }
 
+class TimerStub {
+  milliseconds() {
+    return this.milliseconds_;
+  }
+
+  setMilliseconds(x) {
+    this.milliseconds_ = x;
+  }
+}
+
 function submitDualTokenInteraction(model, interaction) {
   model.submitDualTokenInteraction(interaction);
 }
@@ -33,7 +43,8 @@ function testModelWithFactory(
   submit
 ) {
   const trial = new TrialStub();
-  const model = create(trial, expectedInteractions);
+  const timer = new TimerStub();
+  const model = create(trial, timer, expectedInteractions);
   actualInteractions.forEach((interaction) => submit(model, interaction));
   expect(trial.result().correct).toEqual(expectedResult);
 }
@@ -45,8 +56,8 @@ function testModel(
   submit
 ) {
   testModelWithFactory(
-    (trial, expectedInteractions_) =>
-      new TokenModel(trial, expectedInteractions_),
+    (trial, timer, expectedInteractions_) =>
+      new TokenModel(trial, timer, expectedInteractions_),
     expectedInteractions,
     actualInteractions,
     expectedResult,
@@ -61,8 +72,8 @@ function testSizedModel(
   submit
 ) {
   testModelWithFactory(
-    (trial, expectedInteractions_) =>
-      new SizedTokenModel(trial, expectedInteractions_),
+    (trial, timer, expectedInteractions_) =>
+      new SizedTokenModel(trial, timer, expectedInteractions_),
     expectedInteractions,
     actualInteractions,
     expectedResult,
@@ -98,7 +109,8 @@ describe("TokenModel", () => {
 
   it("should record one single token interaction", () => {
     const trial = new TrialStub();
-    const model = new TokenModel(trial, [
+    const timer = new TimerStub();
+    const model = new TokenModel(trial, timer, [
       {
         token: {
           color: Color.green,
@@ -107,6 +119,7 @@ describe("TokenModel", () => {
         action: Action.pickUp,
       },
     ]);
+    timer.setMilliseconds(1);
     submitSingleTokenInteraction(model, {
       token: {
         color: Color.red,
@@ -121,6 +134,7 @@ describe("TokenModel", () => {
           shape: Shape.square,
         },
         action: Action.touch,
+        milliseconds: 1,
       },
     ]);
   });
@@ -582,7 +596,7 @@ describe("TokenModel", () => {
 
   it("should submit correct mixed token interaction trial", () => {
     const trial = new TrialStub();
-    const model = new TokenModel(trial, [
+    const model = new TokenModel(trial, new TimerStub(), [
       {
         token: {
           color: Color.red,
@@ -625,7 +639,7 @@ describe("TokenModel", () => {
 
   it("should submit correct mixed token interaction unordered trial", () => {
     const trial = new TrialStub();
-    const model = new TokenModel(trial, [
+    const model = new TokenModel(trial, new TimerStub(), [
       [
         {
           token: {
@@ -670,7 +684,7 @@ describe("TokenModel", () => {
 
   it("should submit incorrect mixed token interaction unordered trial", () => {
     const trial = new TrialStub();
-    const model = new TokenModel(trial, [
+    const model = new TokenModel(trial, new TimerStub(), [
       [
         {
           token: {
