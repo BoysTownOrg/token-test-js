@@ -179,9 +179,10 @@ class TokenControl {
       this.observer.notifyThatHoldingAreaHasBeenDroppedOnto();
     };
     interact(holdingArea).dropzone({
-      ondrop() {
+      ondrop(event) {
         onHoldingAreaDrop();
         holdingArea.style.borderColor = "black";
+        interact(event.relatedTarget).dropzone(false);
       },
       ondragenter() {
         holdingArea.style.borderColor = "#22e";
