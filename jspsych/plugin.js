@@ -117,12 +117,16 @@ function addTokenRow(
         listeners: {
           start() {
             onDragged(token);
+            token.style.zIndex = 1;
           },
           move(event) {
             position.x += event.dx;
             position.y += event.dy;
 
             event.target.style.transform = `translate(${position.x}px, ${position.y}px)`;
+          },
+          end() {
+            token.style.zIndex = 0;
           },
         },
       })
