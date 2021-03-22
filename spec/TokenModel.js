@@ -15,14 +15,6 @@ class TrialStub {
   result() {
     return this.result_;
   }
-
-  attach(observer) {
-    this.observer = observer;
-  }
-
-  notifyThatTimeoutReached() {
-    this.observer.notifyThatTimeoutReached();
-  }
 }
 
 class TimerStub {
@@ -54,7 +46,7 @@ function testModelWithFactory(
   const timer = new TimerStub();
   const model = create(trial, timer, expectedInteractions);
   actualInteractions.forEach((interaction) => submit(model, interaction));
-  trial.notifyThatTimeoutReached();
+  model.concludeTrial();
   expect(trial.result().correct).toEqual(expectedResult);
 }
 
@@ -136,7 +128,7 @@ describe("TokenModel", () => {
       },
       action: Action.touch,
     });
-    trial.notifyThatTimeoutReached();
+    model.concludeTrial();
     expect(trial.result().tokenInteractions).toEqual([
       {
         token: {
@@ -644,7 +636,7 @@ describe("TokenModel", () => {
       },
       action: Action.useToTouch,
     });
-    trial.notifyThatTimeoutReached();
+    model.concludeTrial();
     expect(trial.result().correct).toEqual(true);
   });
 
@@ -690,7 +682,7 @@ describe("TokenModel", () => {
       },
       action: Action.touch,
     });
-    trial.notifyThatTimeoutReached();
+    model.concludeTrial();
     expect(trial.result().correct).toEqual(true);
   });
 
@@ -732,7 +724,7 @@ describe("TokenModel", () => {
       },
       action: Action.touch,
     });
-    trial.notifyThatTimeoutReached();
+    model.concludeTrial();
     expect(trial.result().correct).toEqual(false);
   });
 });
