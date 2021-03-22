@@ -358,16 +358,16 @@ class PerformanceTimer {
 }
 
 function pluginUsingControllerAndControlFactories(
-  createTokenController,
-  createTokenControl,
-  createTokenModel
+  TokenControllerType,
+  TokenControlType,
+  TokenModelType
 ) {
   return {
     trial(display_element, trial) {
       clear(display_element);
-      createTokenController(
-        createTokenControl(display_element, trial.sentence),
-        createTokenModel(
+      new TokenControllerType(
+        new TokenControlType(display_element, trial.sentence),
+        new TokenModelType(
           new JsPsychTrial(),
           new PerformanceTimer(),
           parseTokenInteractions(trial.commandString)
@@ -382,19 +382,16 @@ function pluginUsingControllerAndControlFactories(
 
 export function plugin() {
   return pluginUsingControllerAndControlFactories(
-    (control, model) => new TokenController(control, model),
-    (display_element, sentence) => new TokenControl(display_element, sentence),
-    (trial, timer, tokenInteractions) =>
-      new TokenModel(trial, timer, tokenInteractions)
+    TokenController,
+    TokenControl,
+    TokenModel
   );
 }
 
 export function twoSizesPlugin() {
   return pluginUsingControllerAndControlFactories(
-    (control, model) => new SizedTokenController(control, model),
-    (display_element, sentence) =>
-      new SizedTokenControl(display_element, sentence),
-    (trial, timer, tokenInteractions) =>
-      new SizedTokenModel(trial, timer, tokenInteractions)
+    SizedTokenController,
+    SizedTokenControl,
+    SizedTokenModel
   );
 }
