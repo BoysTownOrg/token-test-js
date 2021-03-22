@@ -365,6 +365,11 @@ function pluginUsingControllerAndControlFactories(
   return {
     trial(display_element, trial) {
       clear(display_element);
+      const model = new TokenModelType(
+        new JsPsychTrial(),
+        new PerformanceTimer(),
+        parseTokenInteractions(trial.commandString)
+      );
       new TokenControllerType(
         new TokenControlType(display_element, trial.sentence),
         new TokenModelType(
@@ -373,6 +378,9 @@ function pluginUsingControllerAndControlFactories(
           parseTokenInteractions(trial.commandString)
         )
       );
+      jsPsych.pluginAPI.setTimeout(() => {
+        model.concludeTrial();
+      }, 5000);
     },
     info: {
       parameters: {},
