@@ -133,6 +133,7 @@ function addTokenRow(
       .dropzone({
         ondrop() {
           onDroppedOnto(token);
+          token.style.borderColor = "black";
         },
         ondragenter() {
           token.style.borderColor = "#22e";
@@ -372,11 +373,7 @@ function pluginUsingControllerAndControlFactories(
       );
       new TokenControllerType(
         new TokenControlType(display_element, trial.sentence),
-        new TokenModelType(
-          new JsPsychTrial(),
-          new PerformanceTimer(),
-          parseTokenInteractions(trial.commandString)
-        )
+        model
       );
       jsPsych.pluginAPI.setTimeout(() => {
         model.concludeTrial();
