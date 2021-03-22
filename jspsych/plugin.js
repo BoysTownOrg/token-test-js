@@ -351,6 +351,12 @@ class JsPsychTrial {
   }
 }
 
+class PerformanceTimer {
+  milliseconds() {
+    return performance.now();
+  }
+}
+
 function pluginUsingControllerAndControlFactories(
   createTokenController,
   createTokenControl,
@@ -363,6 +369,7 @@ function pluginUsingControllerAndControlFactories(
         createTokenControl(display_element, trial.sentence),
         createTokenModel(
           new JsPsychTrial(),
+          new PerformanceTimer(),
           parseTokenInteractions(trial.commandString)
         )
       );
@@ -377,7 +384,8 @@ export function plugin() {
   return pluginUsingControllerAndControlFactories(
     (control, model) => new TokenController(control, model),
     (display_element, sentence) => new TokenControl(display_element, sentence),
-    (trial, tokenInteractions) => new TokenModel(trial, tokenInteractions)
+    (trial, timer, tokenInteractions) =>
+      new TokenModel(trial, timer, tokenInteractions)
   );
 }
 
@@ -386,6 +394,7 @@ export function twoSizesPlugin() {
     (control, model) => new SizedTokenController(control, model),
     (display_element, sentence) =>
       new SizedTokenControl(display_element, sentence),
-    (trial, tokenInteractions) => new SizedTokenModel(trial, tokenInteractions)
+    (trial, timer, tokenInteractions) =>
+      new SizedTokenModel(trial, timer, tokenInteractions)
   );
 }
