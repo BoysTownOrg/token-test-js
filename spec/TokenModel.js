@@ -136,6 +136,7 @@ describe("TokenModel", () => {
       },
       action: Action.touch,
     });
+    trial.notifyThatTimeoutReached();
     expect(trial.result().tokenInteractions).toEqual([
       {
         token: {
@@ -643,6 +644,7 @@ describe("TokenModel", () => {
       },
       action: Action.useToTouch,
     });
+    trial.notifyThatTimeoutReached();
     expect(trial.result().correct).toEqual(true);
   });
 
@@ -688,6 +690,7 @@ describe("TokenModel", () => {
       },
       action: Action.touch,
     });
+    trial.notifyThatTimeoutReached();
     expect(trial.result().correct).toEqual(true);
   });
 
@@ -729,6 +732,7 @@ describe("TokenModel", () => {
       },
       action: Action.touch,
     });
+    trial.notifyThatTimeoutReached();
     expect(trial.result().correct).toEqual(false);
   });
 });
