@@ -141,62 +141,36 @@ describe("TokenModel", () => {
     ]);
   });
 
-  it("should allow more token interactions than expected", () => {
-    const trial = new TrialStub();
-    const timer = new TimerStub();
-    const model = new TokenModel(trial, timer, [
-      {
-        token: {
-          color: Color.green,
-          shape: Shape.circle,
-        },
-        action: Action.pickUp,
-      },
-    ]);
-    submitSingleTokenInteraction(model, {
-      token: {
-        color: Color.green,
-        shape: Shape.circle,
-      },
-      action: Action.pickUp,
-    });
-    submitSingleTokenInteraction(model, {
-      token: {
-        color: Color.red,
-        shape: Shape.square,
-      },
-      action: Action.touch,
-    });
-  });
-
   it("should not count more token interactions than expected as correct", () => {
-    const trial = new TrialStub();
-    const timer = new TimerStub();
-    const model = new TokenModel(trial, timer, [
-      {
-        token: {
-          color: Color.green,
-          shape: Shape.circle,
+    testModel(
+      [
+        {
+          token: {
+            color: Color.green,
+            shape: Shape.circle,
+          },
+          action: Action.pickUp,
         },
-        action: Action.pickUp,
-      },
-    ]);
-    submitSingleTokenInteraction(model, {
-      token: {
-        color: Color.red,
-        shape: Shape.square,
-      },
-      action: Action.touch,
-    });
-    submitSingleTokenInteraction(model, {
-      token: {
-        color: Color.green,
-        shape: Shape.circle,
-      },
-      action: Action.pickUp,
-    });
-    model.concludeTrial();
-    expect(trial.result().correct).toBeFalse();
+      ],
+      [
+        {
+          token: {
+            color: Color.red,
+            shape: Shape.square,
+          },
+          action: Action.touch,
+        },
+        {
+          token: {
+            color: Color.green,
+            shape: Shape.circle,
+          },
+          action: Action.pickUp,
+        },
+      ],
+      false,
+      submitSingleTokenInteraction
+    );
   });
 
   it("should submit incorrect trial", () => {
