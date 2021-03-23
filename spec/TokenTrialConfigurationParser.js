@@ -6,10 +6,10 @@ import {
   Shape,
   Size,
 } from "../lib/TokenModel.js";
-import { parseTokenInteractions } from "../lib/TokenTrialConfigurationParser.js";
+import { parseTokenInteractionRule } from "../lib/TokenTrialConfigurationParser.js";
 
 function expectYields(interactions, text) {
-  expect(parseTokenInteractions(text)).toEqual(interactions);
+  expect(parseTokenInteractionRule(text)).toEqual(interactions);
 }
 
 describe("Parser", () => {

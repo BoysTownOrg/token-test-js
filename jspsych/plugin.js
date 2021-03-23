@@ -3,7 +3,7 @@ import {
   SizedTokenController,
   TokenController,
 } from "../lib/TokenController.js";
-import { parseTokenInteractions } from "../lib/TokenTrialConfigurationParser.js";
+import { parseTokenInteractionRule } from "../lib/TokenTrialConfigurationParser.js";
 import interact from "https://cdn.interactjs.io/v1.10.8/interactjs/index.js";
 
 function addEventListener(element, event, f) {
@@ -376,7 +376,7 @@ function pluginUsingControllerAndControlFactories(
       const model = new TokenModelType(
         new JsPsychTrial(),
         new PerformanceTimer(),
-        parseTokenInteractions(trial.commandString)
+        parseTokenInteractionRule(trial.commandString)
       );
       new TokenControllerType(
         new TokenControlType(display_element, trial.sentence),
