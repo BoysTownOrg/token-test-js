@@ -173,6 +173,54 @@ describe("TokenModel", () => {
     );
   });
 
+  it("should not count eventually correct as correct", () => {
+    testModel(
+      [
+        [
+          {
+            token: {
+              color: Color.green,
+              shape: Shape.circle,
+            },
+            action: Action.pickUp,
+          },
+          {
+            token: {
+              color: Color.red,
+              shape: Shape.square,
+            },
+            action: Action.touch,
+          },
+        ],
+      ],
+      [
+        {
+          token: {
+            color: Color.yellow,
+            shape: Shape.circle,
+          },
+          action: Action.pickUp,
+        },
+        {
+          token: {
+            color: Color.green,
+            shape: Shape.circle,
+          },
+          action: Action.pickUp,
+        },
+        {
+          token: {
+            color: Color.red,
+            shape: Shape.square,
+          },
+          action: Action.touch,
+        },
+      ],
+      false,
+      submitSingleTokenInteraction
+    );
+  });
+
   it("should submit incorrect trial", () => {
     testModel(
       [
