@@ -66,15 +66,15 @@ function testModel(rule, interactions, expectedResult, submit) {
 describe("TokenModel", () => {
   it("should submit correct trial", () => {
     testModel(
-      new InAnyOrder([
+      new InAnyOrder(
         new SingleTokenInteraction({
           token: {
             color: Color.red,
             shape: Shape.square,
           },
           action: Action.touch,
-        }),
-      ]),
+        })
+      ),
       [
         {
           token: {
@@ -95,15 +95,15 @@ describe("TokenModel", () => {
     const model = new TokenModel(
       trial,
       timer,
-      new InAnyOrder([
+      new InAnyOrder(
         new SingleTokenInteraction({
           token: {
             color: Color.green,
             shape: Shape.circle,
           },
           action: Action.pickUp,
-        }),
-      ])
+        })
+      )
     );
     timer.setMilliseconds(1);
     submitSingleTokenInteraction(model, {
@@ -128,15 +128,15 @@ describe("TokenModel", () => {
 
   it("should not count more token interactions than expected as correct", () => {
     testModel(
-      new InAnyOrder([
+      new InAnyOrder(
         new SingleTokenInteraction({
           token: {
             color: Color.green,
             shape: Shape.circle,
           },
           action: Action.pickUp,
-        }),
-      ]),
+        })
+      ),
       [
         {
           token: {
@@ -160,15 +160,15 @@ describe("TokenModel", () => {
 
   it("should not count initially correct as correct", () => {
     testModel(
-      new InAnyOrder([
+      new InAnyOrder(
         new SingleTokenInteraction({
           token: {
             color: Color.green,
             shape: Shape.circle,
           },
           action: Action.pickUp,
-        }),
-      ]),
+        })
+      ),
       [
         {
           token: {
@@ -239,24 +239,24 @@ describe("TokenModel", () => {
   it("should submit incorrect trial", () => {
     testModel(
       new InOrder([
-        new InAnyOrder([
+        new InAnyOrder(
           new SingleTokenInteraction({
             token: {
               color: Color.red,
               shape: Shape.square,
             },
             action: Action.touch,
-          }),
-        ]),
-        new InAnyOrder([
+          })
+        ),
+        new InAnyOrder(
           new SingleTokenInteraction({
             token: {
               color: Color.green,
               shape: Shape.circle,
             },
             action: Action.touch,
-          }),
-        ]),
+          })
+        ),
       ]),
       [
         {
@@ -376,15 +376,15 @@ describe("TokenModel", () => {
             action: Action.touch,
           }),
         ]),
-        new InAnyOrder([
+        new InAnyOrder(
           new SingleTokenInteraction({
             token: {
               color: Color.yellow,
               shape: Shape.circle,
             },
             action: Action.touch,
-          }),
-        ]),
+          })
+        ),
       ]),
       [
         {
@@ -433,15 +433,15 @@ describe("TokenModel", () => {
             action: Action.touch,
           }),
         ]),
-        new InAnyOrder([
+        new InAnyOrder(
           new SingleTokenInteraction({
             token: {
               color: Color.yellow,
               shape: Shape.circle,
             },
             action: Action.touch,
-          }),
-        ]),
+          })
+        ),
       ]),
       [
         {
@@ -474,7 +474,7 @@ describe("TokenModel", () => {
   it("should submit correct dual token interaction only trial", () => {
     testModel(
       new InOrder([
-        new InAnyOrder([
+        new InAnyOrder(
           new SingleTokenInteraction({
             firstToken: {
               color: Color.red,
@@ -485,9 +485,9 @@ describe("TokenModel", () => {
               shape: Shape.square,
             },
             action: Action.useToTouch,
-          }),
-        ]),
-        new InAnyOrder([
+          })
+        ),
+        new InAnyOrder(
           new SingleTokenInteraction({
             firstToken: {
               color: Color.yellow,
@@ -498,8 +498,8 @@ describe("TokenModel", () => {
               shape: Shape.circle,
             },
             action: Action.useToTouch,
-          }),
-        ]),
+          })
+        ),
       ]),
       [
         {
@@ -533,7 +533,7 @@ describe("TokenModel", () => {
   it("should submit incorrect dual token interaction only trial", () => {
     testModel(
       new InOrder([
-        new InAnyOrder([
+        new InAnyOrder(
           new SingleTokenInteraction({
             firstToken: {
               color: Color.red,
@@ -544,9 +544,9 @@ describe("TokenModel", () => {
               shape: Shape.square,
             },
             action: Action.useToTouch,
-          }),
-        ]),
-        new InAnyOrder([
+          })
+        ),
+        new InAnyOrder(
           new SingleTokenInteraction({
             firstToken: {
               color: Color.yellow,
@@ -557,8 +557,8 @@ describe("TokenModel", () => {
               shape: Shape.circle,
             },
             action: Action.useToTouch,
-          }),
-        ]),
+          })
+        ),
       ]),
       [
         {
@@ -705,16 +705,16 @@ describe("TokenModel", () => {
       trial,
       new TimerStub(),
       new InOrder([
-        new InAnyOrder([
+        new InAnyOrder(
           new SingleTokenInteraction({
             token: {
               color: Color.red,
               shape: Shape.square,
             },
             action: Action.touch,
-          }),
-        ]),
-        new InAnyOrder([
+          })
+        ),
+        new InAnyOrder(
           new SingleTokenInteraction({
             firstToken: {
               color: Color.yellow,
@@ -725,8 +725,8 @@ describe("TokenModel", () => {
               shape: Shape.circle,
             },
             action: Action.useToTouch,
-          }),
-        ]),
+          })
+        ),
       ])
     );
     model.submitSingleTokenInteraction({
@@ -847,7 +847,7 @@ describe("TokenModel", () => {
 describe("SizedTokenModel", () => {
   it("should submit correct single token trial ", () => {
     testModel(
-      new InAnyOrder([
+      new InAnyOrder(
         new SingleSizedTokenInteraction({
           token: {
             color: Color.red,
@@ -855,8 +855,8 @@ describe("SizedTokenModel", () => {
             size: Size.small,
           },
           action: Action.touch,
-        }),
-      ]),
+        })
+      ),
       [
         {
           token: {
@@ -874,7 +874,7 @@ describe("SizedTokenModel", () => {
 
   it("should submit correct dual token interaction trial", () => {
     testModel(
-      new InAnyOrder([
+      new InAnyOrder(
         new SingleSizedTokenInteraction({
           firstToken: {
             color: Color.red,
@@ -887,8 +887,8 @@ describe("SizedTokenModel", () => {
             size: Size.large,
           },
           action: Action.useToTouch,
-        }),
-      ]),
+        })
+      ),
       [
         {
           firstToken: {
