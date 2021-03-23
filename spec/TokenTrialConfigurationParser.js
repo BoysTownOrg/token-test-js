@@ -4,7 +4,7 @@ import {
   InAnyOrder,
   InOrder,
   Shape,
-  SingleTokenInteraction,
+  TokenInteraction,
   Size,
 } from "../lib/TokenModel.js";
 import { parseTokenInteractionRule } from "../lib/TokenTrialConfigurationParser.js";
@@ -17,7 +17,7 @@ describe("Parser", () => {
   it("should parse one single token interaction", () => {
     expectYields(
       new InAnyOrder(
-        new SingleTokenInteraction({
+        new TokenInteraction({
           token: {
             color: Color.red,
             shape: Shape.square,
@@ -32,7 +32,7 @@ describe("Parser", () => {
   it("should parse one pick-up token interaction", () => {
     expectYields(
       new InAnyOrder(
-        new SingleTokenInteraction({
+        new TokenInteraction({
           token: {
             color: Color.red,
             shape: Shape.square,
@@ -47,7 +47,7 @@ describe("Parser", () => {
   it("should parse one single sized token interaction", () => {
     expectYields(
       new InAnyOrder(
-        new SingleTokenInteraction({
+        new TokenInteraction({
           token: {
             color: Color.red,
             shape: Shape.square,
@@ -64,7 +64,7 @@ describe("Parser", () => {
     expectYields(
       new InOrder([
         new InAnyOrder(
-          new SingleTokenInteraction({
+          new TokenInteraction({
             token: {
               color: Color.red,
               shape: Shape.square,
@@ -73,7 +73,7 @@ describe("Parser", () => {
           })
         ),
         new InAnyOrder(
-          new SingleTokenInteraction({
+          new TokenInteraction({
             token: {
               color: Color.yellow,
               shape: Shape.circle,
@@ -82,7 +82,7 @@ describe("Parser", () => {
           })
         ),
         new InAnyOrder(
-          new SingleTokenInteraction({
+          new TokenInteraction({
             token: {
               color: Color.green,
               shape: Shape.square,
@@ -98,14 +98,14 @@ describe("Parser", () => {
   it("should parse unordered single token interactions", () => {
     expectYields(
       new InAnyOrder([
-        new SingleTokenInteraction({
+        new TokenInteraction({
           token: {
             color: Color.red,
             shape: Shape.square,
           },
           action: Action.touch,
         }),
-        new SingleTokenInteraction({
+        new TokenInteraction({
           token: {
             color: Color.yellow,
             shape: Shape.circle,
@@ -120,7 +120,7 @@ describe("Parser", () => {
   it("should parse unordered single sized token interactions", () => {
     expectYields(
       new InAnyOrder([
-        new SingleTokenInteraction({
+        new TokenInteraction({
           token: {
             color: Color.red,
             shape: Shape.square,
@@ -128,7 +128,7 @@ describe("Parser", () => {
           },
           action: Action.touch,
         }),
-        new SingleTokenInteraction({
+        new TokenInteraction({
           token: {
             color: Color.yellow,
             shape: Shape.circle,
@@ -145,14 +145,14 @@ describe("Parser", () => {
     expectYields(
       new InOrder([
         new InAnyOrder([
-          new SingleTokenInteraction({
+          new TokenInteraction({
             token: {
               color: Color.red,
               shape: Shape.square,
             },
             action: Action.touch,
           }),
-          new SingleTokenInteraction({
+          new TokenInteraction({
             token: {
               color: Color.yellow,
               shape: Shape.circle,
@@ -161,7 +161,7 @@ describe("Parser", () => {
           }),
         ]),
         new InAnyOrder(
-          new SingleTokenInteraction({
+          new TokenInteraction({
             token: {
               color: Color.white,
               shape: Shape.circle,
@@ -177,7 +177,7 @@ describe("Parser", () => {
   it("should parse one dual token interaction", () => {
     expectYields(
       new InAnyOrder(
-        new SingleTokenInteraction({
+        new TokenInteraction({
           firstToken: {
             color: Color.white,
             shape: Shape.square,
