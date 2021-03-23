@@ -112,6 +112,9 @@ function addTokenRow(
       onReleased(token);
     });
     const position = { x: 0, y: 0 };
+    const positions = [];
+    for (let j = 0; j < 1000; j += 1) positions.push({ x: 0, y: 0 });
+    let positionIndex = 0;
     interact(token)
       .draggable({
         listeners: {
@@ -124,9 +127,13 @@ function addTokenRow(
             position.y += event.dy;
 
             event.target.style.transform = `translate(${position.x}px, ${position.y}px)`;
+            positions[positionIndex].x = position.x;
+            positions[positionIndex].y = position.y;
+            positionIndex += 1;
           },
           end() {
             token.style.zIndex = 0;
+            positionIndex = 0;
           },
         },
       })
