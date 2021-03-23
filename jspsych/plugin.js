@@ -171,13 +171,13 @@ class TokenControl {
     this.addTokenRow(
       grid,
       1,
-      ["red", "black", "yellow", "white", "green"],
+      ["red", "black", "yellow", "white", "blue"],
       circleElementWithColor
     );
     this.addTokenRow(
       grid,
       2,
-      ["black", "red", "white", "green", "yellow"],
+      ["black", "red", "white", "blue", "yellow"],
       squareElementWithColor
     );
     const onHoldingAreaDrop = () => {
@@ -259,25 +259,25 @@ class SizedTokenControl {
     this.addTokenRow(
       grid,
       1,
-      ["red", "black", "yellow", "white", "green"],
+      ["red", "black", "yellow", "white", "blue"],
       circleElementWithColor
     );
     this.addTokenRow(
       grid,
       2,
-      ["black", "red", "white", "green", "yellow"],
+      ["black", "red", "white", "blue", "yellow"],
       squareElementWithColor
     );
     this.addTokenRow(
       grid,
       3,
-      ["white", "black", "yellow", "red", "green"],
+      ["white", "black", "yellow", "red", "blue"],
       smallCircleElementWithColor
     );
     this.addTokenRow(
       grid,
       4,
-      ["yellow", "green", "red", "black", "white"],
+      ["yellow", "blue", "red", "black", "white"],
       smallSquareElementWithColor
     );
     adopt(parent, grid);
@@ -377,7 +377,7 @@ function pluginUsingControllerAndControlFactories(
       );
       jsPsych.pluginAPI.setTimeout(() => {
         model.concludeTrial();
-      }, 5000);
+      }, trial.timeoutMilliseconds);
     },
     info: {
       parameters: {},
