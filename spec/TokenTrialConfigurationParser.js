@@ -8,8 +8,8 @@ import {
 } from "../lib/TokenModel.js";
 import { parseTokenInteractionRule } from "../lib/TokenTrialConfigurationParser.js";
 
-function expectYields(interactions, text) {
-  expect(parseTokenInteractionRule(text)).toEqual(interactions);
+function expectYields(rule, text) {
+  expect(parseTokenInteractionRule(text)).toEqual(rule);
 }
 
 describe("Parser", () => {
