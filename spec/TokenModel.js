@@ -169,6 +169,36 @@ describe("TokenModel", () => {
     });
   });
 
+  it("should not count more token interactions than expected as correct", () => {
+    const trial = new TrialStub();
+    const timer = new TimerStub();
+    const model = new TokenModel(trial, timer, [
+      {
+        token: {
+          color: Color.green,
+          shape: Shape.circle,
+        },
+        action: Action.pickUp,
+      },
+    ]);
+    submitSingleTokenInteraction(model, {
+      token: {
+        color: Color.red,
+        shape: Shape.square,
+      },
+      action: Action.touch,
+    });
+    submitSingleTokenInteraction(model, {
+      token: {
+        color: Color.green,
+        shape: Shape.circle,
+      },
+      action: Action.pickUp,
+    });
+    model.concludeTrial();
+    expect(trial.result().correct).toBeFalse();
+  });
+
   it("should submit incorrect trial", () => {
     testModel(
       [
