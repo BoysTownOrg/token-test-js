@@ -66,15 +66,13 @@ function testModel(rule, interactions, expectedResult, submit) {
 describe("TokenModel", () => {
   it("should submit correct trial", () => {
     testModel(
-      new InAnyOrder(
-        new TokenInteraction({
-          token: {
-            color: Color.red,
-            shape: Shape.square,
-          },
-          action: Action.touch,
-        })
-      ),
+      new TokenInteraction({
+        token: {
+          color: Color.red,
+          shape: Shape.square,
+        },
+        action: Action.touch,
+      }),
       [
         {
           token: {
@@ -95,15 +93,13 @@ describe("TokenModel", () => {
     const model = new TokenModel(
       trial,
       timer,
-      new InAnyOrder(
-        new TokenInteraction({
-          token: {
-            color: Color.green,
-            shape: Shape.circle,
-          },
-          action: Action.pickUp,
-        })
-      )
+      new TokenInteraction({
+        token: {
+          color: Color.green,
+          shape: Shape.circle,
+        },
+        action: Action.pickUp,
+      })
     );
     timer.setMilliseconds(1);
     submitSingleTokenInteraction(model, {
