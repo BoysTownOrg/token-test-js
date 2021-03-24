@@ -177,4 +177,23 @@ describe("Parser", () => {
       "use white square to touch yellow circle"
     );
   });
+
+  it("should parse one dual sized token interaction", () => {
+    expectYields(
+      new SizedTokenInteraction({
+        firstToken: {
+          color: Color.white,
+          shape: Shape.square,
+          size: Size.small,
+        },
+        secondToken: {
+          color: Color.yellow,
+          shape: Shape.circle,
+          size: Size.large,
+        },
+        action: Action.useToTouch,
+      }),
+      "use small white square to touch large yellow circle"
+    );
+  });
 });
