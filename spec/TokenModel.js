@@ -8,6 +8,7 @@ import {
   InOrder,
   SizedTokenInteraction,
   TokenInteraction,
+  FirstOrSecond,
 } from "../lib/TokenModel.js";
 
 class TrialStub {
@@ -810,6 +811,38 @@ describe("TokenModel", () => {
         },
       ],
       false,
+      submitSingleTokenInteraction
+    );
+  });
+
+  it("should submit correct option trial", () => {
+    testModel(
+      new FirstOrSecond(
+        new TokenInteraction({
+          token: {
+            color: Color.red,
+            shape: Shape.square,
+          },
+          action: Action.touch,
+        }),
+        new TokenInteraction({
+          token: {
+            color: Color.green,
+            shape: Shape.circle,
+          },
+          action: Action.touch,
+        })
+      ),
+      [
+        {
+          token: {
+            color: Color.green,
+            shape: Shape.circle,
+          },
+          action: Action.touch,
+        },
+      ],
+      true,
       submitSingleTokenInteraction
     );
   });
