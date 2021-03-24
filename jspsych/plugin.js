@@ -1,4 +1,4 @@
-import { SizedTokenModel, TokenModel } from "../lib/TokenModel.js";
+import { TokenModel } from "../lib/TokenModel.js";
 import {
   SizedTokenController,
   TokenController,
@@ -367,13 +367,12 @@ class PerformanceTimer {
 
 function pluginUsingControllerAndControlFactories(
   TokenControllerType,
-  TokenControlType,
-  TokenModelType
+  TokenControlType
 ) {
   return {
     trial(display_element, trial) {
       clear(display_element);
-      const model = new TokenModelType(
+      const model = new TokenModel(
         new JsPsychTrial(),
         new PerformanceTimer(),
         parseTokenInteractionRule(trial.commandString)
@@ -395,15 +394,13 @@ function pluginUsingControllerAndControlFactories(
 export function plugin() {
   return pluginUsingControllerAndControlFactories(
     TokenController,
-    TokenControl,
-    TokenModel
+    TokenControl
   );
 }
 
 export function twoSizesPlugin() {
   return pluginUsingControllerAndControlFactories(
     SizedTokenController,
-    SizedTokenControl,
-    SizedTokenModel
+    SizedTokenControl
   );
 }
