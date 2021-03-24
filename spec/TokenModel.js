@@ -819,16 +819,14 @@ describe("TokenModel", () => {
 describe("SizedTokenModel", () => {
   it("should submit correct single token trial ", () => {
     testModel(
-      new InAnyOrder(
-        new SizedTokenInteraction({
-          token: {
-            color: Color.red,
-            shape: Shape.square,
-            size: Size.small,
-          },
-          action: Action.touch,
-        })
-      ),
+      new SizedTokenInteraction({
+        token: {
+          color: Color.red,
+          shape: Shape.square,
+          size: Size.small,
+        },
+        action: Action.touch,
+      }),
       [
         {
           token: {
@@ -846,21 +844,19 @@ describe("SizedTokenModel", () => {
 
   it("should submit correct dual token interaction trial", () => {
     testModel(
-      new InAnyOrder(
-        new SizedTokenInteraction({
-          firstToken: {
-            color: Color.red,
-            shape: Shape.circle,
-            size: Size.small,
-          },
-          secondToken: {
-            color: Color.green,
-            shape: Shape.square,
-            size: Size.large,
-          },
-          action: Action.useToTouch,
-        })
-      ),
+      new SizedTokenInteraction({
+        firstToken: {
+          color: Color.red,
+          shape: Shape.circle,
+          size: Size.small,
+        },
+        secondToken: {
+          color: Color.green,
+          shape: Shape.square,
+          size: Size.large,
+        },
+        action: Action.useToTouch,
+      }),
       [
         {
           firstToken: {
