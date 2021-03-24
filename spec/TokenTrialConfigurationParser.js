@@ -7,6 +7,7 @@ import {
   TokenInteraction,
   Size,
   SizedTokenInteraction,
+  FirstOrSecond,
 } from "../lib/TokenModel.js";
 import { parseTokenInteractionRule } from "../lib/TokenTrialConfigurationParser.js";
 
@@ -194,6 +195,28 @@ describe("Parser", () => {
         action: Action.useToTouch,
       }),
       "use small white square to touch large yellow circle"
+    );
+  });
+
+  it("should parse option single token interaction", () => {
+    expectYields(
+      new FirstOrSecond(
+        new TokenInteraction({
+          token: {
+            color: Color.blue,
+            shape: Shape.circle,
+          },
+          action: Action.pickUp,
+        }),
+        new TokenInteraction({
+          token: {
+            color: Color.red,
+            shape: Shape.square,
+          },
+          action: Action.pickUp,
+        })
+      ),
+      "pick up blue circle or pick up red square"
     );
   });
 });
