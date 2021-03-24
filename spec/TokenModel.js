@@ -772,10 +772,7 @@ describe("TokenModel", () => {
   });
 
   it("should submit incorrect mixed token interaction unordered trial", () => {
-    const trial = new TrialStub();
-    const model = new TokenModel(
-      trial,
-      new TimerStub(),
+    testModel(
       new InAnyOrder([
         new TokenInteraction({
           token: {
@@ -795,24 +792,26 @@ describe("TokenModel", () => {
           },
           action: Action.useToTouch,
         }),
-      ])
+      ]),
+      [
+        {
+          token: {
+            color: Color.red,
+            shape: Shape.square,
+          },
+          action: Action.touch,
+        },
+        {
+          token: {
+            color: Color.red,
+            shape: Shape.square,
+          },
+          action: Action.touch,
+        },
+      ],
+      false,
+      submitSingleTokenInteraction
     );
-    model.submitSingleTokenInteraction({
-      token: {
-        color: Color.red,
-        shape: Shape.square,
-      },
-      action: Action.touch,
-    });
-    model.submitSingleTokenInteraction({
-      token: {
-        color: Color.red,
-        shape: Shape.square,
-      },
-      action: Action.touch,
-    });
-    model.concludeTrial();
-    expect(trial.result().correct).toEqual(false);
   });
 });
 
