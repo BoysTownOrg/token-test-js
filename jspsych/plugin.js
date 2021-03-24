@@ -1,4 +1,4 @@
-import { TokenModel } from "../lib/TokenModel.js";
+import { Shape, Size, TokenModel } from "../lib/TokenModel.js";
 import {
   SizedTokenController,
   TokenController,
@@ -100,7 +100,8 @@ function addTokenRow(
   createTokenWithColor,
   onReleased,
   onDragged,
-  onDroppedOnto
+  onDroppedOnto,
+  onDraggedReleased
 ) {
   for (let i = 0; i < colors.length; i += 1) {
     const token = createTokenWithColor(colors[i]);
@@ -132,6 +133,7 @@ function addTokenRow(
             positionIndex += 1;
           },
           end() {
+            onDraggedReleased(token, positions.slice(0, positionIndex));
             token.style.zIndex = 0;
             positionIndex = 0;
           },
@@ -162,7 +164,8 @@ function tokenGridWithRows(n) {
 }
 
 class TokenControl {
-  constructor(parent, instructionMessage) {
+  constructor(parent, instructionMessage, trial) {
+    this.trial = trial;
     const holdingArea = divElement();
     holdingArea.style.height = pixelsString(300);
     holdingArea.style.width = pixelsString(5 * 150);
@@ -224,6 +227,9 @@ class TokenControl {
       (token) => {
         this.tokenDroppedOnto = token;
         this.observer.notifyThatTokenHasBeenDroppedOnto();
+      },
+      (token, positions) => {
+        this.trial.recordTokenDragPath(token, positions);
       }
     );
   }
@@ -258,7 +264,8 @@ class TokenControl {
 }
 
 class SizedTokenControl {
-  constructor(parent, instructionMessage) {
+  constructor(parent, instructionMessage, trial) {
+    this.trial = trial;
     const instructions = divElement();
     instructions.textContent = instructionMessage;
     adopt(parent, instructions);
@@ -308,6 +315,9 @@ class SizedTokenControl {
       (token) => {
         this.tokenDroppedOnto = token;
         this.observer.notifyThatTokenHasBeenDroppedOnto();
+      },
+      (token, positions) => {
+        this.trial.recordSizedTokenDragPath(token, positions);
       }
     );
   }
@@ -354,8 +364,39 @@ class SizedTokenControl {
 }
 
 class JsPsychTrial {
+  constructor() {
+    this.tokenDragPaths = [];
+  }
+
   conclude(result) {
-    jsPsych.finishTrial(result);
+    jsPsych.finishTrial({ ...result, tokenDragPaths: this.tokenDragPaths });
+  }
+
+  recordTokenDragPath(token, positions) {
+    const copiedPositions = [];
+    for (let j = 0; j < positions.length; j += 1)
+      copiedPositions.push({ x: positions[j].x, y: positions[j].y });
+    this.tokenDragPaths.push({
+      positions: copiedPositions,
+      token: {
+        color: backgroundColor(token),
+        shape: isCircle(token) ? Shape.circle : Shape.square,
+      },
+    });
+  }
+
+  recordSizedTokenDragPath(token, positions) {
+    const copiedPositions = [];
+    for (let j = 0; j < positions.length; j += 1)
+      copiedPositions.push({ x: positions[j].x, y: positions[j].y });
+    this.tokenDragPaths.push({
+      positions: copiedPositions,
+      token: {
+        color: backgroundColor(token),
+        shape: isCircle(token) ? Shape.circle : Shape.square,
+        size: isSmall(token) ? Size.small : Size.large,
+      },
+    });
   }
 }
 
@@ -372,13 +413,14 @@ function pluginUsingControllerAndControlFactories(
   return {
     trial(display_element, trial) {
       clear(display_element);
+      const jsPsychTrial = new JsPsychTrial();
       const model = new TokenModel(
-        new JsPsychTrial(),
+        jsPsychTrial,
         new PerformanceTimer(),
         parseTokenInteractionRule(trial.commandString)
       );
       new TokenControllerType(
-        new TokenControlType(display_element, trial.sentence),
+        new TokenControlType(display_element, trial.sentence, jsPsychTrial),
         model
       );
       jsPsych.pluginAPI.setTimeout(() => {
