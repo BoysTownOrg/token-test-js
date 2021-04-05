@@ -17,6 +17,14 @@ const feedback = {
 jsPsych.init({
   timeline: [
     {
+      type: twoSizesTokenTestPluginId,
+      sentence:
+        "Take the large white circle and the small blue square.",
+      commandString: "pick up large white circle, pick up small blue square",
+      timeoutMilliseconds: 10000,
+    },
+    feedback,
+    {
       type: tokenTestPluginId,
       sentence:
         "Touch the square that is next to the square that is below the red circle.",

@@ -266,6 +266,13 @@ class TokenControl {
 class SizedTokenControl {
   constructor(parent, instructionMessage, trial) {
     this.trial = trial;
+    const holdingArea = divElement();
+    holdingArea.style.height = pixelsString(300);
+    holdingArea.style.width = pixelsString(5 * 150);
+    holdingArea.style.border = `${pixelsString(2)} solid black`;
+    holdingArea.style.margin = "5% auto";
+    holdingArea.style.backgroundColor = "lightgrey";
+    adopt(parent, holdingArea);
     const instructions = divElement();
     instructions.textContent = instructionMessage;
     adopt(parent, instructions);
@@ -294,6 +301,22 @@ class SizedTokenControl {
       ["yellow", "blue", "red", "black", "white"],
       smallSquareElementWithColor
     );
+    const onHoldingAreaDrop = () => {
+      this.observer.notifyThatHoldingAreaHasBeenDroppedOnto();
+    };
+    interact(holdingArea).dropzone({
+      ondrop(event) {
+        onHoldingAreaDrop();
+        holdingArea.style.borderColor = "black";
+        interact(event.relatedTarget).dropzone(false);
+      },
+      ondragenter() {
+        holdingArea.style.borderColor = "#22e";
+      },
+      ondragleave() {
+        holdingArea.style.borderColor = "black";
+      },
+    });
     adopt(parent, grid);
     this.parent = parent;
   }
