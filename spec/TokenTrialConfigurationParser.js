@@ -1,183 +1,222 @@
-import { Action, Color, Shape, Size } from "../lib/TokenModel.js";
-import { parseTokenInteractions } from "../lib/TokenTrialConfigurationParser.js";
+import {
+  Action,
+  Color,
+  InAnyOrder,
+  InOrder,
+  Shape,
+  TokenInteraction,
+  Size,
+  SizedTokenInteraction,
+  FirstOrSecond,
+} from "../lib/TokenModel.js";
+import { parseTokenInteractionRule } from "../lib/TokenTrialConfigurationParser.js";
 
-function expectYields(interactions, text) {
-  expect(parseTokenInteractions(text)).toEqual(interactions);
+function expectYields(rule, text) {
+  expect(parseTokenInteractionRule(text)).toEqual(rule);
 }
 
 describe("Parser", () => {
   it("should parse one single token interaction", () => {
     expectYields(
-      [
-        {
-          token: {
-            color: Color.red,
-            shape: Shape.square,
-          },
-          action: Action.touch,
+      new TokenInteraction({
+        token: {
+          color: Color.red,
+          shape: Shape.square,
         },
-      ],
+        action: Action.touch,
+      }),
       "touch red square"
     );
   });
 
   it("should parse one pick-up token interaction", () => {
     expectYields(
-      [
-        {
-          token: {
-            color: Color.red,
-            shape: Shape.square,
-          },
-          action: Action.pickUp,
+      new TokenInteraction({
+        token: {
+          color: Color.red,
+          shape: Shape.square,
         },
-      ],
+        action: Action.pickUp,
+      }),
       "pick up red square"
     );
   });
 
   it("should parse one single sized token interaction", () => {
     expectYields(
-      [
-        {
-          token: {
-            color: Color.red,
-            shape: Shape.square,
-            size: Size.small,
-          },
-          action: Action.touch,
+      new SizedTokenInteraction({
+        token: {
+          color: Color.red,
+          shape: Shape.square,
+          size: Size.small,
         },
-      ],
+        action: Action.touch,
+      }),
       "touch small red square"
     );
   });
 
   it("should parse multiple single token interactions", () => {
     expectYields(
-      [
-        {
+      new InOrder([
+        new TokenInteraction({
           token: {
             color: Color.red,
             shape: Shape.square,
           },
           action: Action.touch,
-        },
-        {
+        }),
+        new TokenInteraction({
           token: {
             color: Color.yellow,
             shape: Shape.circle,
           },
           action: Action.touch,
-        },
-        {
+        }),
+        new TokenInteraction({
           token: {
             color: Color.green,
             shape: Shape.square,
           },
           action: Action.pickUp,
-        },
-      ],
+        }),
+      ]),
       "touch red square\ntouch yellow circle\npick up green square"
     );
   });
 
   it("should parse unordered single token interactions", () => {
     expectYields(
-      [
-        [
-          {
-            token: {
-              color: Color.red,
-              shape: Shape.square,
-            },
-            action: Action.touch,
+      new InAnyOrder([
+        new TokenInteraction({
+          token: {
+            color: Color.red,
+            shape: Shape.square,
           },
-          {
-            token: {
-              color: Color.yellow,
-              shape: Shape.circle,
-            },
-            action: Action.touch,
+          action: Action.touch,
+        }),
+        new TokenInteraction({
+          token: {
+            color: Color.yellow,
+            shape: Shape.circle,
           },
-        ],
-      ],
+          action: Action.touch,
+        }),
+      ]),
       "touch red square, touch yellow circle"
     );
   });
 
   it("should parse unordered single sized token interactions", () => {
     expectYields(
-      [
-        [
-          {
-            token: {
-              color: Color.red,
-              shape: Shape.square,
-              size: Size.small,
-            },
-            action: Action.touch,
+      new InAnyOrder([
+        new SizedTokenInteraction({
+          token: {
+            color: Color.red,
+            shape: Shape.square,
+            size: Size.small,
           },
-          {
-            token: {
-              color: Color.yellow,
-              shape: Shape.circle,
-              size: Size.large,
-            },
-            action: Action.touch,
+          action: Action.touch,
+        }),
+        new SizedTokenInteraction({
+          token: {
+            color: Color.yellow,
+            shape: Shape.circle,
+            size: Size.large,
           },
-        ],
-      ],
+          action: Action.touch,
+        }),
+      ]),
       "touch small red square, touch large yellow circle"
     );
   });
 
   it("should parse partially unordered single token interactions", () => {
     expectYields(
-      [
-        [
-          {
+      new InOrder([
+        new InAnyOrder([
+          new TokenInteraction({
             token: {
               color: Color.red,
               shape: Shape.square,
             },
             action: Action.touch,
-          },
-          {
+          }),
+          new TokenInteraction({
             token: {
               color: Color.yellow,
               shape: Shape.circle,
             },
             action: Action.touch,
-          },
-        ],
-        {
+          }),
+        ]),
+        new TokenInteraction({
           token: {
             color: Color.white,
             shape: Shape.circle,
           },
           action: Action.pickUp,
-        },
-      ],
+        }),
+      ]),
       "touch red square, touch yellow circle\npick up white circle"
     );
   });
 
   it("should parse one dual token interaction", () => {
     expectYields(
-      [
-        {
-          firstToken: {
-            color: Color.white,
-            shape: Shape.square,
-          },
-          secondToken: {
-            color: Color.yellow,
+      new TokenInteraction({
+        firstToken: {
+          color: Color.white,
+          shape: Shape.square,
+        },
+        secondToken: {
+          color: Color.yellow,
+          shape: Shape.circle,
+        },
+        action: Action.useToTouch,
+      }),
+      "use white square to touch yellow circle"
+    );
+  });
+
+  it("should parse one dual sized token interaction", () => {
+    expectYields(
+      new SizedTokenInteraction({
+        firstToken: {
+          color: Color.white,
+          shape: Shape.square,
+          size: Size.small,
+        },
+        secondToken: {
+          color: Color.yellow,
+          shape: Shape.circle,
+          size: Size.large,
+        },
+        action: Action.useToTouch,
+      }),
+      "use small white square to touch large yellow circle"
+    );
+  });
+
+  it("should parse option single token interaction", () => {
+    expectYields(
+      new FirstOrSecond(
+        new TokenInteraction({
+          token: {
+            color: Color.blue,
             shape: Shape.circle,
           },
-          action: Action.useToTouch,
-        },
-      ],
-      "use white square to touch yellow circle"
+          action: Action.pickUp,
+        }),
+        new TokenInteraction({
+          token: {
+            color: Color.red,
+            shape: Shape.square,
+          },
+          action: Action.pickUp,
+        })
+      ),
+      "pick up blue circle or pick up red square"
     );
   });
 });
