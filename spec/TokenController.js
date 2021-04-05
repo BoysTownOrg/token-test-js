@@ -79,6 +79,11 @@ class SizedTokenControlStub {
     this.observer.notifyThatTokenHasBeenDroppedOnto();
   }
 
+  dropOntoHoldingArea() {
+    this.observer.notifyThatHoldingAreaHasBeenDroppedOnto();
+    this.observer.notifyThatTokenHasBeenReleased();
+  }
+
   tokenDraggedColor() {
     return this.tokenDraggedColor_;
   }
@@ -208,5 +213,14 @@ describe("SizedTokenController", () => {
       Shape.square
     );
     expect(this.model.dualTokenInteraction().secondToken.size).toBe(Size.large);
+  });
+
+  it("should submit pick-up action when user drags small red circle onto holding area", function () {
+    this.control.dragSmallRedCircle();
+    this.control.dropOntoHoldingArea();
+    expect(this.model.singleTokenInteraction().action).toBe(Action.pickUp);
+    expect(this.model.singleTokenInteraction().token.color).toBe(Color.red);
+    expect(this.model.singleTokenInteraction().token.shape).toBe(Shape.circle);
+    expect(this.model.singleTokenInteraction().token.size).toBe(Size.small);
   });
 });

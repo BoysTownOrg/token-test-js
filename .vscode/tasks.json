@@ -4,7 +4,7 @@
         {
             "label": "node run tests",
             "type": "shell",
-            "command": "node run-tests.js",
+            "command": "& 'C:\\Program Files\\nodejs\\node.exe' .\\run-tests.js",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
