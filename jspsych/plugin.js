@@ -164,7 +164,7 @@ function tokenGridWithRows(n) {
 }
 
 class TokenControl {
-  constructor(parent, instructionMessage, trial) {
+  constructor(parent, instructionMessage, trial, firstRowColors, secondRowColors) {
     this.trial = trial;
     const holdingArea = divElement();
     holdingArea.style.height = pixelsString(300);
@@ -181,13 +181,13 @@ class TokenControl {
     this.addTokenRow(
       grid,
       1,
-      ["red", "black", "yellow", "white", "blue"],
+      firstRowColors,
       circleElementWithColor
     );
     this.addTokenRow(
       grid,
       2,
-      ["black", "red", "white", "blue", "yellow"],
+      secondRowColors,
       squareElementWithColor
     );
     const onHoldingAreaDrop = () => {
@@ -431,7 +431,7 @@ class PerformanceTimer {
 
 function pluginUsingControllerAndControlFactories(
   TokenControllerType,
-  TokenControlType
+  createTokenControl
 ) {
   return {
     trial(display_element, trial) {
@@ -442,8 +442,8 @@ function pluginUsingControllerAndControlFactories(
         new PerformanceTimer(),
         parseTokenInteractionRule(trial.commandString)
       );
-      new TokenControllerType(
-        new TokenControlType(display_element, trial.sentence, jsPsychTrial),
+      const controller = new TokenControllerType(
+        createTokenControl(display_element, trial.sentence, jsPsychTrial),
         model
       );
       jsPsych.pluginAPI.setTimeout(() => {
@@ -459,13 +459,13 @@ function pluginUsingControllerAndControlFactories(
 export function plugin() {
   return pluginUsingControllerAndControlFactories(
     TokenController,
-    TokenControl
+    (parent, sentence, trial) => new TokenControl(parent, sentence, trial, ["red", "black", "yellow", "white", "blue"], ["black", "red", "white", "blue", "yellow"])
   );
 }
 
 export function twoSizesPlugin() {
   return pluginUsingControllerAndControlFactories(
     SizedTokenController,
-    SizedTokenControl
+    (parent, sentence, trial) => new SizedTokenControl(parent, sentence, trial)
   );
 }
