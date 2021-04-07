@@ -35,8 +35,8 @@ function submitDualTokenInteraction(model, interaction) {
   model.submitDualTokenInteraction(interaction);
 }
 
-function submitSingleTokenInteraction(model, interaction) {
-  model.submitSingleTokenInteraction(interaction);
+function submitSingleTokenInteraction(model, interaction, tokenRelation) {
+  model.submitSingleTokenInteraction(interaction, tokenRelation);
 }
 
 function testModelWithFactory(
@@ -44,24 +44,42 @@ function testModelWithFactory(
   rule,
   interactions,
   expectedResult,
-  submit
+  submit,
+  tokenRelation
 ) {
   const trial = new TrialStub();
   const timer = new TimerStub();
   const model = create(trial, timer, rule);
-  interactions.forEach((interaction) => submit(model, interaction));
+  interactions.forEach((interaction) =>
+    submit(model, interaction, tokenRelation)
+  );
   model.concludeTrial();
   expect(trial.result().correct).toEqual(expectedResult);
 }
 
-function testModel(rule, interactions, expectedResult, submit) {
+function testModel(rule, interactions, expectedResult, submit, tokenRelation) {
   testModelWithFactory(
     (trial, timer, rule) => new TokenModel(trial, timer, rule),
     rule,
     interactions,
     expectedResult,
-    submit
+    submit,
+    tokenRelation
   );
+}
+
+class TokenRelationStub {
+  constructor() {
+    this.movedTokenIsFurtherFrom_ = true;
+  }
+
+  movedTokenIsFurtherFrom(token) {
+    return this.movedTokenIsFurtherFrom_;
+  }
+
+  setMovedTokenIsFurtherFrom() {
+    this.movedTokenIsFurtherFrom_ = true;
+  }
 }
 
 describe("TokenModel", () => {
@@ -508,6 +526,36 @@ describe("TokenModel", () => {
       ],
       true,
       submitDualTokenInteraction
+    );
+  });
+
+  it("should submit correct move away from action", () => {
+    const tokenRelation = new TokenRelationStub();
+    tokenRelation.setMovedTokenIsFurtherFrom();
+    testModel(
+      new TokenInteraction({
+        firstToken: {
+          color: Color.green,
+          shape: Shape.square,
+        },
+        secondToken: {
+          color: Color.yellow,
+          shape: Shape.square,
+        },
+        action: Action.moveAwayFrom,
+      }),
+      [
+        {
+          token: {
+            color: Color.green,
+            shape: Shape.square,
+          },
+          action: Action.move,
+        },
+      ],
+      true,
+      submitSingleTokenInteraction,
+      tokenRelation
     );
   });
 
