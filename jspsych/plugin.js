@@ -164,7 +164,13 @@ function tokenGridWithRows(n) {
 }
 
 class TokenControl {
-  constructor(parent, instructionMessage, trial, firstRowColors, secondRowColors) {
+  constructor(
+    parent,
+    instructionMessage,
+    trial,
+    firstRowColors,
+    secondRowColors
+  ) {
     this.trial = trial;
     const holdingArea = divElement();
     holdingArea.style.height = pixelsString(300);
@@ -178,18 +184,8 @@ class TokenControl {
     instructions.style.margin = "5% auto";
     adopt(parent, instructions);
     const grid = tokenGridWithRows(2);
-    this.addTokenRow(
-      grid,
-      1,
-      firstRowColors,
-      circleElementWithColor
-    );
-    this.addTokenRow(
-      grid,
-      2,
-      secondRowColors,
-      squareElementWithColor
-    );
+    this.addTokenRow(grid, 1, firstRowColors, circleElementWithColor);
+    this.addTokenRow(grid, 2, secondRowColors, squareElementWithColor);
     const onHoldingAreaDrop = () => {
       this.observer.notifyThatHoldingAreaHasBeenDroppedOnto();
     };
@@ -459,7 +455,14 @@ function pluginUsingControllerAndControlFactories(
 export function plugin() {
   return pluginUsingControllerAndControlFactories(
     TokenController,
-    (parent, sentence, trial) => new TokenControl(parent, sentence, trial, ["red", "black", "yellow", "white", "blue"], ["black", "red", "white", "blue", "yellow"])
+    (parent, sentence, trial) =>
+      new TokenControl(
+        parent,
+        sentence,
+        trial,
+        ["red", "black", "yellow", "white", "blue"],
+        ["black", "red", "white", "blue", "yellow"]
+      )
   );
 }
 
