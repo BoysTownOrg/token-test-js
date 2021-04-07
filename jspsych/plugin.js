@@ -183,13 +183,7 @@ function tokenGridWithRows(n) {
 }
 
 class TokenControl {
-  constructor(
-    parent,
-    instructionMessage,
-    trial,
-    firstRowTokens,
-    secondRowTokens
-  ) {
+  constructor(parent, instructionMessage, trial, tokenRows) {
     this.trial = trial;
     const holdingArea = divElement();
     holdingArea.style.height = pixelsString(300);
@@ -202,9 +196,9 @@ class TokenControl {
     instructions.textContent = instructionMessage;
     instructions.style.margin = "5% auto";
     adopt(parent, instructions);
-    const grid = tokenGridWithRows(2);
-    this.addTokenRow(grid, 1, firstRowTokens);
-    this.addTokenRow(grid, 2, secondRowTokens);
+    const grid = tokenGridWithRows(tokenRows.length);
+    for (let i = 0; i < tokenRows.length; i += 1)
+      this.addTokenRow(grid, i + 1, tokenRows[i]);
     const onHoldingAreaDrop = () => {
       this.observer.notifyThatHoldingAreaHasBeenDroppedOnto();
     };
@@ -282,15 +276,7 @@ class TokenControl {
 }
 
 class SizedTokenControl {
-  constructor(
-    parent,
-    instructionMessage,
-    trial,
-    firstRowTokens,
-    secondRowTokens,
-    thirdRowTokens,
-    fourthRowTokens
-  ) {
+  constructor(parent, instructionMessage, trial, tokenRows) {
     this.trial = trial;
     const holdingArea = divElement();
     holdingArea.style.height = pixelsString(300);
@@ -302,11 +288,9 @@ class SizedTokenControl {
     const instructions = divElement();
     instructions.textContent = instructionMessage;
     adopt(parent, instructions);
-    const grid = tokenGridWithRows(4);
-    this.addTokenRow(grid, 1, firstRowTokens);
-    this.addTokenRow(grid, 2, secondRowTokens);
-    this.addTokenRow(grid, 3, thirdRowTokens);
-    this.addTokenRow(grid, 4, fourthRowTokens);
+    const grid = tokenGridWithRows(tokenRows.length);
+    for (let i = 0; i < tokenRows.length; i += 1)
+      this.addTokenRow(grid, i + 1, tokenRows[i]);
     const onHoldingAreaDrop = () => {
       this.observer.notifyThatHoldingAreaHasBeenDroppedOnto();
     };
@@ -473,10 +457,7 @@ export function plugin() {
   return pluginUsingControllerAndControlFactories(
     TokenController,
     (parent, sentence, trial) =>
-      new TokenControl(
-        parent,
-        sentence,
-        trial,
+      new TokenControl(parent, sentence, trial, [
         [
           { color: Color.red, shape: Shape.circle },
           { color: Color.black, shape: Shape.circle },
@@ -490,8 +471,8 @@ export function plugin() {
           { color: Color.white, shape: Shape.square },
           { color: Color.blue, shape: Shape.square },
           { color: Color.yellow, shape: Shape.square },
-        ]
-      )
+        ],
+      ])
   );
 }
 
@@ -499,10 +480,7 @@ export function twoSizesPlugin() {
   return pluginUsingControllerAndControlFactories(
     SizedTokenController,
     (parent, sentence, trial) =>
-      new SizedTokenControl(
-        parent,
-        sentence,
-        trial,
+      new SizedTokenControl(parent, sentence, trial, [
         [
           { color: Color.red, shape: Shape.circle, size: Size.large },
           { color: Color.black, shape: Shape.circle, size: Size.large },
@@ -530,7 +508,7 @@ export function twoSizesPlugin() {
           { color: Color.red, shape: Shape.square, size: Size.small },
           { color: Color.black, shape: Shape.square, size: Size.small },
           { color: Color.white, shape: Shape.square, size: Size.small },
-        ]
-      )
+        ],
+      ])
   );
 }
