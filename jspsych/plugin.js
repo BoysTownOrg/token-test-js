@@ -1,4 +1,4 @@
-import { Shape, Size, TokenModel } from "../lib/TokenModel.js";
+import { Color, Shape, Size, TokenModel } from "../lib/TokenModel.js";
 import {
   SizedTokenController,
   TokenController,
@@ -30,6 +30,25 @@ function tokenBorder(borderWidthPixels) {
   return `${pixelsString(borderWidthPixels)} solid black`;
 }
 
+function colorName(color) {
+  switch (color) {
+    case Color.red:
+      return "red";
+    case Color.yellow:
+      return "yellow";
+    case Color.green:
+      return "green";
+    case Color.white:
+      return "white";
+    case Color.blue:
+      return "blue";
+    case Color.black:
+      return "black";
+    default:
+      return "";
+  }
+}
+
 function circleElementWithColorAndDiameterPixels(color, diameterPixels) {
   const circle = divElement();
   circle.style.height = pixelsString(diameterPixels);
@@ -40,7 +59,7 @@ function circleElementWithColorAndDiameterPixels(color, diameterPixels) {
   );
   circle.style.border = tokenBorder(borderWidthPixels);
   circle.style.margin = "auto";
-  circle.style.backgroundColor = color;
+  circle.style.backgroundColor = colorName(color);
   return circle;
 }
 
@@ -58,7 +77,7 @@ function squareElementWithColorAndWidthPixels(color, widthPixels) {
   square.style.width = pixelsString(widthPixels);
   square.style.border = tokenBorder(tokenBorderWidthPixels);
   square.style.margin = "auto";
-  square.style.backgroundColor = color;
+  square.style.backgroundColor = colorName(color);
   return square;
 }
 
@@ -96,15 +115,15 @@ function isSmall(token) {
 function addTokenRow(
   grid,
   row,
-  colors,
-  createTokenWithColor,
+  tokens,
+  createElement,
   onReleased,
   onDragged,
   onDroppedOnto,
   onDraggedReleased
 ) {
-  for (let i = 0; i < colors.length; i += 1) {
-    const token = createTokenWithColor(colors[i]);
+  for (let i = 0; i < tokens.length; i += 1) {
+    const token = createElement(tokens[i]);
     token.style.gridRow = row;
     token.style.gridColumn = i + 1;
     token.style.touchAction = "none";
@@ -168,8 +187,8 @@ class TokenControl {
     parent,
     instructionMessage,
     trial,
-    firstRowColors,
-    secondRowColors
+    firstRowTokens,
+    secondRowTokens
   ) {
     this.trial = trial;
     const holdingArea = divElement();
@@ -184,8 +203,8 @@ class TokenControl {
     instructions.style.margin = "5% auto";
     adopt(parent, instructions);
     const grid = tokenGridWithRows(2);
-    this.addTokenRow(grid, 1, firstRowColors, circleElementWithColor);
-    this.addTokenRow(grid, 2, secondRowColors, squareElementWithColor);
+    this.addTokenRow(grid, 1, firstRowTokens);
+    this.addTokenRow(grid, 2, secondRowTokens);
     const onHoldingAreaDrop = () => {
       this.observer.notifyThatHoldingAreaHasBeenDroppedOnto();
     };
@@ -206,12 +225,15 @@ class TokenControl {
     this.parent = parent;
   }
 
-  addTokenRow(grid, row, colors, create) {
+  addTokenRow(grid, row, tokens) {
     addTokenRow(
       grid,
       row,
-      colors,
-      create,
+      tokens,
+      (token) =>
+        token.shape === Shape.circle
+          ? circleElementWithColor(token.color)
+          : squareElementWithColor(token.color),
       (token) => {
         this.tokenReleased = token;
         this.observer.notifyThatTokenHasBeenReleased();
@@ -260,7 +282,15 @@ class TokenControl {
 }
 
 class SizedTokenControl {
-  constructor(parent, instructionMessage, trial) {
+  constructor(
+    parent,
+    instructionMessage,
+    trial,
+    firstRowTokens,
+    secondRowTokens,
+    thirdRowTokens,
+    fourthRowTokens
+  ) {
     this.trial = trial;
     const holdingArea = divElement();
     holdingArea.style.height = pixelsString(300);
@@ -273,30 +303,10 @@ class SizedTokenControl {
     instructions.textContent = instructionMessage;
     adopt(parent, instructions);
     const grid = tokenGridWithRows(4);
-    this.addTokenRow(
-      grid,
-      1,
-      ["red", "black", "yellow", "white", "blue"],
-      circleElementWithColor
-    );
-    this.addTokenRow(
-      grid,
-      2,
-      ["black", "red", "white", "blue", "yellow"],
-      squareElementWithColor
-    );
-    this.addTokenRow(
-      grid,
-      3,
-      ["white", "black", "yellow", "red", "blue"],
-      smallCircleElementWithColor
-    );
-    this.addTokenRow(
-      grid,
-      4,
-      ["yellow", "blue", "red", "black", "white"],
-      smallSquareElementWithColor
-    );
+    this.addTokenRow(grid, 1, firstRowTokens);
+    this.addTokenRow(grid, 2, secondRowTokens);
+    this.addTokenRow(grid, 3, thirdRowTokens);
+    this.addTokenRow(grid, 4, fourthRowTokens);
     const onHoldingAreaDrop = () => {
       this.observer.notifyThatHoldingAreaHasBeenDroppedOnto();
     };
@@ -317,12 +327,19 @@ class SizedTokenControl {
     this.parent = parent;
   }
 
-  addTokenRow(grid, row, colors, create) {
+  addTokenRow(grid, row, tokens) {
     addTokenRow(
       grid,
       row,
-      colors,
-      create,
+      tokens,
+      (token) =>
+        token.shape === Shape.circle
+          ? token.size === Size.large
+            ? circleElementWithColor(token.color)
+            : smallCircleElementWithColor(token.color)
+          : token.size === Size.large
+          ? squareElementWithColor(token.color)
+          : smallSquareElementWithColor(token.color),
       (token) => {
         this.tokenReleased = token;
         this.observer.notifyThatTokenHasBeenReleased();
@@ -460,8 +477,20 @@ export function plugin() {
         parent,
         sentence,
         trial,
-        ["red", "black", "yellow", "white", "blue"],
-        ["black", "red", "white", "blue", "yellow"]
+        [
+          { color: Color.red, shape: Shape.circle },
+          { color: Color.black, shape: Shape.circle },
+          { color: Color.yellow, shape: Shape.circle },
+          { color: Color.white, shape: Shape.circle },
+          { color: Color.blue, shape: Shape.circle },
+        ],
+        [
+          { color: Color.black, shape: Shape.square },
+          { color: Color.red, shape: Shape.square },
+          { color: Color.white, shape: Shape.square },
+          { color: Color.blue, shape: Shape.square },
+          { color: Color.yellow, shape: Shape.square },
+        ]
       )
   );
 }
@@ -469,6 +498,39 @@ export function plugin() {
 export function twoSizesPlugin() {
   return pluginUsingControllerAndControlFactories(
     SizedTokenController,
-    (parent, sentence, trial) => new SizedTokenControl(parent, sentence, trial)
+    (parent, sentence, trial) =>
+      new SizedTokenControl(
+        parent,
+        sentence,
+        trial,
+        [
+          { color: Color.red, shape: Shape.circle, size: Size.large },
+          { color: Color.black, shape: Shape.circle, size: Size.large },
+          { color: Color.yellow, shape: Shape.circle, size: Size.large },
+          { color: Color.white, shape: Shape.circle, size: Size.large },
+          { color: Color.blue, shape: Shape.circle, size: Size.large },
+        ],
+        [
+          { color: Color.black, shape: Shape.square, size: Size.large },
+          { color: Color.red, shape: Shape.square, size: Size.large },
+          { color: Color.white, shape: Shape.square, size: Size.large },
+          { color: Color.blue, shape: Shape.square, size: Size.large },
+          { color: Color.yellow, shape: Shape.square, size: Size.large },
+        ],
+        [
+          { color: Color.white, shape: Shape.circle, size: Size.small },
+          { color: Color.black, shape: Shape.circle, size: Size.small },
+          { color: Color.yellow, shape: Shape.circle, size: Size.small },
+          { color: Color.red, shape: Shape.circle, size: Size.small },
+          { color: Color.blue, shape: Shape.circle, size: Size.small },
+        ],
+        [
+          { color: Color.yellow, shape: Shape.square, size: Size.small },
+          { color: Color.blue, shape: Shape.square, size: Size.small },
+          { color: Color.red, shape: Shape.square, size: Size.small },
+          { color: Color.black, shape: Shape.square, size: Size.small },
+          { color: Color.white, shape: Shape.square, size: Size.small },
+        ]
+      )
   );
 }
