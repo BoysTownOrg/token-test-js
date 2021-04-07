@@ -1,4 +1,10 @@
-import { Color, Shape, Size, TokenModel } from "../lib/TokenModel.js";
+import {
+  Color,
+  hashToken,
+  Shape,
+  Size,
+  TokenModel,
+} from "../lib/TokenModel.js";
 import {
   SizedTokenController,
   TokenController,
@@ -125,7 +131,7 @@ function addTokenRow(
 ) {
   for (let i = 0; i < tokens.length; i += 1) {
     const tokenElement = createElement(tokens[i]);
-    elementFromToken.set(tokens[i], tokenElement);
+    elementFromToken.set(hashToken(tokens[i]), tokenElement);
     tokenElement.style.gridRow = row;
     tokenElement.style.gridColumn = i + 1;
     tokenElement.style.touchAction = "none";
@@ -251,7 +257,9 @@ class TokenControl {
   }
 
   tokenPosition(token) {
-    const domRect = this.elementFromToken.get(token).getBoundingClientRect();
+    const domRect = this.elementFromToken
+      .get(hashToken(token))
+      .getBoundingClientRect();
     return {
       leftScreenEdgeToLeftEdgePixels: domRect.left,
       topScreenEdgeToTopEdgePixels: domRect.top,
