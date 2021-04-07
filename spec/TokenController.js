@@ -4,6 +4,10 @@ import {
 } from "../lib/TokenController.js";
 import { Action, Color, Shape, Size } from "../lib/TokenModel.js";
 
+function hashToken(token) {
+  return 7 * (token.shape - 1) + token.color - 1;
+}
+
 class TokenControlStub {
   constructor() {
     this.positionFromToken = new Map();
@@ -73,11 +77,18 @@ class TokenControlStub {
   }
 
   setTokenPosition(token, position) {
-    this.positionFromToken.set(token, position);
+    this.positionFromToken.set(hashToken(token), position);
   }
 
   tokenPosition(token) {
-    return this.positionFromToken.get(token);
+    return this.positionFromToken.has(hashToken(token))
+      ? this.positionFromToken.get(hashToken(token))
+      : {
+          leftScreenEdgeToLeftEdgePixels: 0,
+          topScreenEdgeToTopEdgePixels: 0,
+          widthPixels: 0,
+          heightPixels: 0,
+        };
   }
 }
 
