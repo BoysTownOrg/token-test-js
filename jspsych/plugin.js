@@ -117,30 +117,32 @@ function addTokenRow(
   row,
   tokens,
   createElement,
+  elementFromToken,
   onReleased,
   onDragged,
   onDroppedOnto,
   onDraggedReleased
 ) {
   for (let i = 0; i < tokens.length; i += 1) {
-    const token = createElement(tokens[i]);
-    token.style.gridRow = row;
-    token.style.gridColumn = i + 1;
-    token.style.touchAction = "none";
-    adopt(grid, token);
-    addClickEventListener(token, () => {
-      onReleased(token);
+    const tokenElement = createElement(tokens[i]);
+    elementFromToken.set(tokens[i], tokenElement);
+    tokenElement.style.gridRow = row;
+    tokenElement.style.gridColumn = i + 1;
+    tokenElement.style.touchAction = "none";
+    adopt(grid, tokenElement);
+    addClickEventListener(tokenElement, () => {
+      onReleased(tokenElement);
     });
     const position = { x: 0, y: 0 };
     const positions = [];
     for (let j = 0; j < 1000; j += 1) positions.push({ x: 0, y: 0 });
     let positionIndex = 0;
-    interact(token)
+    interact(tokenElement)
       .draggable({
         listeners: {
           start() {
-            onDragged(token);
-            token.style.zIndex = 1;
+            onDragged(tokenElement);
+            tokenElement.style.zIndex = 1;
           },
           move(event) {
             position.x += event.dx;
@@ -152,22 +154,22 @@ function addTokenRow(
             positionIndex += 1;
           },
           end() {
-            onDraggedReleased(token, positions.slice(0, positionIndex));
-            token.style.zIndex = 0;
+            onDraggedReleased(tokenElement, positions.slice(0, positionIndex));
+            tokenElement.style.zIndex = 0;
             positionIndex = 0;
           },
         },
       })
       .dropzone({
         ondrop() {
-          onDroppedOnto(token);
-          token.style.borderColor = "black";
+          onDroppedOnto(tokenElement);
+          tokenElement.style.borderColor = "black";
         },
         ondragenter() {
-          token.style.borderColor = "#22e";
+          tokenElement.style.borderColor = "#22e";
         },
         ondragleave() {
-          token.style.borderColor = "black";
+          tokenElement.style.borderColor = "black";
         },
       });
   }
@@ -185,6 +187,7 @@ function tokenGridWithRows(n) {
 class TokenControl {
   constructor(parent, instructionMessage, trial, tokenRows) {
     this.trial = trial;
+    this.elementFromToken = new Map();
     const holdingArea = divElement();
     holdingArea.style.height = pixelsString(300);
     holdingArea.style.width = pixelsString(5 * 150);
@@ -224,6 +227,7 @@ class TokenControl {
       grid,
       row,
       tokens,
+      this.elementFromToken,
       (token) =>
         token.shape === Shape.circle
           ? circleElementWithColor(token.color)
@@ -244,6 +248,16 @@ class TokenControl {
         this.trial.recordTokenDragPath(token, positions);
       }
     );
+  }
+
+  tokenPosition(token) {
+    const domRect = this.elementFromToken.get(token).getBoundingClientRect();
+    return {
+      leftScreenEdgeToLeftEdgePixels: domRect.left,
+      topScreenEdgeToTopEdgePixels: domRect.top,
+      widthPixels: domRect.width,
+      heightPixels: domRect.height,
+    };
   }
 
   tokenReleasedColor() {
@@ -278,6 +292,7 @@ class TokenControl {
 class SizedTokenControl {
   constructor(parent, instructionMessage, trial, tokenRows) {
     this.trial = trial;
+    this.elementFromToken = new Map();
     const holdingArea = divElement();
     holdingArea.style.height = pixelsString(300);
     holdingArea.style.width = pixelsString(5 * 150);
@@ -316,6 +331,7 @@ class SizedTokenControl {
       grid,
       row,
       tokens,
+      this.elementFromToken,
       (token) =>
         token.shape === Shape.circle
           ? token.size === Size.large
