@@ -5,8 +5,18 @@ import {
 import { Action, Color, Shape, Size } from "../lib/TokenModel.js";
 
 class TokenControlStub {
+  constructor() {
+    this.positionFromToken = new Map();
+  }
+
   releaseRedSquare() {
     this.tokenReleasedColor_ = "red";
+    this.tokenReleasedIsCircle_ = false;
+    this.observer.notifyThatTokenHasBeenReleased();
+  }
+
+  releaseGreenSquare() {
+    this.tokenReleasedColor_ = "green";
     this.tokenReleasedIsCircle_ = false;
     this.observer.notifyThatTokenHasBeenReleased();
   }
@@ -14,6 +24,12 @@ class TokenControlStub {
   dragRedCircle() {
     this.tokenDraggedColor_ = "red";
     this.tokenDraggedIsCircle_ = true;
+    this.observer.notifyThatTokenHasBeenDragged();
+  }
+
+  dragGreenSquare() {
+    this.tokenDraggedColor_ = "green";
+    this.tokenDraggedIsCircle_ = false;
     this.observer.notifyThatTokenHasBeenDragged();
   }
 
@@ -54,6 +70,14 @@ class TokenControlStub {
 
   attach(observer) {
     this.observer = observer;
+  }
+
+  setTokenPosition(token, position) {
+    this.positionFromToken.set(token, position);
+  }
+
+  tokenPosition(token) {
+    return this.positionFromToken.get(token);
   }
 }
 
@@ -134,20 +158,44 @@ class TokenModelStub {
     return this.dualTokenInteraction_;
   }
 
-  submitSingleTokenInteraction(singleTokenInteraction_) {
+  submitSingleTokenInteraction(singleTokenInteraction_, tokenRelation_) {
     this.singleTokenInteraction_ = singleTokenInteraction_;
+    this.tokenRelation_ = tokenRelation_;
   }
 
   submitDualTokenInteraction(dualTokenInteraction_) {
     this.dualTokenInteraction_ = dualTokenInteraction_;
   }
+
+  tokenRelation() {
+    return this.tokenRelation_;
+  }
+}
+
+function yDifference(pointA, pointB) {
+  return pointA.y - pointB.y;
+}
+
+function xDifference(pointA, pointB) {
+  return pointA.x - pointB.x;
+}
+
+function distance(pointA, pointB) {
+  return Math.sqrt(
+    xDifference(pointA, pointB) * xDifference(pointA, pointB) +
+      yDifference(pointA, pointB) * yDifference(pointA, pointB)
+  );
+}
+
+function setTokenPosition(control, token, position) {
+  control.setTokenPosition(token, position);
 }
 
 describe("TokenController", () => {
   beforeEach(function () {
     this.control = new TokenControlStub();
     this.model = new TokenModelStub();
-    new TokenController(this.control, this.model);
+    const controller = new TokenController(this.control, this.model);
   });
 
   it("should submit touch action when user releases red square", function () {
@@ -179,6 +227,68 @@ describe("TokenController", () => {
     expect(this.model.singleTokenInteraction().action).toBe(Action.pickUp);
     expect(this.model.singleTokenInteraction().token.color).toBe(Color.red);
     expect(this.model.singleTokenInteraction().token.shape).toBe(Shape.circle);
+  });
+
+  it("should determine whether green square is further from yellow square after drag", function () {
+    setTokenPosition(
+      this.control,
+      { color: Color.yellow, shape: Shape.square },
+      {
+        leftScreenEdgeToLeftEdgePixels: 10,
+        topScreenEdgeToTopEdgePixels: 20,
+        widthPixels: 30,
+        heightPixels: 40,
+      }
+    );
+    setTokenPosition(
+      this.control,
+      { color: Color.green, shape: Shape.square },
+      {
+        leftScreenEdgeToLeftEdgePixels: 50,
+        topScreenEdgeToTopEdgePixels: 60,
+        widthPixels: 70,
+        heightPixels: 80,
+      }
+    );
+    this.control.dragGreenSquare();
+    setTokenPosition(
+      this.control,
+      { color: Color.green, shape: Shape.square },
+      {
+        leftScreenEdgeToLeftEdgePixels: 90,
+        topScreenEdgeToTopEdgePixels: 100,
+        widthPixels: 70,
+        heightPixels: 80,
+      }
+    );
+    this.control.releaseGreenSquare();
+    expect(
+      this.model.tokenRelation().releasedTokenIsFurtherFrom({
+        color: Color.yellow,
+        shape: Shape.square,
+      })
+    ).toBe(
+      distance(
+        {
+          x: 10 + 30 / 2,
+          y: 20 + 40 / 2,
+        },
+        {
+          x: 90 + 70 / 2,
+          y: 100 + 80 / 2,
+        }
+      ) >
+        distance(
+          {
+            x: 10 + 30 / 2,
+            y: 20 + 40 / 2,
+          },
+          {
+            x: 50 + 70 / 2,
+            y: 60 + 80 / 2,
+          }
+        )
+    );
   });
 });
 
