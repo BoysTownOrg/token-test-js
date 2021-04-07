@@ -270,7 +270,7 @@ describe("TokenController", () => {
     );
     this.control.releaseGreenSquare();
     expect(
-      this.model.tokenRelation().releasedTokenIsFurtherFrom({
+      this.model.tokenRelation().movedTokenIsFurtherFrom({
         color: Color.yellow,
         shape: Shape.square,
       })
