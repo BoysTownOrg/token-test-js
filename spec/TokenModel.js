@@ -70,15 +70,15 @@ function testModel(rule, interactions, expectedResult, submit, tokenRelation) {
 
 class TokenRelationStub {
   constructor() {
-    this.tokenIsFurtherFrom_ = true;
+    this.movedTokenIsFurtherFrom_ = true;
   }
 
-  tokenIsFurtherFrom(tokenA, tokenB) {
-    return this.tokenIsFurtherFrom_;
+  movedTokenIsFurtherFrom(token) {
+    return this.movedTokenIsFurtherFrom_;
   }
 
-  setTokenIsFurtherFrom() {
-    this.tokenIsFurtherFrom_ = true;
+  setMovedTokenIsFurtherFrom() {
+    this.movedTokenIsFurtherFrom_ = true;
   }
 }
 
@@ -531,7 +531,7 @@ describe("TokenModel", () => {
 
   it("should submit correct move away from action", () => {
     const tokenRelation = new TokenRelationStub();
-    tokenRelation.setTokenIsFurtherFrom();
+    tokenRelation.setMovedTokenIsFurtherFrom();
     testModel(
       new TokenInteraction({
         firstToken: {
