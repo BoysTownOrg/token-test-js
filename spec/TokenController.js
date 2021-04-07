@@ -2,11 +2,7 @@ import {
   TokenController,
   SizedTokenController,
 } from "../lib/TokenController.js";
-import { Action, Color, Shape, Size } from "../lib/TokenModel.js";
-
-function hashToken(token) {
-  return 7 * (token.shape - 1) + token.color - 1;
-}
+import { Action, Color, Shape, Size, hashToken } from "../lib/TokenModel.js";
 
 class TokenControlStub {
   constructor() {
