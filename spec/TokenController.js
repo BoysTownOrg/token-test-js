@@ -37,6 +37,14 @@ class TokenControlStub {
     this.tokenDroppedOntoColor_ = "green";
     this.tokenDroppedOntoIsCircle_ = false;
     this.observer.notifyThatTokenHasBeenDroppedOnto();
+    this.observer.notifyThatTokenHasBeenReleased();
+  }
+
+  dropOntoRedSquare() {
+    this.tokenDroppedOntoColor_ = "red";
+    this.tokenDroppedOntoIsCircle_ = false;
+    this.observer.notifyThatTokenHasBeenDroppedOnto();
+    this.observer.notifyThatTokenHasBeenReleased();
   }
 
   dropOntoHoldingArea() {
@@ -170,8 +178,9 @@ class TokenModelStub {
     this.tokenRelation_ = tokenRelation_;
   }
 
-  submitDualTokenInteraction(dualTokenInteraction_) {
+  submitDualTokenInteraction(dualTokenInteraction_, tokenRelation_) {
     this.dualTokenInteraction_ = dualTokenInteraction_;
+    this.tokenRelation_ = tokenRelation_;
   }
 
   tokenRelation() {
@@ -298,6 +307,68 @@ describe("TokenController", () => {
     );
   });
 
+  it("should determine whether green square is further from yellow square after drop onto other token", function () {
+    setTokenPosition(
+      this.control,
+      { color: Color.yellow, shape: Shape.square },
+      {
+        leftScreenEdgeToLeftEdgePixels: 40,
+        topScreenEdgeToTopEdgePixels: 30,
+        widthPixels: 20,
+        heightPixels: 10,
+      }
+    );
+    setTokenPosition(
+      this.control,
+      { color: Color.green, shape: Shape.square },
+      {
+        leftScreenEdgeToLeftEdgePixels: 80,
+        topScreenEdgeToTopEdgePixels: 70,
+        widthPixels: 60,
+        heightPixels: 50,
+      }
+    );
+    this.control.dragGreenSquare();
+    setTokenPosition(
+      this.control,
+      { color: Color.green, shape: Shape.square },
+      {
+        leftScreenEdgeToLeftEdgePixels: 100,
+        topScreenEdgeToTopEdgePixels: 90,
+        widthPixels: 60,
+        heightPixels: 50,
+      }
+    );
+    this.control.dropOntoRedSquare();
+    expect(
+      this.model.tokenRelation().movedTokenIsFurtherFrom({
+        color: Color.yellow,
+        shape: Shape.square,
+      })
+    ).toBe(
+      distance(
+        {
+          x: 40 + 20 / 2,
+          y: 30 + 10 / 2,
+        },
+        {
+          x: 100 + 60 / 2,
+          y: 90 + 50 / 2,
+        }
+      ) >
+        distance(
+          {
+            x: 40 + 20 / 2,
+            y: 30 + 10 / 2,
+          },
+          {
+            x: 80 + 60 / 2,
+            y: 70 + 50 / 2,
+          }
+        )
+    );
+  });
+
   it("should submit a move action on drag and release", function () {
     this.control.dragGreenSquare();
     this.control.releaseGreenSquare();
@@ -311,7 +382,7 @@ describe("SizedTokenController", () => {
   beforeEach(function () {
     this.control = new SizedTokenControlStub();
     this.model = new TokenModelStub();
-    new SizedTokenController(this.control, this.model);
+    const controller = new SizedTokenController(this.control, this.model);
   });
 
   it("should submit touch action when user releases small red square", function () {
