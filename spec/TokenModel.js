@@ -31,8 +31,8 @@ class TimerStub {
   }
 }
 
-function submitDualTokenInteraction(model, interaction) {
-  model.submitDualTokenInteraction(interaction);
+function submitDualTokenInteraction(model, interaction, tokenRelation) {
+  model.submitDualTokenInteraction(interaction, tokenRelation);
 }
 
 function submitSingleTokenInteraction(model, interaction, tokenRelation) {
@@ -555,6 +555,40 @@ describe("TokenModel", () => {
       ],
       true,
       submitSingleTokenInteraction,
+      tokenRelation
+    );
+  });
+
+  it("should submit correct move away from action even when dropping token on another", () => {
+    const tokenRelation = new TokenRelationStub();
+    tokenRelation.setMovedTokenIsFurtherFrom();
+    testModel(
+      new TokenInteraction({
+        firstToken: {
+          color: Color.green,
+          shape: Shape.square,
+        },
+        secondToken: {
+          color: Color.yellow,
+          shape: Shape.square,
+        },
+        action: Action.moveAwayFrom,
+      }),
+      [
+        {
+          firstToken: {
+            color: Color.green,
+            shape: Shape.square,
+          },
+          secondToken: {
+            color: Color.red,
+            shape: Shape.square,
+          },
+          action: Action.useToTouch,
+        },
+      ],
+      true,
+      submitDualTokenInteraction,
       tokenRelation
     );
   });
