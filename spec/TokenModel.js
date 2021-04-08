@@ -593,6 +593,36 @@ describe("TokenModel", () => {
     );
   });
 
+  it("should submit correct move away from action even when picking it up", () => {
+    const tokenRelation = new TokenRelationStub();
+    tokenRelation.setMovedTokenIsFurtherFrom();
+    testModel(
+      new TokenInteraction({
+        firstToken: {
+          color: Color.green,
+          shape: Shape.square,
+        },
+        secondToken: {
+          color: Color.yellow,
+          shape: Shape.square,
+        },
+        action: Action.moveAwayFrom,
+      }),
+      [
+        {
+          token: {
+            color: Color.green,
+            shape: Shape.square,
+          },
+          action: Action.pickUp,
+        },
+      ],
+      true,
+      submitSingleTokenInteraction,
+      tokenRelation
+    );
+  });
+
   it("should submit incorrect dual token interaction only trial", () => {
     testModel(
       new InOrder([
