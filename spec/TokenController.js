@@ -116,6 +116,7 @@ class SizedTokenControlStub {
     this.tokenDroppedOntoIsCircle_ = false;
     this.tokenDroppedOntoIsSmall_ = false;
     this.observer.notifyThatTokenHasBeenDroppedOnto();
+    this.observer.notifyThatTokenHasBeenReleased();
   }
 
   dropOntoHoldingArea() {
