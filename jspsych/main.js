@@ -74,7 +74,10 @@ jsPsych.init({
       "Pick up the black circle OR the red square.",
       "pick up black circle or pick up red square"
     ),
-    // Move the green square away ...
+    ...tokenTrialWithFeedback(
+      "Move the blue square away from the yellow square.",
+      "move blue square away from yellow square"
+    ),
     ...tokenTrialWithFeedback(
       "If there is a black circle, pick up the red square.",
       "pick up red square"
