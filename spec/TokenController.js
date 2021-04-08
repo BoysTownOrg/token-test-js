@@ -297,6 +297,14 @@ describe("TokenController", () => {
         )
     );
   });
+
+  it("should submit a move action on drag and release", function () {
+    this.control.dragGreenSquare();
+    this.control.releaseGreenSquare();
+    expect(this.model.singleTokenInteraction().action).toBe(Action.move);
+    expect(this.model.singleTokenInteraction().token.color).toBe(Color.green);
+    expect(this.model.singleTokenInteraction().token.shape).toBe(Shape.square);
+  });
 });
 
 describe("SizedTokenController", () => {
