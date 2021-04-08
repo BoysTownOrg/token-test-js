@@ -233,11 +233,11 @@ class TokenControl {
       grid,
       row,
       tokens,
-      this.elementFromToken,
       (token) =>
         token.shape === Shape.circle
           ? circleElementWithColor(token.color)
           : squareElementWithColor(token.color),
+      this.elementFromToken,
       (token) => {
         this.tokenReleased = token;
         this.observer.notifyThatTokenHasBeenReleased();
@@ -339,7 +339,6 @@ class SizedTokenControl {
       grid,
       row,
       tokens,
-      this.elementFromToken,
       (token) =>
         token.shape === Shape.circle
           ? token.size === Size.large
@@ -348,6 +347,7 @@ class SizedTokenControl {
           : token.size === Size.large
           ? squareElementWithColor(token.color)
           : smallSquareElementWithColor(token.color),
+      this.elementFromToken,
       (token) => {
         this.tokenReleased = token;
         this.observer.notifyThatTokenHasBeenReleased();
