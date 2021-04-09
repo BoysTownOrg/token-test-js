@@ -440,6 +440,70 @@ describe("TokenController", () => {
     );
   });
 
+  it("should determine whether red circle is between the yellow square and the green square after drag part 2", function () {
+    setTokenPosition(
+      this.control,
+      { color: Color.green, shape: Shape.square },
+      {
+        leftScreenEdgeToLeftEdgePixels: 10,
+        topScreenEdgeToTopEdgePixels: 20,
+        widthPixels: 30,
+        heightPixels: 40,
+      }
+    );
+    setTokenPosition(
+      this.control,
+      { color: Color.yellow, shape: Shape.square },
+      {
+        leftScreenEdgeToLeftEdgePixels: 50,
+        topScreenEdgeToTopEdgePixels: 60,
+        widthPixels: 70,
+        heightPixels: 80,
+      }
+    );
+    setTokenPosition(
+      this.control,
+      { color: Color.red, shape: Shape.circle },
+      {
+        leftScreenEdgeToLeftEdgePixels: 90,
+        topScreenEdgeToTopEdgePixels: 100,
+        widthPixels: 110,
+        heightPixels: 120,
+      }
+    );
+    this.control.dragRedCircle();
+    setTokenPosition(
+      this.control,
+      { color: Color.red, shape: Shape.circle },
+      {
+        leftScreenEdgeToLeftEdgePixels: 15,
+        topScreenEdgeToTopEdgePixels: 25,
+        widthPixels: 35,
+        heightPixels: 45,
+      }
+    );
+    this.control.releaseRedCircle();
+    const redCircleNewPosition = { x: 15 + 35 / 2, y: 25 + 45 / 2 };
+    const A = { x: 10 + 30 / 2, y: 20 + 40 / 2 };
+    const B = { x: 50 + 70 / 2, y: 60 + 80 / 2 };
+    const m = (A.y - B.y) / (A.x - B.x);
+    expect(
+      this.model.tokenRelation().movedTokenIsBetween(
+        {
+          color: Color.yellow,
+          shape: Shape.square,
+        },
+        {
+          color: Color.green,
+          shape: Shape.square,
+        }
+      )
+    ).toBe(
+      A.x + A.y * m <= redCircleNewPosition.x + redCircleNewPosition.y * m &&
+        redCircleNewPosition.x + redCircleNewPosition.y * m <= B.x + B.y * m
+    );
+  });
+
   it("should submit a move action on drag and release", function () {
     this.control.dragGreenSquare();
     this.control.releaseGreenSquare();
