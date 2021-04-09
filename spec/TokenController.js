@@ -15,6 +15,12 @@ class TokenControlStub {
     this.observer.notifyThatTokenHasBeenReleased();
   }
 
+  releaseRedCircle() {
+    this.tokenReleasedColor_ = "red";
+    this.tokenReleasedIsCircle_ = true;
+    this.observer.notifyThatTokenHasBeenReleased();
+  }
+
   releaseGreenSquare() {
     this.tokenReleasedColor_ = "green";
     this.tokenReleasedIsCircle_ = false;
@@ -367,6 +373,70 @@ describe("TokenController", () => {
             y: 70 + 50 / 2,
           }
         )
+    );
+  });
+
+  it("should determine whether red circle is between the yellow square and the green square after drag", function () {
+    setTokenPosition(
+      this.control,
+      { color: Color.yellow, shape: Shape.square },
+      {
+        leftScreenEdgeToLeftEdgePixels: 10,
+        topScreenEdgeToTopEdgePixels: 20,
+        widthPixels: 30,
+        heightPixels: 40,
+      }
+    );
+    setTokenPosition(
+      this.control,
+      { color: Color.green, shape: Shape.square },
+      {
+        leftScreenEdgeToLeftEdgePixels: 50,
+        topScreenEdgeToTopEdgePixels: 60,
+        widthPixels: 70,
+        heightPixels: 80,
+      }
+    );
+    setTokenPosition(
+      this.control,
+      { color: Color.red, shape: Shape.circle },
+      {
+        leftScreenEdgeToLeftEdgePixels: 90,
+        topScreenEdgeToTopEdgePixels: 100,
+        widthPixels: 110,
+        heightPixels: 120,
+      }
+    );
+    this.control.dragRedCircle();
+    setTokenPosition(
+      this.control,
+      { color: Color.red, shape: Shape.circle },
+      {
+        leftScreenEdgeToLeftEdgePixels: 130,
+        topScreenEdgeToTopEdgePixels: 140,
+        widthPixels: 150,
+        heightPixels: 160,
+      }
+    );
+    this.control.releaseRedCircle();
+    const redCircleNewPosition = { x: 130 + 150 / 2, y: 140 + 160 / 2 };
+    const A = { x: 10 + 30 / 2, y: 20 + 40 / 2 };
+    const B = { x: 50 + 70 / 2, y: 60 + 80 / 2 };
+    const m = (A.y - B.y) / (A.x - B.x);
+    expect(
+      this.model.tokenRelation().movedTokenIsBetween(
+        {
+          color: Color.yellow,
+          shape: Shape.square,
+        },
+        {
+          color: Color.green,
+          shape: Shape.square,
+        }
+      )
+    ).toBe(
+      A.x + A.y * m <= redCircleNewPosition.x + redCircleNewPosition.y * m &&
+        redCircleNewPosition.x + redCircleNewPosition.y * m <= B.x + B.y * m
     );
   });
 
