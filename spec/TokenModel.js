@@ -70,7 +70,8 @@ function testModel(rule, interactions, expectedResult, submit, tokenRelation) {
 
 class TokenRelationStub {
   constructor() {
-    this.movedTokenIsFurtherFrom_ = true;
+    this.movedTokenIsFurtherFrom_ = false;
+    this.movedTokenIsBetween_ = false;
   }
 
   movedTokenIsFurtherFrom(token) {
@@ -79,6 +80,14 @@ class TokenRelationStub {
 
   setMovedTokenIsFurtherFrom() {
     this.movedTokenIsFurtherFrom_ = true;
+  }
+
+  setMovedTokenIsBetween() {
+    this.movedTokenIsBetween_ = true;
+  }
+
+  movedTokenIsBetween(a, b) {
+    return this.movedTokenIsBetween_;
   }
 }
 
@@ -615,6 +624,40 @@ describe("TokenModel", () => {
             shape: Shape.square,
           },
           action: Action.pickUp,
+        },
+      ],
+      true,
+      submitSingleTokenInteraction,
+      tokenRelation
+    );
+  });
+
+  it("should submit correct put between action", () => {
+    const tokenRelation = new TokenRelationStub();
+    tokenRelation.setMovedTokenIsBetween();
+    testModel(
+      new TokenInteraction({
+        firstToken: {
+          color: Color.red,
+          shape: Shape.circle,
+        },
+        secondToken: {
+          color: Color.yellow,
+          shape: Shape.square,
+        },
+        thirdToken: {
+          color: Color.green,
+          shape: Shape.square,
+        },
+        action: Action.putBetween,
+      }),
+      [
+        {
+          token: {
+            color: Color.red,
+            shape: Shape.circle,
+          },
+          action: Action.move,
         },
       ],
       true,
