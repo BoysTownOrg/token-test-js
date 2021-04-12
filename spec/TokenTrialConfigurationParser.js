@@ -196,6 +196,27 @@ describe("Parser", () => {
     );
   });
 
+  it("should parse put between token interaction", () => {
+    expectYields(
+      new TokenInteraction({
+        firstToken: {
+          color: Color.white,
+          shape: Shape.square,
+        },
+        secondToken: {
+          color: Color.yellow,
+          shape: Shape.circle,
+        },
+        thirdToken: {
+          color: Color.red,
+          shape: Shape.circle,
+        },
+        action: Action.putBetween,
+      }),
+      "put white square between yellow circle and red circle"
+    );
+  });
+
   it("should parse one dual sized token interaction", () => {
     expectYields(
       new SizedTokenInteraction({
