@@ -84,7 +84,10 @@ jsPsych.init({
     ),
     // Put the green square beside ...
     // Touch the squares slowly ...
-    // Put the red circle between ...
+    ...tokenTrialWithFeedback(
+      "Put the red circle between the yellow square and the blue square.",
+      "put red circle between yellow square and blue square"
+    ),
     ...tokenTrialWithFeedback(
       "Touch all circles, except the blue one.",
       "touch black circle, touch red circle, touch yellow circle, touch white circle"
