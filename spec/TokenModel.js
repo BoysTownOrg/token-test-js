@@ -165,6 +165,29 @@ describe("TokenModel", () => {
     );
   });
 
+  it("should honor that picking up a token is technically touching it", () => {
+    testModel(
+      new TokenInteraction({
+        token: {
+          color: Color.red,
+          shape: Shape.square,
+        },
+        action: Action.touch,
+      }),
+      [
+        {
+          token: {
+            color: Color.red,
+            shape: Shape.square,
+          },
+          action: Action.pickUp,
+        },
+      ],
+      true,
+      submitSingleTokenInteraction
+    );
+  });
+
   it("should record one single token interaction", () => {
     const trial = new TrialStub();
     const timer = new TimerStub();
