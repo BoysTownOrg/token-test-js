@@ -138,6 +138,33 @@ describe("TokenModel", () => {
     );
   });
 
+  it("should honor that using a token is technically touching it", () => {
+    testModel(
+      new TokenInteraction({
+        token: {
+          color: Color.red,
+          shape: Shape.square,
+        },
+        action: Action.touch,
+      }),
+      [
+        {
+          firstToken: {
+            color: Color.red,
+            shape: Shape.square,
+          },
+          secondToken: {
+            color: Color.white,
+            shape: Shape.circle,
+          },
+          action: Action.useToTouch,
+        },
+      ],
+      true,
+      submitDualTokenInteraction
+    );
+  });
+
   it("should record one single token interaction", () => {
     const trial = new TrialStub();
     const timer = new TimerStub();
