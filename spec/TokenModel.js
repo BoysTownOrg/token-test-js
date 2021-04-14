@@ -368,6 +368,53 @@ describe("TokenModel", () => {
     );
   });
 
+  it("should count two 'use to touch' as correct for two 'touches'", () => {
+    testModel(
+      new InAnyOrder([
+        new TokenInteraction({
+          token: {
+            color: Color.green,
+            shape: Shape.circle,
+          },
+          action: Action.touch,
+        }),
+        new TokenInteraction({
+          token: {
+            color: Color.red,
+            shape: Shape.square,
+          },
+          action: Action.touch,
+        }),
+      ]),
+      [
+        {
+          firstToken: {
+            color: Color.red,
+            shape: Shape.square,
+          },
+          secondToken: {
+            color: Color.red,
+            shape: Shape.circle,
+          },
+          action: Action.useToTouch,
+        },
+        {
+          firstToken: {
+            color: Color.green,
+            shape: Shape.circle,
+          },
+          secondToken: {
+            color: Color.yellow,
+            shape: Shape.square,
+          },
+          action: Action.useToTouch,
+        },
+      ],
+      true,
+      submitDualTokenInteraction
+    );
+  });
+
   it("should submit incorrect trial", () => {
     testModel(
       new InOrder([
