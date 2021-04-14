@@ -329,6 +329,45 @@ describe("TokenModel", () => {
     );
   });
 
+  it("should count moves as correct for touches", () => {
+    testModel(
+      new InAnyOrder([
+        new TokenInteraction({
+          token: {
+            color: Color.green,
+            shape: Shape.circle,
+          },
+          action: Action.touch,
+        }),
+        new TokenInteraction({
+          token: {
+            color: Color.red,
+            shape: Shape.square,
+          },
+          action: Action.touch,
+        }),
+      ]),
+      [
+        {
+          token: {
+            color: Color.red,
+            shape: Shape.square,
+          },
+          action: Action.move,
+        },
+        {
+          token: {
+            color: Color.green,
+            shape: Shape.circle,
+          },
+          action: Action.move,
+        },
+      ],
+      true,
+      submitSingleTokenInteraction
+    );
+  });
+
   it("should submit incorrect trial", () => {
     testModel(
       new InOrder([
