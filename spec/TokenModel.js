@@ -31,12 +31,12 @@ class TimerStub {
   }
 }
 
-function submitDualTokenInteraction(model, interaction) {
-  model.submitDualTokenInteraction(interaction);
+function submitDualTokenInteraction(model, interaction, tokenRelation) {
+  model.submitDualTokenInteraction(interaction, tokenRelation);
 }
 
-function submitSingleTokenInteraction(model, interaction) {
-  model.submitSingleTokenInteraction(interaction);
+function submitSingleTokenInteraction(model, interaction, tokenRelation) {
+  model.submitSingleTokenInteraction(interaction, tokenRelation);
 }
 
 function testModelWithFactory(
@@ -44,24 +44,51 @@ function testModelWithFactory(
   rule,
   interactions,
   expectedResult,
-  submit
+  submit,
+  tokenRelation
 ) {
   const trial = new TrialStub();
   const timer = new TimerStub();
   const model = create(trial, timer, rule);
-  interactions.forEach((interaction) => submit(model, interaction));
+  interactions.forEach((interaction) =>
+    submit(model, interaction, tokenRelation)
+  );
   model.concludeTrial();
   expect(trial.result().correct).toEqual(expectedResult);
 }
 
-function testModel(rule, interactions, expectedResult, submit) {
+function testModel(rule, interactions, expectedResult, submit, tokenRelation) {
   testModelWithFactory(
     (trial, timer, rule) => new TokenModel(trial, timer, rule),
     rule,
     interactions,
     expectedResult,
-    submit
+    submit,
+    tokenRelation
   );
+}
+
+class TokenRelationStub {
+  constructor() {
+    this.movedTokenIsFurtherFrom_ = false;
+    this.movedTokenIsBetween_ = false;
+  }
+
+  movedTokenIsFurtherFrom(token) {
+    return this.movedTokenIsFurtherFrom_;
+  }
+
+  setMovedTokenIsFurtherFrom() {
+    this.movedTokenIsFurtherFrom_ = true;
+  }
+
+  setMovedTokenIsBetween() {
+    this.movedTokenIsBetween_ = true;
+  }
+
+  movedTokenIsBetween(a, b) {
+    return this.movedTokenIsBetween_;
+  }
 }
 
 describe("TokenModel", () => {
@@ -508,6 +535,172 @@ describe("TokenModel", () => {
       ],
       true,
       submitDualTokenInteraction
+    );
+  });
+
+  it("should submit correct move away from action", () => {
+    const tokenRelation = new TokenRelationStub();
+    tokenRelation.setMovedTokenIsFurtherFrom();
+    testModel(
+      new TokenInteraction({
+        firstToken: {
+          color: Color.green,
+          shape: Shape.square,
+        },
+        secondToken: {
+          color: Color.yellow,
+          shape: Shape.square,
+        },
+        action: Action.moveAwayFrom,
+      }),
+      [
+        {
+          token: {
+            color: Color.green,
+            shape: Shape.square,
+          },
+          action: Action.move,
+        },
+      ],
+      true,
+      submitSingleTokenInteraction,
+      tokenRelation
+    );
+  });
+
+  it("should submit correct move away from action even when dropping token on another", () => {
+    const tokenRelation = new TokenRelationStub();
+    tokenRelation.setMovedTokenIsFurtherFrom();
+    testModel(
+      new TokenInteraction({
+        firstToken: {
+          color: Color.green,
+          shape: Shape.square,
+        },
+        secondToken: {
+          color: Color.yellow,
+          shape: Shape.square,
+        },
+        action: Action.moveAwayFrom,
+      }),
+      [
+        {
+          firstToken: {
+            color: Color.green,
+            shape: Shape.square,
+          },
+          secondToken: {
+            color: Color.red,
+            shape: Shape.square,
+          },
+          action: Action.useToTouch,
+        },
+      ],
+      true,
+      submitDualTokenInteraction,
+      tokenRelation
+    );
+  });
+
+  it("should submit correct move away from action even when picking it up", () => {
+    const tokenRelation = new TokenRelationStub();
+    tokenRelation.setMovedTokenIsFurtherFrom();
+    testModel(
+      new TokenInteraction({
+        firstToken: {
+          color: Color.green,
+          shape: Shape.square,
+        },
+        secondToken: {
+          color: Color.yellow,
+          shape: Shape.square,
+        },
+        action: Action.moveAwayFrom,
+      }),
+      [
+        {
+          token: {
+            color: Color.green,
+            shape: Shape.square,
+          },
+          action: Action.pickUp,
+        },
+      ],
+      true,
+      submitSingleTokenInteraction,
+      tokenRelation
+    );
+  });
+
+  it("should submit correct put between action", () => {
+    const tokenRelation = new TokenRelationStub();
+    tokenRelation.setMovedTokenIsBetween();
+    testModel(
+      new TokenInteraction({
+        firstToken: {
+          color: Color.red,
+          shape: Shape.circle,
+        },
+        secondToken: {
+          color: Color.yellow,
+          shape: Shape.square,
+        },
+        thirdToken: {
+          color: Color.green,
+          shape: Shape.square,
+        },
+        action: Action.putBetween,
+      }),
+      [
+        {
+          token: {
+            color: Color.red,
+            shape: Shape.circle,
+          },
+          action: Action.move,
+        },
+      ],
+      true,
+      submitSingleTokenInteraction,
+      tokenRelation
+    );
+  });
+
+  it("should submit correct put between action even when token dropped onto another", () => {
+    const tokenRelation = new TokenRelationStub();
+    tokenRelation.setMovedTokenIsBetween();
+    testModel(
+      new TokenInteraction({
+        firstToken: {
+          color: Color.red,
+          shape: Shape.circle,
+        },
+        secondToken: {
+          color: Color.yellow,
+          shape: Shape.square,
+        },
+        thirdToken: {
+          color: Color.green,
+          shape: Shape.square,
+        },
+        action: Action.putBetween,
+      }),
+      [
+        {
+          firstToken: {
+            color: Color.red,
+            shape: Shape.circle,
+          },
+          secondToken: {
+            color: Color.yellow,
+            shape: Shape.square,
+          },
+          action: Action.useToTouch,
+        },
+      ],
+      true,
+      submitDualTokenInteraction,
+      tokenRelation
     );
   });
 
