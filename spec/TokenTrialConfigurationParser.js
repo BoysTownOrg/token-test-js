@@ -8,6 +8,7 @@ import {
   Size,
   SizedTokenInteraction,
   FirstOrSecond,
+  DoNothing,
 } from "../lib/TokenModel.js";
 import { parseTokenInteractionRule } from "../lib/TokenTrialConfigurationParser.js";
 
@@ -16,6 +17,10 @@ function expectYields(rule, text) {
 }
 
 describe("Parser", () => {
+  it("should parse do nothing", () => {
+    expectYields(new DoNothing(), "nothing");
+  });
+
   it("should parse one single token interaction", () => {
     expectYields(
       new TokenInteraction({
