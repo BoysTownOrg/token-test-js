@@ -14,11 +14,11 @@ const feedback = {
   choices: ["Continue"],
 };
 
-function sizedTokenTrialWithFeedback(sentence, commandString) {
+function sizedTokenTrialWithFeedback(sentenceUrl, commandString) {
   return [
     {
       type: twoSizesTokenTestPluginId,
-      sentence,
+      sentenceUrl,
       commandString,
       timeoutMilliseconds: 10000,
     },
@@ -26,11 +26,11 @@ function sizedTokenTrialWithFeedback(sentence, commandString) {
   ];
 }
 
-function tokenTrialWithFeedback(sentence, commandString) {
+function tokenTrialWithFeedback(sentenceUrl, commandString) {
   return [
     {
       type: tokenTestPluginId,
-      sentence,
+      sentenceUrl,
       commandString,
       timeoutMilliseconds: 10000,
     },

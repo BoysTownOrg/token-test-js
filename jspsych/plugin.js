@@ -202,7 +202,7 @@ function audioPlayer(url) {
 }
 
 class TokenControl {
-  constructor(parent, instructionUrl, trial, tokenRows) {
+  constructor(parent, trial, tokenRows) {
     this.trial = trial;
     this.elementFromToken = new Map();
     const holdingArea = divElement();
@@ -233,8 +233,6 @@ class TokenControl {
     });
     adopt(parent, grid);
     this.parent = parent;
-    const player = audioPlayer(instructionUrl);
-    player.play();
   }
 
   addTokenRow(grid, row, tokens) {
@@ -338,8 +336,6 @@ class SizedTokenControl {
     });
     adopt(parent, grid);
     this.parent = parent;
-    const player = audioPlayer(instructionUrl);
-    player.play();
   }
 
   addTokenRow(grid, row, tokens) {
@@ -472,12 +468,16 @@ function pluginUsingControllerAndControlFactories(
         parseTokenInteractionRule(trial.commandString)
       );
       const controller = new TokenControllerType(
-        createTokenControl(display_element, trial.sentence, jsPsychTrial),
+        createTokenControl(display_element, jsPsychTrial),
         model
       );
-      jsPsych.pluginAPI.setTimeout(() => {
-        model.concludeTrial();
-      }, trial.timeoutMilliseconds);
+      const player = audioPlayer(trial.sentenceUrl);
+      player.play();
+      player.onended = () => {
+        jsPsych.pluginAPI.setTimeout(() => {
+          model.concludeTrial();
+        }, trial.timeoutMilliseconds);
+      };
     },
     info: {
       parameters: {},
@@ -488,8 +488,8 @@ function pluginUsingControllerAndControlFactories(
 export function plugin() {
   return pluginUsingControllerAndControlFactories(
     TokenController,
-    (parent, sentenceUrl, trial) =>
-      new TokenControl(parent, sentenceUrl, trial, [
+    (parent, trial) =>
+      new TokenControl(parent, trial, [
         [
           { color: Color.red, shape: Shape.circle },
           { color: Color.blue, shape: Shape.circle },
@@ -511,8 +511,8 @@ export function plugin() {
 export function twoSizesPlugin() {
   return pluginUsingControllerAndControlFactories(
     SizedTokenController,
-    (parent, sentenceUrl, trial) =>
-      new SizedTokenControl(parent, sentenceUrl, trial, [
+    (parent, trial) =>
+      new SizedTokenControl(parent, trial, [
         [
           { color: Color.red, shape: Shape.circle, size: Size.large },
           { color: Color.blue, shape: Shape.circle, size: Size.large },
