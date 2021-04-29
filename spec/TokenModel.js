@@ -193,6 +193,23 @@ describe("TokenModel", () => {
     testModel(new DoNothing(), [], true, submitSingleTokenInteraction);
   });
 
+  it("should consider something as incorrect for do nothing", () => {
+    testModel(
+      new DoNothing(),
+      [
+        {
+          token: {
+            color: Color.red,
+            shape: Shape.square,
+          },
+          action: Action.pickUp,
+        },
+      ],
+      false,
+      submitSingleTokenInteraction
+    );
+  });
+
   it("should record one single token interaction", () => {
     const trial = new TrialStub();
     const timer = new TimerStub();
