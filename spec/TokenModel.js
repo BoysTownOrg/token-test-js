@@ -9,6 +9,7 @@ import {
   SizedTokenInteraction,
   TokenInteraction,
   FirstOrSecond,
+  DoNothing,
 } from "../lib/TokenModel.js";
 
 class TrialStub {
@@ -186,6 +187,10 @@ describe("TokenModel", () => {
       true,
       submitSingleTokenInteraction
     );
+  });
+
+  it("should consider nothing as correct for do nothing", () => {
+    testModel(new DoNothing(), [], true, submitSingleTokenInteraction);
   });
 
   it("should record one single token interaction", () => {
