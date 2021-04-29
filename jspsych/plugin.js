@@ -190,8 +190,19 @@ function tokenGridWithRows(n) {
   return grid;
 }
 
+function audioPlayer(url) {
+  const AudioContext = window.AudioContext || window.webkitAudioContext;
+  const audioContext = new AudioContext();
+  const player = document.createElement("audio");
+  player.crossOrigin = "anonymous";
+  const track = audioContext.createMediaElementSource(player);
+  track.connect(audioContext.destination);
+  player.src = url;
+  return player;
+}
+
 class TokenControl {
-  constructor(parent, instructionMessage, trial, tokenRows) {
+  constructor(parent, instructionUrl, trial, tokenRows) {
     this.trial = trial;
     this.elementFromToken = new Map();
     const holdingArea = divElement();
@@ -201,10 +212,6 @@ class TokenControl {
     holdingArea.style.margin = "5% auto";
     holdingArea.style.backgroundColor = "lightgrey";
     adopt(parent, holdingArea);
-    const instructions = divElement();
-    instructions.textContent = instructionMessage;
-    instructions.style.margin = "5% auto";
-    adopt(parent, instructions);
     const grid = tokenGridWithRows(tokenRows.length);
     for (let i = 0; i < tokenRows.length; i += 1)
       this.addTokenRow(grid, i + 1, tokenRows[i]);
@@ -226,6 +233,8 @@ class TokenControl {
     });
     adopt(parent, grid);
     this.parent = parent;
+    const player = audioPlayer(instructionUrl);
+    player.play();
   }
 
   addTokenRow(grid, row, tokens) {
@@ -298,7 +307,7 @@ class TokenControl {
 }
 
 class SizedTokenControl {
-  constructor(parent, instructionMessage, trial, tokenRows) {
+  constructor(parent, instructionUrl, trial, tokenRows) {
     this.trial = trial;
     this.elementFromToken = new Map();
     const holdingArea = divElement();
@@ -308,9 +317,6 @@ class SizedTokenControl {
     holdingArea.style.margin = "5% auto";
     holdingArea.style.backgroundColor = "lightgrey";
     adopt(parent, holdingArea);
-    const instructions = divElement();
-    instructions.textContent = instructionMessage;
-    adopt(parent, instructions);
     const grid = tokenGridWithRows(tokenRows.length);
     for (let i = 0; i < tokenRows.length; i += 1)
       this.addTokenRow(grid, i + 1, tokenRows[i]);
@@ -332,6 +338,8 @@ class SizedTokenControl {
     });
     adopt(parent, grid);
     this.parent = parent;
+    const player = audioPlayer(instructionUrl);
+    player.play();
   }
 
   addTokenRow(grid, row, tokens) {
@@ -480,20 +488,20 @@ function pluginUsingControllerAndControlFactories(
 export function plugin() {
   return pluginUsingControllerAndControlFactories(
     TokenController,
-    (parent, sentence, trial) =>
-      new TokenControl(parent, sentence, trial, [
+    (parent, sentenceUrl, trial) =>
+      new TokenControl(parent, sentenceUrl, trial, [
         [
           { color: Color.red, shape: Shape.circle },
-          { color: Color.black, shape: Shape.circle },
+          { color: Color.blue, shape: Shape.circle },
           { color: Color.yellow, shape: Shape.circle },
           { color: Color.white, shape: Shape.circle },
-          { color: Color.blue, shape: Shape.circle },
+          { color: Color.green, shape: Shape.circle },
         ],
         [
-          { color: Color.black, shape: Shape.square },
+          { color: Color.blue, shape: Shape.square },
           { color: Color.red, shape: Shape.square },
           { color: Color.white, shape: Shape.square },
-          { color: Color.blue, shape: Shape.square },
+          { color: Color.green, shape: Shape.square },
           { color: Color.yellow, shape: Shape.square },
         ],
       ])
@@ -503,34 +511,34 @@ export function plugin() {
 export function twoSizesPlugin() {
   return pluginUsingControllerAndControlFactories(
     SizedTokenController,
-    (parent, sentence, trial) =>
-      new SizedTokenControl(parent, sentence, trial, [
+    (parent, sentenceUrl, trial) =>
+      new SizedTokenControl(parent, sentenceUrl, trial, [
         [
           { color: Color.red, shape: Shape.circle, size: Size.large },
-          { color: Color.black, shape: Shape.circle, size: Size.large },
+          { color: Color.blue, shape: Shape.circle, size: Size.large },
           { color: Color.yellow, shape: Shape.circle, size: Size.large },
           { color: Color.white, shape: Shape.circle, size: Size.large },
-          { color: Color.blue, shape: Shape.circle, size: Size.large },
+          { color: Color.green, shape: Shape.circle, size: Size.large },
         ],
         [
-          { color: Color.black, shape: Shape.square, size: Size.large },
+          { color: Color.blue, shape: Shape.square, size: Size.large },
           { color: Color.red, shape: Shape.square, size: Size.large },
           { color: Color.white, shape: Shape.square, size: Size.large },
-          { color: Color.blue, shape: Shape.square, size: Size.large },
+          { color: Color.green, shape: Shape.square, size: Size.large },
           { color: Color.yellow, shape: Shape.square, size: Size.large },
         ],
         [
           { color: Color.white, shape: Shape.circle, size: Size.small },
-          { color: Color.black, shape: Shape.circle, size: Size.small },
+          { color: Color.blue, shape: Shape.circle, size: Size.small },
           { color: Color.yellow, shape: Shape.circle, size: Size.small },
           { color: Color.red, shape: Shape.circle, size: Size.small },
-          { color: Color.blue, shape: Shape.circle, size: Size.small },
+          { color: Color.green, shape: Shape.circle, size: Size.small },
         ],
         [
           { color: Color.yellow, shape: Shape.square, size: Size.small },
-          { color: Color.blue, shape: Shape.square, size: Size.small },
+          { color: Color.green, shape: Shape.square, size: Size.small },
           { color: Color.red, shape: Shape.square, size: Size.small },
-          { color: Color.black, shape: Shape.square, size: Size.small },
+          { color: Color.blue, shape: Shape.square, size: Size.small },
           { color: Color.white, shape: Shape.square, size: Size.small },
         ],
       ])

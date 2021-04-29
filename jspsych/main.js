@@ -38,180 +38,161 @@ function tokenTrialWithFeedback(sentence, commandString) {
   ];
 }
 
+function audioResourcePath(stem) {
+  return `token-resources/${stem}.wav`;
+}
+
 jsPsych.init({
   timeline: [
     // A
     ...sizedTokenTrialWithFeedback(
-      "Take the large white circle and the small blue square.",
-      "pick up large white circle, pick up small blue square"
+      audioResourcePath(20),
+      "pick up large white circle, pick up small green square"
     ),
     ...sizedTokenTrialWithFeedback(
-      "Take the small black circle and the large yellow square.",
-      "pick up small black circle, pick up large yellow square"
+      audioResourcePath(21),
+      "pick up small blue circle, pick up large yellow square"
     ),
     ...sizedTokenTrialWithFeedback(
-      "Take the large blue square and the large red square.",
-      "pick up large blue square, pick up large red square"
+      audioResourcePath(22),
+      "pick up large green square, pick up large red square"
     ),
     ...sizedTokenTrialWithFeedback(
-      "Take the large white square and the small blue circle.",
-      "pick up large white square, pick up small blue circle"
+      audioResourcePath(23),
+      "pick up large white square, pick up small green circle"
     ),
     // B
     ...tokenTrialWithFeedback(
-      "Put the red circle on the blue square.",
-      "use red circle to touch blue square"
+      audioResourcePath(24),
+      "use red circle to touch green square"
     ),
     ...tokenTrialWithFeedback(
-      "Touch the black circle with the red square.",
-      "use red square to touch black circle"
+      audioResourcePath(26),
+      "use red square to touch blue circle"
     ),
     ...tokenTrialWithFeedback(
-      "Touch the black circle and the red square.",
-      "touch black circle, touch red square"
+      audioResourcePath(27),
+      "touch blue circle, touch red square"
     ),
     ...tokenTrialWithFeedback(
-      "Pick up the black circle OR the red square.",
-      "pick up black circle or pick up red square"
+      audioResourcePath(28),
+      "pick up blue circle or pick up red square"
     ),
     ...tokenTrialWithFeedback(
-      "Move the blue square away from the yellow square.",
-      "move blue square away from yellow square"
+      audioResourcePath(29),
+      "move green square away from yellow square"
     ),
+    ...tokenTrialWithFeedback(audioResourcePath(31), ""),
     ...tokenTrialWithFeedback(
-      "If there is a black circle, pick up the red square.",
-      "pick up red square"
+      audioResourcePath(32),
+      "pick up green square, pick up red square, pick up blue square, pick up white square"
     ),
     // Put the green square beside ...
     // Touch the squares slowly ...
     ...tokenTrialWithFeedback(
-      "Put the red circle between the yellow square and the blue square.",
-      "put red circle between yellow square and blue square"
+      audioResourcePath(35),
+      "put red circle between yellow square and green square"
     ),
     ...tokenTrialWithFeedback(
-      "Touch all circles, except the blue one.",
-      "touch black circle, touch red circle, touch yellow circle, touch white circle"
+      audioResourcePath(36),
+      "touch blue circle, touch red circle, touch yellow circle, touch white circle"
     ),
+    ...tokenTrialWithFeedback(audioResourcePath(37), "pick up white square"),
+    ...tokenTrialWithFeedback(audioResourcePath(38), "pick up yellow circle"),
     ...tokenTrialWithFeedback(
-      "Pick up the red circle - no - the white square.",
-      "pick up white square"
-    ),
-    ...tokenTrialWithFeedback(
-      "Instead of the white square, pick up the yellow circle.",
-      "pick up yellow circle"
-    ),
-    ...tokenTrialWithFeedback(
-      "Together with the yellow circle, pick up the black circle",
-      "pick up yellow circle, pick up black circle"
+      audioResourcePath(39),
+      "pick up yellow circle, pick up blue circle"
     ),
     // C
+    ...tokenTrialWithFeedback(audioResourcePath(40), "touch red square"),
     ...tokenTrialWithFeedback(
-      "Touch the square that is next to the square that is below the red circle.",
-      "touch red square"
+      audioResourcePath(41),
+      "use yellow circle to touch blue circle"
     ),
     ...tokenTrialWithFeedback(
-      "Using the circle that is above the white square, touch the black circle.",
-      "use yellow circle to touch black circle"
+      audioResourcePath(42),
+      "pick up blue circle, pick up red circle, pick up white square"
     ),
     ...tokenTrialWithFeedback(
-      "Pick up the black circle and the red circle and the white square",
-      "pick up black circle, pick up red circle, pick up white square"
+      audioResourcePath(43),
+      "touch red square, touch green square, pick up white circle, pick up yellow square"
     ),
     ...tokenTrialWithFeedback(
-      "Touch the red square and the blue square and pick up the white circle and the yellow square.",
-      "touch red square, touch blue square, pick up white circle, pick up yellow square"
+      audioResourcePath(44),
+      "touch blue circle, touch white square, touch green square, touch red circle"
+    ),
+    ...tokenTrialWithFeedback(audioResourcePath(45), "touch red square"),
+    ...tokenTrialWithFeedback(
+      audioResourcePath(46),
+      "touch red circle, touch green circle, pick up yellow square"
     ),
     ...tokenTrialWithFeedback(
-      "Touch the black circle and the white square and the blue square and the red circle.",
-      "touch black circle, touch white square, touch blue square, touch red circle"
-    ),
-    ...tokenTrialWithFeedback(
-      "Touch the square below the circle next to the red circle.",
-      "touch red square"
-    ),
-    ...tokenTrialWithFeedback(
-      "Touch the red circle and the blue circle and pick up the yellow square.",
-      "touch red circle, touch blue circle, pick up yellow square"
-    ),
-    ...tokenTrialWithFeedback(
-      "Before touching the yellow circle, pick up the circle above the square that is next to the yellow square.",
+      audioResourcePath(47),
       "pick up white circle\ntouch yellow circle"
     ),
     ...tokenTrialWithFeedback(
-      "Pick up the yellow circle and the square that is below the black circle.",
+      audioResourcePath(48),
       "pick up yellow circle, pick up red square"
     ),
     ...tokenTrialWithFeedback(
-      "Using the square that is below the blue circle, touch the red square.",
+      audioResourcePath(49),
       "use yellow square to touch red square"
     ),
+    ...tokenTrialWithFeedback(audioResourcePath(50), "touch white circle"),
     ...tokenTrialWithFeedback(
-      "Touch the circle that is next to the circle that is above the yellow square.",
-      "touch white circle"
+      audioResourcePath(51),
+      "pick up white square, pick up blue square"
     ),
     ...tokenTrialWithFeedback(
-      "Pick up the white square and the square that is below the red circle.",
-      "pick up white square, pick up black square"
+      audioResourcePath(52),
+      "touch red square, touch green square, touch white circle, touch yellow square"
     ),
     ...tokenTrialWithFeedback(
-      "Touch the red square and the blue square and the white circle and the yellow square.",
-      "touch red square, touch blue square, touch white circle, touch yellow square"
+      audioResourcePath(53),
+      "pick up yellow circle, pick up blue square, pick up white circle"
     ),
     ...tokenTrialWithFeedback(
-      "Pick up the yellow circle and the black square and the white circle.",
-      "pick up yellow circle, pick up black square, pick up white circle"
+      audioResourcePath(54),
+      "touch yellow circle, touch green square, pick up red circle, pick up white square"
     ),
     ...tokenTrialWithFeedback(
-      "Touch the yellow circle and the blue square and pick up the red circle and the white square.",
-      "touch yellow circle, touch blue square, pick up red circle, pick up white square"
-    ),
-    ...tokenTrialWithFeedback(
-      "Before touching the red square, pick up the square next to the square that is below the white circle.",
+      audioResourcePath(55),
       "pick up yellow square\ntouch red square"
     ),
+    ...tokenTrialWithFeedback(audioResourcePath(56), "touch blue circle"),
     ...tokenTrialWithFeedback(
-      "Touch the circle next to the circle above the black square.",
-      "touch black circle"
+      audioResourcePath(57),
+      "pick up green square, pick up red circle, touch blue square"
     ),
     ...tokenTrialWithFeedback(
-      "Pick up the blue square and the red circle and touch the black square.",
-      "pick up blue square, pick up red circle, touch black square"
+      audioResourcePath(58),
+      "use white circle to touch blue square"
+    ),
+    ...tokenTrialWithFeedback(audioResourcePath(59), "touch green square"),
+    ...tokenTrialWithFeedback(audioResourcePath(60), "touch green square"),
+    ...tokenTrialWithFeedback(
+      audioResourcePath(61),
+      "pick up yellow circle, pick up blue square, touch white circle"
     ),
     ...tokenTrialWithFeedback(
-      "Using the circle that is above the blue square, touch the black square.",
-      "use white circle to touch black square"
+      audioResourcePath(62),
+      "pick up green square, pick up green circle"
     ),
     ...tokenTrialWithFeedback(
-      "Touch the square next to the square below the blue circle.",
-      "touch blue square"
+      audioResourcePath(63),
+      "touch blue square, touch white square, pick up green circle, pick up red square"
     ),
     ...tokenTrialWithFeedback(
-      "Touch the square that is below the circle that is next to the blue circle.",
-      "touch blue square"
+      audioResourcePath(64),
+      "touch green circle, touch white circle, touch red square, touch yellow circle"
     ),
     ...tokenTrialWithFeedback(
-      "Pick up the yellow circle and the black square and touch the white circle.",
-      "pick up yellow circle, pick up black square, touch white circle"
+      audioResourcePath(65),
+      "pick up white square, pick up yellow square, pick up blue circle"
     ),
     ...tokenTrialWithFeedback(
-      "Pick up the blue square and the circle that is above the yellow square.",
-      "pick up blue square, pick up blue circle"
-    ),
-    ...tokenTrialWithFeedback(
-      "Touch the black square and the white square and pick up the blue circle and the red square.",
-      "touch black square, touch white square, pick up blue circle, pick up red square"
-    ),
-    ...tokenTrialWithFeedback(
-      "Touch the blue circle and the white circle and the red square and the yellow circle.",
-      "touch blue circle, touch white circle, touch red square, touch yellow circle"
-    ),
-    ...tokenTrialWithFeedback(
-      "Pick up the white square and the yellow square and the black circle.",
-      "pick up white square, pick up yellow square, pick up black circle"
-    ),
-    ...tokenTrialWithFeedback(
-      "Before touching the black square, pick up the circle next to the circle that is above the yellow square.",
-      "pick up white circle\ntouch black square"
+      audioResourcePath(66),
+      "pick up white circle\ntouch blue square"
     ),
   ],
 });
