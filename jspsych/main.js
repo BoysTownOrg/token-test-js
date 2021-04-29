@@ -82,7 +82,7 @@ jsPsych.init({
       audioResourcePath(29),
       "move green square away from yellow square"
     ),
-    ...tokenTrialWithFeedback(audioResourcePath(31), ""),
+    ...tokenTrialWithFeedback(audioResourcePath(31), "nothing"),
     ...tokenTrialWithFeedback(
       audioResourcePath(32),
       "pick up green square, pick up red square, pick up blue square, pick up white square"
