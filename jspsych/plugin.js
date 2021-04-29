@@ -305,7 +305,7 @@ class TokenControl {
 }
 
 class SizedTokenControl {
-  constructor(parent, instructionUrl, trial, tokenRows) {
+  constructor(parent, trial, tokenRows) {
     this.trial = trial;
     this.elementFromToken = new Map();
     const holdingArea = divElement();
