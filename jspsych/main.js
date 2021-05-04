@@ -44,6 +44,18 @@ function audioResourcePath(stem) {
 
 jsPsych.init({
   timeline: [
+    {
+      type: "survey-text",
+      questions: [
+        {
+          prompt: "If the ID displayed is not correct, please enter it now.",
+          placeholder: jsPsych.data.urlVariables().subjectID,
+        },
+      ],
+      preamble:
+        "This task will record your voice. It will tell you what to say.",
+      button_label: "Click to enter ID",
+    },
     // A
     ...sizedTokenTrialWithFeedback(
       audioResourcePath(20),
