@@ -39,7 +39,7 @@ function tokenTrialWithFeedback(sentenceUrl, commandString) {
 }
 
 function audioResourcePath(stem) {
-  return `token-resources/${stem}.wav`;
+  return `${tokenResourcePath}/${stem}.wav`;
 }
 
 jsPsych.init({
