@@ -56,6 +56,12 @@ jsPsych.init({
         "This task will record your voice. It will tell you what to say.",
       button_label: "Click to enter ID",
     },
+    {
+      type: "html-button-response",
+      stimulus:
+        "This task requires you to listen to a sentence and then do the actions given in the sentence. You will see squares and circles of different colors and sizes. Use your mouse to follow the directions the best you can. Some of the trials will be easy and some may be hard.",
+      choices: ["Start"],
+    },
     // A
     ...sizedTokenTrialWithFeedback(
       audioResourcePath(20),
