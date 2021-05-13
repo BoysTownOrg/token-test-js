@@ -213,4 +213,7 @@ jsPsych.init({
       "pick up white circle\ntouch blue square"
     ),
   ],
+  on_finish() {
+    window.close();
+  },
 });
