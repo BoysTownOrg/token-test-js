@@ -214,6 +214,6 @@ jsPsych.init({
     ),
   ],
   on_finish() {
-    window.close();
+    history.back();
   },
 });
