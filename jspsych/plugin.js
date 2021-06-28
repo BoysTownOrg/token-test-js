@@ -28,8 +28,8 @@ function pixelsString(a) {
   return `${a}px`;
 }
 
-const tokenWidthPixels = 125;
-const smallTokenWidthPixels = 80;
+const tokenWidthPixels = 100;
+const smallTokenWidthPixels = 60;
 const tokenBorderWidthPixels = 2;
 
 function tokenBorder(borderWidthPixels) {
@@ -186,7 +186,7 @@ function tokenGridWithRows(n) {
   grid.style.display = "grid";
   grid.style.gridTemplateColumns = "repeat(5, 1fr)";
   grid.style.gridTemplateRows = `repeat(${n}, 1fr)`;
-  grid.style.gridGap = `${pixelsString(30)} ${pixelsString(30)}`;
+  grid.style.gridGap = `${pixelsString(20)} ${pixelsString(20)}`;
   return grid;
 }
 
@@ -206,8 +206,8 @@ class TokenControl {
     this.trial = trial;
     this.elementFromToken = new Map();
     const holdingArea = divElement();
-    holdingArea.style.height = pixelsString(240);
-    holdingArea.style.width = pixelsString(5 * 125);
+    holdingArea.style.height = pixelsString(160);
+    holdingArea.style.width = pixelsString(5 * 100);
     holdingArea.style.border = `${pixelsString(2)} solid black`;
     holdingArea.style.margin = "5% auto";
     holdingArea.style.backgroundColor = "lightgrey";
