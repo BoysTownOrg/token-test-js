@@ -5,12 +5,17 @@ const twoSizesTokenTestPluginId = "two-sizes-token-test";
 jsPsych.plugins[tokenTestPluginId] = plugin();
 jsPsych.plugins[twoSizesTokenTestPluginId] = twoSizesPlugin();
 
+function audioResourcePath(stem) {
+  return `${tokenResourcePath}/${stem}.wav`;
+}
+
 function sizedTokenTrialWithFeedback(sentenceUrl, commandString) {
   return {
     type: twoSizesTokenTestPluginId,
     sentenceUrl,
     commandString,
     timeoutMilliseconds: 10000,
+    beepUrl: audioResourcePath("beep"),
   };
 }
 
@@ -20,11 +25,8 @@ function tokenTrialWithFeedback(sentenceUrl, commandString) {
     sentenceUrl,
     commandString,
     timeoutMilliseconds: 10000,
+    beepUrl: audioResourcePath("beep"),
   };
-}
-
-function audioResourcePath(stem) {
-  return `${tokenResourcePath}/${stem}.wav`;
 }
 
 jsPsych.init({

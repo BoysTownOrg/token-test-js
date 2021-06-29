@@ -309,8 +309,8 @@ class SizedTokenControl {
     this.trial = trial;
     this.elementFromToken = new Map();
     const holdingArea = divElement();
-    holdingArea.style.height = pixelsString(240);
-    holdingArea.style.width = pixelsString(5 * 125);
+    holdingArea.style.height = pixelsString(160);
+    holdingArea.style.width = pixelsString(5 * 100);
     holdingArea.style.border = `${pixelsString(2)} solid black`;
     holdingArea.style.margin = "5% auto";
     holdingArea.style.backgroundColor = "lightgrey";
@@ -474,6 +474,7 @@ function pluginUsingControllerAndControlFactories(
       const player = audioPlayer(trial.sentenceUrl);
       player.play();
       player.onended = () => {
+        audioPlayer(trial.beepUrl).play();
         jsPsych.pluginAPI.setTimeout(() => {
           model.concludeTrial();
         }, trial.timeoutMilliseconds);
