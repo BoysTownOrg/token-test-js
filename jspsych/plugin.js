@@ -50,6 +50,10 @@ function colorName(color) {
       return "blue";
     case Color.black:
       return "black";
+    case Color.brown:
+      return "brown";
+    case Color.orange:
+      return "orange";
     default:
       return "";
   }
@@ -494,16 +498,16 @@ export function plugin() {
         [
           { color: Color.red, shape: Shape.circle },
           { color: Color.blue, shape: Shape.circle },
-          { color: Color.yellow, shape: Shape.circle },
+          { color: Color.brown, shape: Shape.circle },
           { color: Color.white, shape: Shape.circle },
-          { color: Color.green, shape: Shape.circle },
+          { color: Color.orange, shape: Shape.circle },
         ],
         [
           { color: Color.blue, shape: Shape.square },
           { color: Color.red, shape: Shape.square },
           { color: Color.white, shape: Shape.square },
-          { color: Color.green, shape: Shape.square },
-          { color: Color.yellow, shape: Shape.square },
+          { color: Color.orange, shape: Shape.square },
+          { color: Color.brown, shape: Shape.square },
         ],
       ])
   );
@@ -517,27 +521,27 @@ export function twoSizesPlugin() {
         [
           { color: Color.red, shape: Shape.circle, size: Size.large },
           { color: Color.blue, shape: Shape.circle, size: Size.large },
-          { color: Color.yellow, shape: Shape.circle, size: Size.large },
+          { color: Color.brown, shape: Shape.circle, size: Size.large },
           { color: Color.white, shape: Shape.circle, size: Size.large },
-          { color: Color.green, shape: Shape.circle, size: Size.large },
+          { color: Color.orange, shape: Shape.circle, size: Size.large },
         ],
         [
           { color: Color.blue, shape: Shape.square, size: Size.large },
           { color: Color.red, shape: Shape.square, size: Size.large },
           { color: Color.white, shape: Shape.square, size: Size.large },
-          { color: Color.green, shape: Shape.square, size: Size.large },
-          { color: Color.yellow, shape: Shape.square, size: Size.large },
+          { color: Color.orange, shape: Shape.square, size: Size.large },
+          { color: Color.brown, shape: Shape.square, size: Size.large },
         ],
         [
           { color: Color.white, shape: Shape.circle, size: Size.small },
           { color: Color.blue, shape: Shape.circle, size: Size.small },
-          { color: Color.yellow, shape: Shape.circle, size: Size.small },
+          { color: Color.brown, shape: Shape.circle, size: Size.small },
           { color: Color.red, shape: Shape.circle, size: Size.small },
-          { color: Color.green, shape: Shape.circle, size: Size.small },
+          { color: Color.orange, shape: Shape.circle, size: Size.small },
         ],
         [
-          { color: Color.yellow, shape: Shape.square, size: Size.small },
-          { color: Color.green, shape: Shape.square, size: Size.small },
+          { color: Color.brown, shape: Shape.square, size: Size.small },
+          { color: Color.orange, shape: Shape.square, size: Size.small },
           { color: Color.red, shape: Shape.square, size: Size.small },
           { color: Color.blue, shape: Shape.square, size: Size.small },
           { color: Color.white, shape: Shape.square, size: Size.small },
