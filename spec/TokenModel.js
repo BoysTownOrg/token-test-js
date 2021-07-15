@@ -852,6 +852,40 @@ describe("TokenModel", () => {
     );
   });
 
+  it("should submit correct put left of action even when token dropped onto another", () => {
+    const tokenRelation = new TokenRelationStub();
+    tokenRelation.setMovedTokenIsLeftOf();
+    testModel(
+      new TokenInteraction({
+        firstToken: {
+          color: Color.red,
+          shape: Shape.circle,
+        },
+        secondToken: {
+          color: Color.yellow,
+          shape: Shape.square,
+        },
+        action: Action.putLeftOf,
+      }),
+      [
+        {
+          firstToken: {
+            color: Color.red,
+            shape: Shape.circle,
+          },
+          secondToken: {
+            color: Color.yellow,
+            shape: Shape.square,
+          },
+          action: Action.useToTouch,
+        },
+      ],
+      true,
+      submitDualTokenInteraction,
+      tokenRelation
+    );
+  });
+
   it("should submit correct put between action", () => {
     const tokenRelation = new TokenRelationStub();
     tokenRelation.setMovedTokenIsBetween();
