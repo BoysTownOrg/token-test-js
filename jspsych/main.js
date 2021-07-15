@@ -51,38 +51,47 @@ jsPsych.init({
     },
     sizedTokenTrialWithFeedback(
       audioResourcePath(20),
+      // 1. Click on the large white circle and the small orange square.
       "touch large white circle, touch small orange square"
     ),
     sizedTokenTrialWithFeedback(
       audioResourcePath(21),
+      // 2. Click on the small blue circle and the large brown square.
       "touch small blue circle, touch large brown square"
     ),
     sizedTokenTrialWithFeedback(
       audioResourcePath(22),
+      // 3. Click on the large orange square and the large red square.
       "touch large orange square, touch large red square"
     ),
     sizedTokenTrialWithFeedback(
       audioResourcePath(23),
+      // 4. Click on the large white square and the small orange circle.
       "touch large white square, touch small orange circle"
     ),
     tokenTrialWithFeedback(
       audioResourcePath(24),
+      // 5. Put the red circle on the orange square.
       "use red circle to touch orange square"
     ),
     tokenTrialWithFeedback(
       audioResourcePath(26),
+      // 6. Touch the blue circle with the red square.
       "use red square to touch blue circle"
     ),
     tokenTrialWithFeedback(
       audioResourcePath(27),
+      // 7. Click on the blue circle and the red square.
       "touch blue circle, touch red square"
     ),
     tokenTrialWithFeedback(
       audioResourcePath(28),
+      // 8. Drag the blue circle or the red square to the box.
       "pick up blue circle or pick up red square"
     ),
     tokenTrialWithFeedback(
       audioResourcePath(29),
+      // 9. Move the orange square away from the brown square.
       "move orange square away from brown square"
     ),
     tokenTrialWithFeedback(
@@ -90,7 +99,9 @@ jsPsych.init({
       // 10. If there is a black circle, drag the red square to the box
       "nothing"
     ),
-    // 11. Put the orange square beside the red circle...
+
+    // 11. Put the orange square beside the red circle (?)
+
     tokenTrialWithFeedback(
       audioResourcePath(35),
       // 12. Click on the squares first and the circles second
@@ -179,7 +190,7 @@ jsPsych.init({
     tokenTrialWithFeedback(
       audioResourcePath(52),
       // 29. Click on the red square and the orange square and the white circle and the brown circle.
-      "touch red square, touch orange square, touch white circle, touch brown square"
+      "touch red square, touch orange square, touch white circle, touch brown circle"
     ),
     tokenTrialWithFeedback(
       audioResourcePath(53),
