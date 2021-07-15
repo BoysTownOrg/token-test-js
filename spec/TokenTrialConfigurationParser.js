@@ -246,6 +246,23 @@ describe("Parser", () => {
     );
   });
 
+  it("should parse put to the left of token interaction", () => {
+    expectYields(
+      new TokenInteraction({
+        firstToken: {
+          color: Color.white,
+          shape: Shape.square,
+        },
+        secondToken: {
+          color: Color.yellow,
+          shape: Shape.circle,
+        },
+        action: Action.putLeftOf,
+      }),
+      "put white square left of yellow circle"
+    );
+  });
+
   it("should parse one dual sized token interaction", () => {
     expectYields(
       new SizedTokenInteraction({

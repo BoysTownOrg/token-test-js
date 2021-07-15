@@ -100,7 +100,7 @@ jsPsych.init({
       "nothing"
     ),
 
-    // 11. Put the orange square beside the red circle (?)
+    // 11. Put the orange square to the left of the red circle (?)
 
     tokenTrialWithFeedback(
       audioResourcePath(12),
