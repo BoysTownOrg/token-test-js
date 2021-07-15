@@ -376,6 +376,47 @@ describe("TokenController", () => {
     );
   });
 
+  it("should determine whether red circle is left of yellow square after drag", function () {
+    setTokenPosition(
+      this.control,
+      { color: Color.yellow, shape: Shape.square },
+      {
+        leftScreenEdgeToLeftEdgePixels: 10,
+        topScreenEdgeToTopEdgePixels: 20,
+        widthPixels: 30,
+        heightPixels: 40,
+      }
+    );
+    setTokenPosition(
+      this.control,
+      { color: Color.red, shape: Shape.circle },
+      {
+        leftScreenEdgeToLeftEdgePixels: 15,
+        topScreenEdgeToTopEdgePixels: 25,
+        widthPixels: 35,
+        heightPixels: 45,
+      }
+    );
+    this.control.dragRedCircle();
+    setTokenPosition(
+      this.control,
+      { color: Color.red, shape: Shape.circle },
+      {
+        leftScreenEdgeToLeftEdgePixels: 1,
+        topScreenEdgeToTopEdgePixels: 25,
+        widthPixels: 35,
+        heightPixels: 45,
+      }
+    );
+    this.control.releaseRedCircle();
+    expect(
+      this.model.tokenRelation().movedTokenIsLeftOf({
+        color: Color.yellow,
+        shape: Shape.square,
+      })
+    ).toBe(1 + 35 / 2 < 10 + 30 / 2);
+  });
+
   it("should determine whether red circle is between the yellow square and the green square after drag", function () {
     setTokenPosition(
       this.control,
