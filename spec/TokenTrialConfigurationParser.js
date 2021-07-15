@@ -136,6 +136,30 @@ describe("Parser", () => {
     );
   });
 
+  it("should parse orange color", () => {
+    expectYields(
+      new InAnyOrder([
+        new SizedTokenInteraction({
+          token: {
+            color: Color.white,
+            shape: Shape.circle,
+            size: Size.large,
+          },
+          action: Action.touch,
+        }),
+        new SizedTokenInteraction({
+          token: {
+            color: Color.orange,
+            shape: Shape.square,
+            size: Size.small,
+          },
+          action: Action.touch,
+        }),
+      ]),
+      "touch large white circle, touch small orange square"
+    );
+  });
+
   it("should parse partially unordered single token interactions", () => {
     expectYields(
       new InOrder([
