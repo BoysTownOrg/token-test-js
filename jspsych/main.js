@@ -99,9 +99,11 @@ jsPsych.init({
       // 10. If there is a black circle, drag the red square to the box
       "nothing"
     ),
-
-    // 11. Put the orange square to the left of the red circle (?)
-
+    tokenTrialWithFeedback(
+      audioResourcePath(11),
+      // 11. Put the orange square to the left of the red circle (?)
+      "put orange square left of red circle"
+    ),
     tokenTrialWithFeedback(
       audioResourcePath(12),
       // 12. Click on the squares first and the circles second
