@@ -49,27 +49,25 @@ jsPsych.init({
         "This task requires you to listen to a sentence and then do the actions given in the sentence. You will see squares and circles of different colors and sizes. Use your mouse to follow the directions the best you can. Some of the trials will be easy and some may be hard.",
       choices: ["Start"],
     },
-    // A
     sizedTokenTrialWithFeedback(
       audioResourcePath(20),
-      "pick up large white circle, pick up small green square"
+      "touch large white circle, touch small orange square"
     ),
     sizedTokenTrialWithFeedback(
       audioResourcePath(21),
-      "pick up small blue circle, pick up large yellow square"
+      "touch small blue circle, touch large brown square"
     ),
     sizedTokenTrialWithFeedback(
       audioResourcePath(22),
-      "pick up large green square, pick up large red square"
+      "touch large orange square, touch large red square"
     ),
     sizedTokenTrialWithFeedback(
       audioResourcePath(23),
-      "pick up large white square, pick up small green circle"
+      "touch large white square, touch small orange circle"
     ),
-    // B
     tokenTrialWithFeedback(
       audioResourcePath(24),
-      "use red circle to touch green square"
+      "use red circle to touch orange square"
     ),
     tokenTrialWithFeedback(
       audioResourcePath(26),
@@ -85,118 +83,172 @@ jsPsych.init({
     ),
     tokenTrialWithFeedback(
       audioResourcePath(29),
-      "move green square away from yellow square"
+      "move orange square away from brown square"
     ),
-    tokenTrialWithFeedback(audioResourcePath(31), "nothing"),
     tokenTrialWithFeedback(
-      audioResourcePath(32),
-      "pick up green square, pick up red square, pick up blue square, pick up white square"
+      audioResourcePath(31),
+      // 10. If there is a black circle, drag the red square to the box
+      "nothing"
     ),
-    // Put the green square beside ...
-    // Touch the squares slowly ...
+    // 11. Put the orange square beside the red circle...
     tokenTrialWithFeedback(
       audioResourcePath(35),
-      "put red circle between yellow square and green square"
+      // 12. Click on the squares first and the circles second
+      "touch red square, touch blue square, touch white square, touch brown square, touch orange square\ntouch red circle, touch blue circle, touch white circle, touch brown circle, touch orange circle"
+    ),
+    tokenTrialWithFeedback(
+      audioResourcePath(35),
+      // 13. Put the red circle between the brown square and the orange square.
+      "put red circle between brown square and orange square"
     ),
     tokenTrialWithFeedback(
       audioResourcePath(36),
-      "touch blue circle, touch red circle, touch yellow circle, touch white circle"
+      // 14. Click on all circles, except the orange one.
+      "touch blue circle, touch red circle, touch brown circle, touch white circle"
     ),
-    tokenTrialWithFeedback(audioResourcePath(37), "pick up white square"),
-    tokenTrialWithFeedback(audioResourcePath(38), "pick up yellow circle"),
     tokenTrialWithFeedback(
-      audioResourcePath(39),
-      "pick up yellow circle, pick up blue circle"
+      audioResourcePath(37),
+      // 15. Drag the red circle - no - the white square to the box.
+      "pick up white square"
     ),
-    // C
-    tokenTrialWithFeedback(audioResourcePath(40), "touch red square"),
+    tokenTrialWithFeedback(
+      audioResourcePath(38),
+      // 16. Instead of the white square, drag the brown circle to the box.
+      "pick up brown circle"
+    ),
+    tokenTrialWithFeedback(
+      audioResourcePath(40),
+      // 17. Click on the square that is next to the square that is below the red circle
+      "touch red square"
+    ),
     tokenTrialWithFeedback(
       audioResourcePath(41),
-      "use yellow circle to touch blue circle"
+      // 18. Using the circle that is above the white square, touch the blue circle.
+      "use brown circle to touch blue circle"
     ),
     tokenTrialWithFeedback(
       audioResourcePath(42),
+      // 19. Drag the blue circle and the red circle and the white square to the box.
       "pick up blue circle, pick up red circle, pick up white square"
     ),
     tokenTrialWithFeedback(
       audioResourcePath(43),
-      "touch red square, touch green square, pick up white circle, pick up yellow square"
+      // 20. Click on the red square and the orange square and drag the white circle and the brown square to the box.
+      "touch red square, touch orange square, pick up white circle, pick up brown square"
     ),
     tokenTrialWithFeedback(
       audioResourcePath(44),
-      "touch blue circle, touch white square, touch green square, touch red circle"
+      // 21. Click on the blue circle and the white square and the orange square and the red circle.
+      "touch blue circle, touch white square, touch orange square, touch red circle"
     ),
-    tokenTrialWithFeedback(audioResourcePath(45), "touch red square"),
+    tokenTrialWithFeedback(
+      audioResourcePath(45),
+      // 22. Click on the square below the circle next to the red circle.
+      "touch red square"
+    ),
     tokenTrialWithFeedback(
       audioResourcePath(46),
-      "touch red circle, touch green circle, pick up yellow square"
+      // 23. Click on the red circle and the orange circle and drag the brown square to the box.
+      "touch red circle, touch orange circle, pick up brown square"
     ),
     tokenTrialWithFeedback(
       audioResourcePath(47),
-      "pick up white circle\ntouch yellow circle"
+      // 24. Before clicking on the brown circle, drag the circle above the square that is next to the brown square to the box.
+      "pick up white circle\ntouch brown circle"
     ),
     tokenTrialWithFeedback(
       audioResourcePath(48),
-      "pick up yellow circle, pick up red square"
+      // 25. Drag the brown circle and the square that is below the blue circle to the box.
+      "pick up brown circle, pick up red square"
     ),
     tokenTrialWithFeedback(
       audioResourcePath(49),
-      "use yellow square to touch red square"
+      // 26. Using the square that is below the orange circle, touch the red square.
+      "use brown square to touch red square"
     ),
-    tokenTrialWithFeedback(audioResourcePath(50), "touch white circle"),
+    tokenTrialWithFeedback(
+      audioResourcePath(50),
+      // 27. Click on the circle that is next to the circle that is above the brown square.
+      "touch white circle"
+    ),
     tokenTrialWithFeedback(
       audioResourcePath(51),
+      // 28. Drag the white square and the square that is below the red circle to the box.
       "pick up white square, pick up blue square"
     ),
     tokenTrialWithFeedback(
       audioResourcePath(52),
-      "touch red square, touch green square, touch white circle, touch yellow square"
+      // 29. Click on the red square and the orange square and the white circle and the brown circle.
+      "touch red square, touch orange square, touch white circle, touch brown square"
     ),
     tokenTrialWithFeedback(
       audioResourcePath(53),
-      "pick up yellow circle, pick up blue square, pick up white circle"
+      // 30. Drag the brown circle and the blue square and the white circle to the box.
+      "pick up brown circle, pick up blue square, pick up white circle"
     ),
     tokenTrialWithFeedback(
       audioResourcePath(54),
-      "touch yellow circle, touch green square, pick up red circle, pick up white square"
+      // 31. Click on the brown circle and the orange square and drag the red circle and the white square to the box.
+      "touch brown circle, touch orange square, pick up red circle, pick up white square"
     ),
     tokenTrialWithFeedback(
       audioResourcePath(55),
-      "pick up yellow square\ntouch red square"
+      // 32. Before clicking on the red square, drag the square next to the square that is below the white circle to the box.
+      "pick up brown square or pick up white square\ntouch red square"
     ),
-    tokenTrialWithFeedback(audioResourcePath(56), "touch blue circle"),
+    tokenTrialWithFeedback(
+      audioResourcePath(56),
+      // 33. Click on the circle next to the circle above the blue square.
+      "touch blue circle"
+    ),
     tokenTrialWithFeedback(
       audioResourcePath(57),
-      "pick up green square, pick up red circle, touch blue square"
+      // 34. Drag the orange square and the red circle to the box and click on the blue square.
+      "pick up orange square, pick up red circle, touch blue square"
     ),
     tokenTrialWithFeedback(
       audioResourcePath(58),
+      // 35. Using the circle that is above the orange square, touch the blue square.
       "use white circle to touch blue square"
     ),
-    tokenTrialWithFeedback(audioResourcePath(59), "touch green square"),
-    tokenTrialWithFeedback(audioResourcePath(60), "touch green square"),
+    tokenTrialWithFeedback(
+      audioResourcePath(59),
+      // 36. Click on the square next to the square below the orange circle.
+      "touch orange square"
+    ),
+    tokenTrialWithFeedback(
+      audioResourcePath(60),
+      // 37. Click on the square that is below the circle that is next to the orange circle.
+      "touch orange square"
+    ),
     tokenTrialWithFeedback(
       audioResourcePath(61),
-      "pick up yellow circle, pick up blue square, touch white circle"
+      // 38. Drag the brown circle and the blue square to the box and click on the white circle.
+      "pick up brown circle, pick up blue square, touch white circle"
     ),
     tokenTrialWithFeedback(
       audioResourcePath(62),
-      "pick up green square, pick up green circle"
+      // 39. Drag the orange square and the circle that is above the brown square to the box.
+      "pick up orange square, pick up orange circle"
     ),
     tokenTrialWithFeedback(
       audioResourcePath(63),
-      "touch blue square, touch white square, pick up green circle, pick up red square"
+      // 40. Click on the blue square and the white square and drag the orange circle and the red circle to the box.
+      "touch blue square, touch white square, pick up orange circle, pick up red circle"
     ),
     tokenTrialWithFeedback(
       audioResourcePath(64),
-      "touch green circle, touch white circle, touch red square, touch yellow circle"
+      // 41. Click on the orange circle and the white circle and the red square and the brown circle.
+      "touch orange circle, touch white circle, touch red square, touch brown circle"
     ),
     tokenTrialWithFeedback(
       audioResourcePath(65),
-      "pick up white square, pick up yellow square, pick up blue circle"
+      // 42. Drag the white square and the brown square and the blue circle to the box.
+      "pick up white square, pick up brown square, pick up blue circle"
     ),
     tokenTrialWithFeedback(
       audioResourcePath(66),
+      // 43. Before clicking on the blue square, drag the circle next to the circle that is above the brown square to the box.
       "pick up white circle\ntouch blue square"
     ),
   ],
