@@ -36,7 +36,7 @@ function tokenBorder(borderWidthPixels) {
   return `${pixelsString(borderWidthPixels)} solid black`;
 }
 
-function colorName(color) {
+function cssColorString(color) {
   switch (color) {
     case Color.red:
       return "red";
@@ -69,7 +69,7 @@ function circleElementWithColorAndDiameterPixels(color, diameterPixels) {
   );
   circle.style.border = tokenBorder(borderWidthPixels);
   circle.style.margin = "auto";
-  circle.style.backgroundColor = colorName(color);
+  circle.style.backgroundColor = cssColorString(color);
   return circle;
 }
 
@@ -87,7 +87,7 @@ function squareElementWithColorAndWidthPixels(color, widthPixels) {
   square.style.width = pixelsString(widthPixels);
   square.style.border = tokenBorder(tokenBorderWidthPixels);
   square.style.margin = "auto";
-  square.style.backgroundColor = colorName(color);
+  square.style.backgroundColor = cssColorString(color);
   return square;
 }
 
@@ -110,7 +110,7 @@ function clear(parent) {
   }
 }
 
-function backgroundColor(token) {
+function cssBackgroundColor(token) {
   return token.style.backgroundColor;
 }
 
@@ -280,7 +280,7 @@ class TokenControl {
   }
 
   tokenReleasedColor() {
-    return backgroundColor(this.tokenReleased);
+    return cssBackgroundColor(this.tokenReleased);
   }
 
   tokenReleasedIsCircle() {
@@ -288,7 +288,7 @@ class TokenControl {
   }
 
   tokenDraggedColor() {
-    return backgroundColor(this.tokenDragged);
+    return cssBackgroundColor(this.tokenDragged);
   }
 
   tokenDraggedIsCircle() {
@@ -296,7 +296,7 @@ class TokenControl {
   }
 
   tokenDroppedOntoColor() {
-    return backgroundColor(this.tokenDroppedOnto);
+    return cssBackgroundColor(this.tokenDroppedOnto);
   }
 
   tokenDroppedOntoIsCircle() {
@@ -375,7 +375,7 @@ class SizedTokenControl {
   }
 
   tokenReleasedColor() {
-    return backgroundColor(this.tokenReleased);
+    return cssBackgroundColor(this.tokenReleased);
   }
 
   tokenReleasedIsCircle() {
@@ -387,7 +387,7 @@ class SizedTokenControl {
   }
 
   tokenDraggedColor() {
-    return backgroundColor(this.tokenDragged);
+    return cssBackgroundColor(this.tokenDragged);
   }
 
   tokenDraggedIsCircle() {
@@ -399,7 +399,7 @@ class SizedTokenControl {
   }
 
   tokenDroppedOntoColor() {
-    return backgroundColor(this.tokenDroppedOnto);
+    return cssBackgroundColor(this.tokenDroppedOnto);
   }
 
   tokenDroppedOntoIsCircle() {
@@ -431,7 +431,7 @@ class JsPsychTrial {
     this.tokenDragPaths.push({
       positions: copiedPositions,
       token: {
-        color: backgroundColor(token),
+        color: cssBackgroundColor(token),
         shape: isCircle(token) ? Shape.circle : Shape.square,
       },
     });
@@ -444,7 +444,7 @@ class JsPsychTrial {
     this.tokenDragPaths.push({
       positions: copiedPositions,
       token: {
-        color: backgroundColor(token),
+        color: cssBackgroundColor(token),
         shape: isCircle(token) ? Shape.circle : Shape.square,
         size: isSmall(token) ? Size.small : Size.large,
       },
