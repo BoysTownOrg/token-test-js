@@ -60,7 +60,7 @@ function testModelWithFactory(
 
 function testModel(rule, interactions, expectedResult, submit, tokenRelation) {
   testModelWithFactory(
-    (trial, timer, rule) => new TokenModel(trial, timer, rule),
+    (trial, timer, rule_) => new TokenModel(trial, timer, rule_),
     rule,
     interactions,
     expectedResult,
@@ -73,6 +73,11 @@ class TokenRelationStub {
   constructor() {
     this.movedTokenIsFurtherFrom_ = false;
     this.movedTokenIsBetween_ = false;
+    this.movedTokenIsLeftOf_ = false;
+  }
+
+  setMovedTokenIsLeftOf() {
+    this.movedTokenIsLeftOf_ = true;
   }
 
   movedTokenIsFurtherFrom(token) {
@@ -89,6 +94,10 @@ class TokenRelationStub {
 
   movedTokenIsBetween(a, b) {
     return this.movedTokenIsBetween_;
+  }
+
+  movedTokenIsLeftOf(a) {
+    return this.movedTokenIsLeftOf_;
   }
 }
 
@@ -805,6 +814,36 @@ describe("TokenModel", () => {
             shape: Shape.square,
           },
           action: Action.pickUp,
+        },
+      ],
+      true,
+      submitSingleTokenInteraction,
+      tokenRelation
+    );
+  });
+
+  it("should submit correct put left of action", () => {
+    const tokenRelation = new TokenRelationStub();
+    tokenRelation.setMovedTokenIsLeftOf();
+    testModel(
+      new TokenInteraction({
+        firstToken: {
+          color: Color.red,
+          shape: Shape.circle,
+        },
+        secondToken: {
+          color: Color.yellow,
+          shape: Shape.square,
+        },
+        action: Action.putLeftOf,
+      }),
+      [
+        {
+          token: {
+            color: Color.red,
+            shape: Shape.circle,
+          },
+          action: Action.move,
         },
       ],
       true,
