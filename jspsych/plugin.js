@@ -209,30 +209,28 @@ class TokenControl {
   constructor(parent, trial, tokenRows) {
     this.trial = trial;
     this.elementFromToken = new Map();
-    const holdingArea = divElement();
-    holdingArea.style.height = pixelsString(160);
-    holdingArea.style.width = pixelsString(5 * 100);
-    holdingArea.style.border = `${pixelsString(2)} solid black`;
-    holdingArea.style.margin = "5% auto";
-    holdingArea.style.backgroundColor = "lightgrey";
-    adopt(parent, holdingArea);
+    const boxImage = new Image();
+    boxImage.src = trial.boxUrl;
+    boxImage.style.border = `${pixelsString(2)} solid black`;
+    boxImage.style.margin = "5% auto";
+    adopt(parent, boxImage);
     const grid = tokenGridWithRows(tokenRows.length);
     for (let i = 0; i < tokenRows.length; i += 1)
       this.addTokenRow(grid, i + 1, tokenRows[i]);
     const onHoldingAreaDrop = () => {
       this.observer.notifyThatHoldingAreaHasBeenDroppedOnto();
     };
-    interact(holdingArea).dropzone({
+    interact(boxImage).dropzone({
       ondrop(event) {
         onHoldingAreaDrop();
-        holdingArea.style.borderColor = "black";
+        boxImage.style.borderColor = "black";
         interact(event.relatedTarget).dropzone(false);
       },
       ondragenter() {
-        holdingArea.style.borderColor = "#22e";
+        boxImage.style.borderColor = "#22e";
       },
       ondragleave() {
-        holdingArea.style.borderColor = "black";
+        boxImage.style.borderColor = "black";
       },
     });
     adopt(parent, grid);
@@ -312,32 +310,9 @@ class SizedTokenControl {
   constructor(parent, trial, tokenRows) {
     this.trial = trial;
     this.elementFromToken = new Map();
-    const holdingArea = divElement();
-    holdingArea.style.height = pixelsString(160);
-    holdingArea.style.width = pixelsString(5 * 100);
-    holdingArea.style.border = `${pixelsString(2)} solid black`;
-    holdingArea.style.margin = "5% auto";
-    holdingArea.style.backgroundColor = "lightgrey";
-    adopt(parent, holdingArea);
     const grid = tokenGridWithRows(tokenRows.length);
     for (let i = 0; i < tokenRows.length; i += 1)
       this.addTokenRow(grid, i + 1, tokenRows[i]);
-    const onHoldingAreaDrop = () => {
-      this.observer.notifyThatHoldingAreaHasBeenDroppedOnto();
-    };
-    interact(holdingArea).dropzone({
-      ondrop(event) {
-        onHoldingAreaDrop();
-        holdingArea.style.borderColor = "black";
-        interact(event.relatedTarget).dropzone(false);
-      },
-      ondragenter() {
-        holdingArea.style.borderColor = "#22e";
-      },
-      ondragleave() {
-        holdingArea.style.borderColor = "black";
-      },
-    });
     adopt(parent, grid);
     this.parent = parent;
   }

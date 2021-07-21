@@ -30,6 +30,7 @@ function tokenTrialWithFeedback(sentenceUrl, commandString) {
     commandString,
     timeoutMilliseconds: 10000,
     beepUrl: audioResourcePath("beep"),
+    boxUrl: `${tokenResourcePath}/box.jpg`,
   };
 }
 
@@ -246,11 +247,13 @@ jsPsych.init({
       // 38. Drag the brown circle and the blue square to the box and click on the white circle.
       "pick up brown circle, pick up blue square, touch white circle"
     ),
+
     // tokenTrialWithFeedback(
     //   audioResourcePath(39),
     //   // 39. Drag the orange square and the circle that is above the brown square to the box.
     //   "pick up orange square, pick up orange circle"
     // ),
+
     tokenTrialWithFeedback(
       tokenAudioResourcePath(40),
       // 40. Click on the blue square and the white square and drag the orange circle and the red circle to the box.
