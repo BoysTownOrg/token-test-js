@@ -206,11 +206,11 @@ function audioPlayer(url) {
 }
 
 class TokenControl {
-  constructor(parent, trial, tokenRows) {
+  constructor(parent, trial, trialParameters, tokenRows) {
     this.trial = trial;
     this.elementFromToken = new Map();
     const boxImage = new Image();
-    boxImage.src = trial.boxUrl;
+    boxImage.src = trialParameters.boxUrl;
     boxImage.style.border = `${pixelsString(2)} solid black`;
     boxImage.style.margin = "5% auto";
     adopt(parent, boxImage);
@@ -438,25 +438,25 @@ function pluginUsingControllerAndControlFactories(
   createTokenControl
 ) {
   return {
-    trial(display_element, trial) {
+    trial(display_element, trialParameters) {
       clear(display_element);
       const jsPsychTrial = new JsPsychTrial();
       const model = new TokenModel(
         jsPsychTrial,
         new PerformanceTimer(),
-        parseTokenInteractionRule(trial.commandString)
+        parseTokenInteractionRule(trialParameters.commandString)
       );
       const controller = new TokenControllerType(
-        createTokenControl(display_element, jsPsychTrial),
+        createTokenControl(display_element, jsPsychTrial, trialParameters),
         model
       );
-      const player = audioPlayer(trial.sentenceUrl);
+      const player = audioPlayer(trialParameters.sentenceUrl);
       player.play();
       player.onended = () => {
-        audioPlayer(trial.beepUrl).play();
+        audioPlayer(trialParameters.beepUrl).play();
         jsPsych.pluginAPI.setTimeout(() => {
           model.concludeTrial();
-        }, trial.timeoutMilliseconds);
+        }, trialParameters.timeoutMilliseconds);
       };
     },
     info: {
@@ -468,8 +468,8 @@ function pluginUsingControllerAndControlFactories(
 export function plugin() {
   return pluginUsingControllerAndControlFactories(
     TokenController,
-    (parent, trial) =>
-      new TokenControl(parent, trial, [
+    (parent, trial, trialParameters) =>
+      new TokenControl(parent, trial, trialParameters, [
         [
           { color: Color.red, shape: Shape.circle },
           { color: Color.blue, shape: Shape.circle },
