@@ -253,11 +253,11 @@ jsPsych.init({
       "pick up brown circle, pick up blue square, touch white circle"
     ),
 
-    // tokenTrialWithFeedback(
-    //   audioResourcePath(39),
-    //   // 39. Drag the orange square and the circle that is above the brown square to the box.
-    //   "pick up orange square, pick up orange circle"
-    // ),
+    tokenTrialWithFeedback(
+      audioResourcePath(39),
+      // 39. Drag the orange square and the circle that is above the brown square to the box.
+      "pick up orange square, pick up orange circle"
+    ),
 
     tokenTrialWithFeedback(
       tokenAudioResourcePath(40),
