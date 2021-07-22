@@ -2,8 +2,10 @@ import { plugin, twoSizesPlugin } from "./plugin.js";
 
 const tokenTestPluginId = "token-test";
 const twoSizesTokenTestPluginId = "two-sizes-token-test";
-jsPsych.plugins[tokenTestPluginId] = plugin();
-jsPsych.plugins[twoSizesTokenTestPluginId] = twoSizesPlugin();
+jsPsych.plugins[tokenTestPluginId] = plugin(tokenTestPluginId);
+jsPsych.plugins[twoSizesTokenTestPluginId] = twoSizesPlugin(
+  twoSizesTokenTestPluginId
+);
 
 function audioResourcePath(stem) {
   return `${tokenResourcePath}/${stem}.wav`;
@@ -37,6 +39,10 @@ function tokenTrialWithFeedback(sentenceUrl, commandString) {
 jsPsych.init({
   timeline: [
     {
+      type: "preload",
+      auto_preload: true,
+    },
+    {
       type: "survey-text",
       questions: [
         {
@@ -44,8 +50,7 @@ jsPsych.init({
           placeholder: jsPsych.data.urlVariables().subjectID,
         },
       ],
-      preamble:
-        "This task will record your voice. It will tell you what to say.",
+      preamble: "",
       button_label: "Click to enter ID",
     },
     {

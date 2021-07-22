@@ -465,7 +465,11 @@ function pluginUsingControllerAndControlFactories(
   };
 }
 
-export function plugin() {
+export function plugin(id) {
+  jsPsych.pluginAPI.registerPreload(id, "sentenceUrl", "audio");
+  jsPsych.pluginAPI.registerPreload(id, "beepUrl", "audio");
+  jsPsych.pluginAPI.registerPreload(id, "boxUrl", "image");
+
   return pluginUsingControllerAndControlFactories(
     TokenController,
     (parent, trial, trialParameters) =>
@@ -488,7 +492,10 @@ export function plugin() {
   );
 }
 
-export function twoSizesPlugin() {
+export function twoSizesPlugin(id) {
+  jsPsych.pluginAPI.registerPreload(id, "sentenceUrl", "audio");
+  jsPsych.pluginAPI.registerPreload(id, "beepUrl", "audio");
+
   return pluginUsingControllerAndControlFactories(
     SizedTokenController,
     (parent, trial) =>
