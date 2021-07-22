@@ -10,7 +10,7 @@ import {
   TokenController,
 } from "../lib/TokenController.js";
 import { parseTokenInteractionRule } from "../lib/TokenTrialConfigurationParser.js";
-import interact from "https://cdn.interactjs.io/v1.10.8/interactjs/index.js";
+import interact from "https://cdn.interactjs.io/v1.10.11/interactjs/index.js";
 
 function addEventListener(element, event, f) {
   element.addEventListener(event, f);
@@ -171,6 +171,7 @@ function addTokenRow(
         },
       })
       .dropzone({
+        overlap: 0.01,
         ondrop() {
           onDroppedOnto(tokenElement);
           tokenElement.style.borderColor = "black";
