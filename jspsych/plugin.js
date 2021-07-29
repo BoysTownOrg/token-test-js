@@ -206,6 +206,17 @@ function audioPlayer(url) {
   return player;
 }
 
+function audioBufferSource(url) {
+  const AudioContext = window.AudioContext || window.webkitAudioContext;
+  const audioContext = new AudioContext();
+  return jsPsych.pluginAPI.getAudioBuffer(url).then((buffer) => {
+    const bufferSource = audioContext.createBufferSource();
+    bufferSource.buffer = buffer;
+    bufferSource.connect(audioContext.destination);
+    return bufferSource;
+  });
+}
+
 class TokenControl {
   constructor(parent, trial, trialParameters, tokenRows) {
     this.trial = trial;
@@ -451,14 +462,17 @@ function pluginUsingControllerAndControlFactories(
         createTokenControl(display_element, jsPsychTrial, trialParameters),
         model
       );
-      const player = audioPlayer(trialParameters.sentenceUrl);
-      player.play();
-      player.onended = () => {
-        audioPlayer(trialParameters.beepUrl).play();
-        jsPsych.pluginAPI.setTimeout(() => {
-          model.concludeTrial();
-        }, trialParameters.timeoutMilliseconds);
-      };
+      audioBufferSource(trialParameters.sentenceUrl).then((sentenceSource) => {
+        sentenceSource.onended = () => {
+          audioBufferSource(trialParameters.beepUrl).then((beepSource) => {
+            beepSource.start();
+            jsPsych.pluginAPI.setTimeout(() => {
+              model.concludeTrial();
+            }, trialParameters.timeoutMilliseconds);
+          });
+        };
+        sentenceSource.start();
+      });
     },
     info: {
       parameters: {},
