@@ -245,10 +245,10 @@ describe("TokenModel", () => {
     expect(trial.result().tokenInteractions).toEqual([
       {
         token: {
-          color: Color.red,
-          shape: Shape.square,
+          color: "red",
+          shape: "square",
         },
-        action: Action.touch,
+        action: "touch",
         milliseconds: 1,
       },
     ]);
