@@ -143,10 +143,8 @@ function addTokenRow(
     addClickEventListener(tokenElement, () => {
       onReleased(tokens[i]);
     });
-    const position = { x: 0, y: 0 };
-    const positions = [];
-    for (let j = 0; j < 1000; j += 1) positions.push({ x: 0, y: 0 });
-    let positionIndex = 0;
+    const tokenPosition = { x: 0, y: 0 };
+    let tokenPositions = [];
     interact(tokenElement)
       .draggable({
         listeners: {
@@ -155,18 +153,16 @@ function addTokenRow(
             tokenElement.style.zIndex = 1;
           },
           move(event) {
-            position.x += event.dx;
-            position.y += event.dy;
+            tokenPosition.x += event.dx;
+            tokenPosition.y += event.dy;
 
-            event.target.style.transform = `translate(${position.x}px, ${position.y}px)`;
-            positions[positionIndex].x = position.x;
-            positions[positionIndex].y = position.y;
-            positionIndex += 1;
+            event.target.style.transform = `translate(${tokenPosition.x}px, ${tokenPosition.y}px)`;
+            tokenPositions.push({ ...tokenPosition });
           },
           end() {
-            onDraggedReleased(tokens[i], positions.slice(0, positionIndex));
+            onDraggedReleased(tokens[i], tokenPositions);
+            tokenPositions = [];
             tokenElement.style.zIndex = 0;
-            positionIndex = 0;
           },
         },
       })
