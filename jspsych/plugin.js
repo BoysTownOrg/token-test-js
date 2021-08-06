@@ -212,8 +212,9 @@ class TokenControl {
     boxImage.style.margin = "5% auto";
     adopt(parent, boxImage);
     const grid = tokenGridWithRows(tokenRows.length);
-    for (let i = 0; i < tokenRows.length; i += 1)
-      this.addTokenRow(grid, i + 1, tokenRows[i]);
+    tokenRows.forEach((tokenRow, index) => {
+      this.addTokenRow(grid, index + 1, tokenRow);
+    });
     const onHoldingAreaDrop = () => {
       this.observer.notifyThatHoldingAreaHasBeenDroppedOnto();
     };
@@ -308,8 +309,9 @@ class SizedTokenControl {
     this.trial = trial;
     this.elementFromToken = new Map();
     const grid = tokenGridWithRows(tokenRows.length);
-    for (let i = 0; i < tokenRows.length; i += 1)
-      this.addTokenRow(grid, i + 1, tokenRows[i]);
+    tokenRows.forEach((tokenRow, index) => {
+      this.addTokenRow(grid, index + 1, tokenRow);
+    });
     adopt(parent, grid);
     this.parent = parent;
   }
