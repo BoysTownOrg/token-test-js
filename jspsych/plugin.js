@@ -406,10 +406,7 @@ class JsPsychTrial {
       copiedPositions.push({ x: positions[j].x, y: positions[j].y });
     this.tokenDragPaths.push({
       positions: copiedPositions,
-      token: {
-        color: tokenColor(token),
-        shape: isCircle(token) ? Shape.circle : Shape.square,
-      },
+      token,
     });
   }
 
@@ -419,11 +416,7 @@ class JsPsychTrial {
       copiedPositions.push({ x: positions[j].x, y: positions[j].y });
     this.tokenDragPaths.push({
       positions: copiedPositions,
-      token: {
-        color: tokenColor(token),
-        shape: isCircle(token) ? Shape.circle : Shape.square,
-        size: isSmall(token) ? Size.small : Size.large,
-      },
+      token,
     });
   }
 }
