@@ -403,7 +403,7 @@ class JsPsychTrial {
   recordTokenDragPath(token, positions) {
     const copiedPositions = [];
     for (let j = 0; j < positions.length; j += 1)
-      copiedPositions.push({ x: positions[j].x, y: positions[j].y });
+      copiedPositions.push({ ...positions[j] });
     this.tokenDragPaths.push({
       positions: copiedPositions,
       token,
@@ -413,7 +413,7 @@ class JsPsychTrial {
   recordSizedTokenDragPath(token, positions) {
     const copiedPositions = [];
     for (let j = 0; j < positions.length; j += 1)
-      copiedPositions.push({ x: positions[j].x, y: positions[j].y });
+      copiedPositions.push({ ...positions[j] });
     this.tokenDragPaths.push({
       positions: copiedPositions,
       token,
