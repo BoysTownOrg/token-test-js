@@ -133,15 +133,15 @@ function addTokenRow(
   onDroppedOnto,
   onDraggedReleased
 ) {
-  for (let i = 0; i < tokens.length; i += 1) {
-    const tokenElement = createElement(tokens[i]);
-    elementFromToken.set(hashToken(tokens[i]), tokenElement);
+  tokens.forEach((token, index) => {
+    const tokenElement = createElement(token);
+    elementFromToken.set(hashToken(token), tokenElement);
     tokenElement.style.gridRow = row;
-    tokenElement.style.gridColumn = i + 1;
+    tokenElement.style.gridColumn = index + 1;
     tokenElement.style.touchAction = "none";
     adopt(grid, tokenElement);
     addClickEventListener(tokenElement, () => {
-      onReleased(tokens[i]);
+      onReleased(token);
     });
     const tokenPosition = { x: 0, y: 0 };
     let tokenPositions = [];
@@ -149,7 +149,7 @@ function addTokenRow(
       .draggable({
         listeners: {
           start() {
-            onDragged(tokens[i]);
+            onDragged(token);
             tokenElement.style.zIndex = 1;
           },
           move(event) {
@@ -160,7 +160,7 @@ function addTokenRow(
             tokenPositions.push({ ...tokenPosition });
           },
           end() {
-            onDraggedReleased(tokens[i], tokenPositions);
+            onDraggedReleased(token, tokenPositions);
             tokenPositions = [];
             tokenElement.style.zIndex = 0;
           },
@@ -169,7 +169,7 @@ function addTokenRow(
       .dropzone({
         overlap: 0.01,
         ondrop() {
-          onDroppedOnto(tokens[i]);
+          onDroppedOnto(token);
           tokenElement.style.borderColor = "black";
         },
         ondragenter() {
@@ -179,7 +179,7 @@ function addTokenRow(
           tokenElement.style.borderColor = "black";
         },
       });
-  }
+  });
 }
 
 function tokenGridWithRows(n) {
