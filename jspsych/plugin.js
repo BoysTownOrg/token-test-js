@@ -51,9 +51,9 @@ function cssColorString(color) {
     case Color.black:
       return "black";
     case Color.brown:
-      return "brown";
+      return "#511a11";
     case Color.orange:
-      return "orange";
+      return "#fc7303";
     default:
       return "";
   }
