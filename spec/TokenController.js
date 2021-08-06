@@ -10,44 +10,44 @@ class TokenControlStub {
   }
 
   releaseRedSquare() {
-    this.tokenReleasedColor_ = "red";
+    this.tokenReleasedColor_ = Color.red;
     this.tokenReleasedIsCircle_ = false;
     this.observer.notifyThatTokenHasBeenReleased();
   }
 
   releaseRedCircle() {
-    this.tokenReleasedColor_ = "red";
+    this.tokenReleasedColor_ = Color.red;
     this.tokenReleasedIsCircle_ = true;
     this.observer.notifyThatTokenHasBeenReleased();
   }
 
   releaseGreenSquare() {
-    this.tokenReleasedColor_ = "green";
+    this.tokenReleasedColor_ = Color.green;
     this.tokenReleasedIsCircle_ = false;
     this.observer.notifyThatTokenHasBeenReleased();
   }
 
   dragRedCircle() {
-    this.tokenDraggedColor_ = "red";
+    this.tokenDraggedColor_ = Color.red;
     this.tokenDraggedIsCircle_ = true;
     this.observer.notifyThatTokenHasBeenDragged();
   }
 
   dragGreenSquare() {
-    this.tokenDraggedColor_ = "green";
+    this.tokenDraggedColor_ = Color.green;
     this.tokenDraggedIsCircle_ = false;
     this.observer.notifyThatTokenHasBeenDragged();
   }
 
   dropOntoGreenSquare() {
-    this.tokenDroppedOntoColor_ = "green";
+    this.tokenDroppedOntoColor_ = Color.green;
     this.tokenDroppedOntoIsCircle_ = false;
     this.observer.notifyThatTokenHasBeenDroppedOnto();
     this.observer.notifyThatTokenHasBeenReleased();
   }
 
   dropOntoRedSquare() {
-    this.tokenDroppedOntoColor_ = "red";
+    this.tokenDroppedOntoColor_ = Color.red;
     this.tokenDroppedOntoIsCircle_ = false;
     this.observer.notifyThatTokenHasBeenDroppedOnto();
     this.observer.notifyThatTokenHasBeenReleased();
@@ -104,21 +104,21 @@ class TokenControlStub {
 
 class SizedTokenControlStub {
   releaseSmallRedSquare() {
-    this.tokenReleasedColor_ = "red";
+    this.tokenReleasedColor_ = Color.red;
     this.tokenReleasedIsCircle_ = false;
     this.tokenReleasedIsSmall_ = true;
     this.observer.notifyThatTokenHasBeenReleased();
   }
 
   dragSmallRedCircle() {
-    this.tokenDraggedColor_ = "red";
+    this.tokenDraggedColor_ = Color.red;
     this.tokenDraggedIsCircle_ = true;
     this.tokenDraggedIsSmall_ = true;
     this.observer.notifyThatTokenHasBeenDragged();
   }
 
   dropOntoLargeGreenSquare() {
-    this.tokenDroppedOntoColor_ = "green";
+    this.tokenDroppedOntoColor_ = Color.green;
     this.tokenDroppedOntoIsCircle_ = false;
     this.tokenDroppedOntoIsSmall_ = false;
     this.observer.notifyThatTokenHasBeenDroppedOnto();
