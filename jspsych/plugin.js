@@ -110,16 +110,16 @@ function clear(parent) {
   }
 }
 
-function cssBackgroundColor(token) {
-  return token.style.backgroundColor;
+function tokenColor(token) {
+  return token.color;
 }
 
 function isCircle(token) {
-  return token.style.borderRadius !== "";
+  return token.shape === Shape.circle;
 }
 
 function isSmall(token) {
-  return token.style.width === pixelsString(smallTokenWidthPixels);
+  return token.size === Size.small;
 }
 
 function addTokenRow(
@@ -141,7 +141,7 @@ function addTokenRow(
     tokenElement.style.touchAction = "none";
     adopt(grid, tokenElement);
     addClickEventListener(tokenElement, () => {
-      onReleased(tokenElement);
+      onReleased(tokens[i]);
     });
     const position = { x: 0, y: 0 };
     const positions = [];
@@ -151,7 +151,7 @@ function addTokenRow(
       .draggable({
         listeners: {
           start() {
-            onDragged(tokenElement);
+            onDragged(tokens[i]);
             tokenElement.style.zIndex = 1;
           },
           move(event) {
@@ -164,7 +164,7 @@ function addTokenRow(
             positionIndex += 1;
           },
           end() {
-            onDraggedReleased(tokenElement, positions.slice(0, positionIndex));
+            onDraggedReleased(tokens[i], positions.slice(0, positionIndex));
             tokenElement.style.zIndex = 0;
             positionIndex = 0;
           },
@@ -173,7 +173,7 @@ function addTokenRow(
       .dropzone({
         overlap: 0.01,
         ondrop() {
-          onDroppedOnto(tokenElement);
+          onDroppedOnto(tokens[i]);
           tokenElement.style.borderColor = "black";
         },
         ondragenter() {
@@ -279,7 +279,7 @@ class TokenControl {
   }
 
   tokenReleasedColor() {
-    return cssBackgroundColor(this.tokenReleased);
+    return tokenColor(this.tokenReleased);
   }
 
   tokenReleasedIsCircle() {
@@ -287,7 +287,7 @@ class TokenControl {
   }
 
   tokenDraggedColor() {
-    return cssBackgroundColor(this.tokenDragged);
+    return tokenColor(this.tokenDragged);
   }
 
   tokenDraggedIsCircle() {
@@ -295,7 +295,7 @@ class TokenControl {
   }
 
   tokenDroppedOntoColor() {
-    return cssBackgroundColor(this.tokenDroppedOnto);
+    return tokenColor(this.tokenDroppedOnto);
   }
 
   tokenDroppedOntoIsCircle() {
@@ -351,7 +351,7 @@ class SizedTokenControl {
   }
 
   tokenReleasedColor() {
-    return cssBackgroundColor(this.tokenReleased);
+    return tokenColor(this.tokenReleased);
   }
 
   tokenReleasedIsCircle() {
@@ -363,7 +363,7 @@ class SizedTokenControl {
   }
 
   tokenDraggedColor() {
-    return cssBackgroundColor(this.tokenDragged);
+    return tokenColor(this.tokenDragged);
   }
 
   tokenDraggedIsCircle() {
@@ -375,7 +375,7 @@ class SizedTokenControl {
   }
 
   tokenDroppedOntoColor() {
-    return cssBackgroundColor(this.tokenDroppedOnto);
+    return tokenColor(this.tokenDroppedOnto);
   }
 
   tokenDroppedOntoIsCircle() {
@@ -407,7 +407,7 @@ class JsPsychTrial {
     this.tokenDragPaths.push({
       positions: copiedPositions,
       token: {
-        color: cssBackgroundColor(token),
+        color: tokenColor(token),
         shape: isCircle(token) ? Shape.circle : Shape.square,
       },
     });
@@ -420,7 +420,7 @@ class JsPsychTrial {
     this.tokenDragPaths.push({
       positions: copiedPositions,
       token: {
-        color: cssBackgroundColor(token),
+        color: tokenColor(token),
         shape: isCircle(token) ? Shape.circle : Shape.square,
         size: isSmall(token) ? Size.small : Size.large,
       },
