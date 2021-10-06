@@ -279,8 +279,13 @@ jsPsych.init({
       // 43. Before clicking on the blue square, drag the circle next to the circle that is above the brown square to the box.
       "pick up white circle\ntouch blue square"
     ),
+    {
+      type: "html-button-response",
+      stimulus: "Thanks for participating! Press Done to finish.",
+      choices: ["Done"],
+    },
   ],
   on_finish() {
-    history.back();
+    window.close();
   },
 });
