@@ -390,12 +390,17 @@ class SizedTokenControl {
 }
 
 class JsPsychTrial {
-  constructor() {
+  constructor(sentenceUrl) {
     this.tokenDragPaths = [];
+    this.sentenceUrl = sentenceUrl;
   }
 
   conclude(result) {
-    jsPsych.finishTrial({ ...result, tokenDragPaths: this.tokenDragPaths });
+    jsPsych.finishTrial({
+      ...result,
+      tokenDragPaths: this.tokenDragPaths,
+      sentenceUrl: this.sentenceUrl,
+    });
   }
 
   recordTokenDragPath(token, positions) {
@@ -434,7 +439,7 @@ function pluginUsingControllerAndControlFactories(
   return {
     trial(display_element, trialParameters) {
       clear(display_element);
-      const jsPsychTrial = new JsPsychTrial();
+      const jsPsychTrial = new JsPsychTrial(trialParameters.sentenceUrl);
       const model = new TokenModel(
         jsPsychTrial,
         new PerformanceTimer(),
