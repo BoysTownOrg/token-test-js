@@ -117,7 +117,7 @@ jsPsych.init({
     // beside?
     tokenTrialWithFeedback(
       11,
-      "Put the orange square to the left of the red circle",
+      "Put the orange square beside the red circle",
       "put orange square left of red circle"
     ),
 
