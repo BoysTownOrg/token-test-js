@@ -392,6 +392,7 @@ class SizedTokenControl {
 class JsPsychTrial {
   constructor(sentenceUrl, sentence) {
     this.tokenDragPaths = [];
+    this.sentenceNumber = sentenceNumber;
     this.sentenceUrl = sentenceUrl;
     this.sentence = sentence;
   }
@@ -400,6 +401,7 @@ class JsPsychTrial {
     jsPsych.finishTrial({
       ...result,
       tokenDragPaths: this.tokenDragPaths,
+      sentenceNumber: this.sentenceNumber,
       sentenceUrl: this.sentenceUrl,
       sentence: this.sentence,
     });
@@ -442,6 +444,7 @@ function pluginUsingControllerAndControlFactories(
     trial(display_element, trialParameters) {
       clear(display_element);
       const jsPsychTrial = new JsPsychTrial(
+        trialParameters.sentenceNumber,
         trialParameters.sentenceUrl,
         trialParameters.sentence
       );
