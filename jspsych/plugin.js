@@ -390,7 +390,7 @@ class SizedTokenControl {
 }
 
 class JsPsychTrial {
-  constructor(sentenceUrl, sentence) {
+  constructor(sentenceNumber, sentenceUrl, sentence) {
     this.tokenDragPaths = [];
     this.sentenceNumber = sentenceNumber;
     this.sentenceUrl = sentenceUrl;
