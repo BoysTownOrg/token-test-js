@@ -390,9 +390,10 @@ class SizedTokenControl {
 }
 
 class JsPsychTrial {
-  constructor(sentenceUrl) {
+  constructor(sentenceUrl, sentence) {
     this.tokenDragPaths = [];
     this.sentenceUrl = sentenceUrl;
+    this.sentence = sentence;
   }
 
   conclude(result) {
@@ -400,6 +401,7 @@ class JsPsychTrial {
       ...result,
       tokenDragPaths: this.tokenDragPaths,
       sentenceUrl: this.sentenceUrl,
+      sentence: this.sentence,
     });
   }
 
@@ -439,7 +441,10 @@ function pluginUsingControllerAndControlFactories(
   return {
     trial(display_element, trialParameters) {
       clear(display_element);
-      const jsPsychTrial = new JsPsychTrial(trialParameters.sentenceUrl);
+      const jsPsychTrial = new JsPsychTrial(
+        trialParameters.sentenceUrl,
+        trialParameters.sentence
+      );
       const model = new TokenModel(
         jsPsychTrial,
         new PerformanceTimer(),
