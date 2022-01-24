@@ -202,10 +202,17 @@ function audioBufferSource(url) {
   });
 }
 
+function addProgressElement(parent, trialParameters) {
+  const progressElement = document.createElement("div");
+  progressElement.textContent = `trial ${trialParameters.currentTrial} of ${trialParameters.totalTrials}`;
+  adopt(parent, progressElement);
+}
+
 class TokenControl {
   constructor(parent, trial, trialParameters, tokenRows) {
     this.trial = trial;
     this.elementFromToken = new Map();
+    addProgressElement(parent, trialParameters);
     const boxImage = new Image();
     boxImage.src = trialParameters.boxUrl;
     boxImage.style.border = `${pixelsString(2)} solid black`;
@@ -305,9 +312,10 @@ class TokenControl {
 }
 
 class SizedTokenControl {
-  constructor(parent, trial, tokenRows) {
+  constructor(parent, trial, trialParameters, tokenRows) {
     this.trial = trial;
     this.elementFromToken = new Map();
+    addProgressElement(parent, trialParameters);
     const grid = tokenGridWithRows(tokenRows.length);
     tokenRows.forEach((tokenRow, index) => {
       this.addTokenRow(grid, index + 1, tokenRow);
@@ -508,8 +516,8 @@ export function twoSizesPlugin(id) {
 
   return pluginUsingControllerAndControlFactories(
     SizedTokenController,
-    (parent, trial) =>
-      new SizedTokenControl(parent, trial, [
+    (parent, trial, trialParameters) =>
+      new SizedTokenControl(parent, trial, trialParameters, [
         [
           { color: Color.red, shape: Shape.circle, size: Size.large },
           { color: Color.blue, shape: Shape.circle, size: Size.large },
