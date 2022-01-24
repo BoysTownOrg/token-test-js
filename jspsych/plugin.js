@@ -208,9 +208,18 @@ function addProgressElement(parent, trialParameters) {
   adopt(parent, progressElement);
 }
 
+function onTokenReleased(control, token) {
+  control.tokenReleased = token;
+  audioBufferSource(control.trialParameters.tokenDropUrl).then((source) => {
+    source.start();
+  });
+  control.observer.notifyThatTokenHasBeenReleased();
+}
+
 class TokenControl {
   constructor(parent, trial, trialParameters, tokenRows) {
     this.trial = trial;
+    this.trialParameters = trialParameters;
     this.elementFromToken = new Map();
     addProgressElement(parent, trialParameters);
     const boxImage = new Image();
@@ -253,8 +262,7 @@ class TokenControl {
           : squareElementWithColor(token.color),
       this.elementFromToken,
       (token) => {
-        this.tokenReleased = token;
-        this.observer.notifyThatTokenHasBeenReleased();
+        onTokenReleased(this, token);
       },
       (token) => {
         this.tokenDragged = token;
@@ -314,6 +322,7 @@ class TokenControl {
 class SizedTokenControl {
   constructor(parent, trial, trialParameters, tokenRows) {
     this.trial = trial;
+    this.trialParameters = trialParameters;
     this.elementFromToken = new Map();
     addProgressElement(parent, trialParameters);
     const grid = tokenGridWithRows(tokenRows.length);
@@ -339,8 +348,7 @@ class SizedTokenControl {
           : smallSquareElementWithColor(token.color),
       this.elementFromToken,
       (token) => {
-        this.tokenReleased = token;
-        this.observer.notifyThatTokenHasBeenReleased();
+        onTokenReleased(this, token);
       },
       (token) => {
         this.tokenDragged = token;

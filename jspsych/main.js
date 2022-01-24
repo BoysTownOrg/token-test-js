@@ -25,6 +25,7 @@ function sizedTokenTrialWithFeedback(sentenceNumber, sentence, commandString) {
     commandString,
     timeoutMilliseconds: 10000,
     beepUrl: audioResourcePath("beep"),
+    tokenDropUrl: audioResourcePath("token-drop"),
   };
 }
 
@@ -37,6 +38,7 @@ function tokenTrialWithFeedback(sentenceNumber, sentence, commandString) {
     commandString,
     timeoutMilliseconds: 10000,
     beepUrl: audioResourcePath("beep"),
+    tokenDropUrl: audioResourcePath("token-drop"),
     boxUrl: `${tokenResourcePath}/box.jpg`,
   };
 }
