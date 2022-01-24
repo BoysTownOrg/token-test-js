@@ -216,6 +216,16 @@ function onTokenReleased(control, token) {
   control.observer.notifyThatTokenHasBeenReleased();
 }
 
+function onTokenDragged(control, token) {
+  control.tokenDragged = token;
+  control.observer.notifyThatTokenHasBeenDragged();
+}
+
+function onTokenDroppedOnto(control, token) {
+  control.tokenDroppedOnto = token;
+  control.observer.notifyThatTokenHasBeenDroppedOnto();
+}
+
 class TokenControl {
   constructor(parent, trial, trialParameters, tokenRows) {
     this.trial = trial;
@@ -265,12 +275,10 @@ class TokenControl {
         onTokenReleased(this, token);
       },
       (token) => {
-        this.tokenDragged = token;
-        this.observer.notifyThatTokenHasBeenDragged();
+        onTokenDragged(this, token);
       },
       (token) => {
-        this.tokenDroppedOnto = token;
-        this.observer.notifyThatTokenHasBeenDroppedOnto();
+        onTokenDroppedOnto(this, token);
       },
       (token, positions) => {
         this.trial.recordTokenDragPath(token, positions);
@@ -351,12 +359,10 @@ class SizedTokenControl {
         onTokenReleased(this, token);
       },
       (token) => {
-        this.tokenDragged = token;
-        this.observer.notifyThatTokenHasBeenDragged();
+        onTokenDragged(this, token);
       },
       (token) => {
-        this.tokenDroppedOnto = token;
-        this.observer.notifyThatTokenHasBeenDroppedOnto();
+        onTokenDroppedOnto(this, token);
       },
       (token, positions) => {
         this.trial.recordSizedTokenDragPath(token, positions);
