@@ -16,9 +16,8 @@ function tokenAudioResourcePath(stem) {
   return audioResourcePath(`token_${stem}`);
 }
 
-function sizedTokenTrialWithFeedback(sentenceNumber, sentence, commandString) {
+function commonTokenTrialWithFeedback(sentenceNumber, sentence, commandString) {
   return {
-    type: twoSizesTokenTestPluginId,
     sentenceNumber,
     sentenceUrl: tokenAudioResourcePath(sentenceNumber),
     sentence,
@@ -29,16 +28,17 @@ function sizedTokenTrialWithFeedback(sentenceNumber, sentence, commandString) {
   };
 }
 
+function sizedTokenTrialWithFeedback(sentenceNumber, sentence, commandString) {
+  return {
+    type: twoSizesTokenTestPluginId,
+    ...commonTokenTrialWithFeedback(sentenceNumber, sentence, commandString),
+  };
+}
+
 function tokenTrialWithFeedback(sentenceNumber, sentence, commandString) {
   return {
     type: tokenTestPluginId,
-    sentenceNumber,
-    sentenceUrl: tokenAudioResourcePath(sentenceNumber),
-    sentence,
-    commandString,
-    timeoutMilliseconds: 10000,
-    beepUrl: audioResourcePath("beep"),
-    tokenDropUrl: audioResourcePath("token-drop"),
+    ...commonTokenTrialWithFeedback(sentenceNumber, sentence, commandString),
     boxUrl: `${tokenResourcePath}/box.jpg`,
   };
 }
