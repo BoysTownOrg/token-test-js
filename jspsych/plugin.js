@@ -191,7 +191,7 @@ function tokenGridWithRows(n) {
   return grid;
 }
 
-function audioBufferSource(url) {
+function audioBufferSource(jsPsych, url) {
   const AudioContext = window.AudioContext || window.webkitAudioContext;
   const audioContext = new AudioContext();
   return jsPsych.pluginAPI.getAudioBuffer(url).then((buffer) => {
@@ -208,11 +208,13 @@ function addProgressElement(parent, trialParameters) {
   adopt(parent, progressElement);
 }
 
-function onTokenReleased(control, token) {
+function onTokenReleased(jsPsych, control, token) {
   control.tokenReleased = token;
-  audioBufferSource(control.trialParameters.tokenDropUrl).then((source) => {
-    source.start();
-  });
+  audioBufferSource(jsPsych, control.trialParameters.tokenDropUrl).then(
+    (source) => {
+      source.start();
+    }
+  );
   control.observer.notifyThatTokenHasBeenReleased();
 }
 
@@ -227,7 +229,8 @@ function onTokenDroppedOnto(control, token) {
 }
 
 class TokenControl {
-  constructor(parent, trial, trialParameters, tokenRows) {
+  constructor(jsPsych, parent, trial, trialParameters, tokenRows) {
+    this.jsPsych = jsPsych;
     this.trial = trial;
     this.trialParameters = trialParameters;
     this.elementFromToken = new Map();
@@ -272,7 +275,7 @@ class TokenControl {
           : squareElementWithColor(token.color),
       this.elementFromToken,
       (token) => {
-        onTokenReleased(this, token);
+        onTokenReleased(this.jsPsych, this, token);
       },
       (token) => {
         onTokenDragged(this, token);
@@ -328,7 +331,8 @@ class TokenControl {
 }
 
 class SizedTokenControl {
-  constructor(parent, trial, trialParameters, tokenRows) {
+  constructor(jsPsych, parent, trial, trialParameters, tokenRows) {
+    this.jsPsych = jsPsych;
     this.trial = trial;
     this.trialParameters = trialParameters;
     this.elementFromToken = new Map();
@@ -356,7 +360,7 @@ class SizedTokenControl {
           : smallSquareElementWithColor(token.color),
       this.elementFromToken,
       (token) => {
-        onTokenReleased(this, token);
+        onTokenReleased(this.jsPsych, this, token);
       },
       (token) => {
         onTokenDragged(this, token);
@@ -412,7 +416,8 @@ class SizedTokenControl {
 }
 
 class JsPsychTrial {
-  constructor(sentenceNumber, sentenceUrl, sentence) {
+  constructor(jsPsych, sentenceNumber, sentenceUrl, sentence) {
+    this.jsPsych = jsPsych;
     this.tokenDragPaths = [];
     this.sentenceNumber = sentenceNumber;
     this.sentenceUrl = sentenceUrl;
@@ -420,7 +425,7 @@ class JsPsychTrial {
   }
 
   conclude(result) {
-    jsPsych.finishTrial({
+    this.jsPsych.finishTrial({
       ...result,
       tokenDragPaths: this.tokenDragPaths,
       sentenceNumber: this.sentenceNumber,
@@ -458,14 +463,16 @@ class PerformanceTimer {
   }
 }
 
-function pluginUsingControllerAndControlFactories(
-  TokenControllerType,
-  createTokenControl
-) {
-  return {
+function pluginClass(TokenControllerType, createTokenControl) {
+  class Plugin {
+    constructor(jsPsych) {
+      this.jsPsych = jsPsych;
+    }
+
     trial(display_element, trialParameters) {
       clear(display_element);
       const jsPsychTrial = new JsPsychTrial(
+        this.jsPsych,
         trialParameters.sentenceNumber,
         trialParameters.sentenceUrl,
         trialParameters.sentence
@@ -476,36 +483,85 @@ function pluginUsingControllerAndControlFactories(
         parseTokenInteractionRule(trialParameters.commandString)
       );
       const controller = new TokenControllerType(
-        createTokenControl(display_element, jsPsychTrial, trialParameters),
+        createTokenControl(
+          this.jsPsych,
+          display_element,
+          jsPsychTrial,
+          trialParameters
+        ),
         model
       );
-      audioBufferSource(trialParameters.sentenceUrl).then((sentenceSource) => {
-        sentenceSource.onended = () => {
-          audioBufferSource(trialParameters.beepUrl).then((beepSource) => {
-            beepSource.start();
-            jsPsych.pluginAPI.setTimeout(() => {
-              model.concludeTrial();
-            }, trialParameters.timeoutMilliseconds);
-          });
-        };
-        sentenceSource.start();
-      });
-    },
-    info: {
-      parameters: {},
-    },
-  };
+      audioBufferSource(this.jsPsych, trialParameters.sentenceUrl).then(
+        (sentenceSource) => {
+          sentenceSource.onended = () => {
+            audioBufferSource(this.jsPsych, trialParameters.beepUrl).then(
+              (beepSource) => {
+                beepSource.start();
+                this.jsPsych.pluginAPI.setTimeout(() => {
+                  model.concludeTrial();
+                }, trialParameters.timeoutMilliseconds);
+              }
+            );
+          };
+          sentenceSource.start();
+        }
+      );
+    }
+  }
+  return Plugin;
 }
 
-export function plugin(id) {
-  jsPsych.pluginAPI.registerPreload(id, "sentenceUrl", "audio");
-  jsPsych.pluginAPI.registerPreload(id, "beepUrl", "audio");
-  jsPsych.pluginAPI.registerPreload(id, "boxUrl", "image");
+function pluginUsingControllerAndControlFactories(
+  TokenControllerType,
+  createTokenControl,
+  name,
+  jsPsychModule,
+  additionalParameters = {}
+) {
+  const Plugin = pluginClass(TokenControllerType, createTokenControl);
+  Plugin.info = {
+    name,
+    parameters: {
+      sentenceNumber: {
+        type: jsPsychModule.ParameterType.INT,
+        default: 1,
+      },
+      sentenceUrl: {
+        type: jsPsychModule.ParameterType.AUDIO,
+        default: undefined,
+      },
+      sentence: {
+        type: jsPsychModule.ParameterType.STRING,
+        default: "",
+      },
+      commandString: {
+        type: jsPsychModule.ParameterType.STRING,
+        default: "nothing",
+      },
+      timeoutMilliseconds: {
+        type: jsPsychModule.ParameterType.INT,
+        default: 10000,
+      },
+      beepUrl: {
+        type: jsPsychModule.ParameterType.AUDIO,
+        default: undefined,
+      },
+      tokenDropUrl: {
+        type: jsPsychModule.ParameterType.AUDIO,
+        default: undefined,
+      },
+      ...additionalParameters,
+    },
+  };
 
+  return Plugin;
+}
+
+export function plugin(jsPsychModule) {
   return pluginUsingControllerAndControlFactories(
     TokenController,
-    (parent, trial, trialParameters) =>
-      new TokenControl(parent, trial, trialParameters, [
+    (jsPsych, parent, trial, trialParameters) =>
+      new TokenControl(jsPsych, parent, trial, trialParameters, [
         [
           { color: Color.red, shape: Shape.circle },
           { color: Color.blue, shape: Shape.circle },
@@ -520,18 +576,23 @@ export function plugin(id) {
           { color: Color.orange, shape: Shape.square },
           { color: Color.brown, shape: Shape.square },
         ],
-      ])
+      ]),
+    "Token",
+    jsPsychModule,
+    {
+      boxUrl: {
+        type: jsPsychModule.ParameterType.IMAGE,
+        default: undefined,
+      },
+    }
   );
 }
 
-export function twoSizesPlugin(id) {
-  jsPsych.pluginAPI.registerPreload(id, "sentenceUrl", "audio");
-  jsPsych.pluginAPI.registerPreload(id, "beepUrl", "audio");
-
+export function twoSizesPlugin(jsPsychModule) {
   return pluginUsingControllerAndControlFactories(
     SizedTokenController,
-    (parent, trial, trialParameters) =>
-      new SizedTokenControl(parent, trial, trialParameters, [
+    (jsPsych, parent, trial, trialParameters) =>
+      new SizedTokenControl(jsPsych, parent, trial, trialParameters, [
         [
           { color: Color.red, shape: Shape.circle, size: Size.large },
           { color: Color.blue, shape: Shape.circle, size: Size.large },
@@ -560,6 +621,8 @@ export function twoSizesPlugin(id) {
           { color: Color.blue, shape: Shape.square, size: Size.small },
           { color: Color.white, shape: Shape.square, size: Size.small },
         ],
-      ])
+      ]),
+    "Sized Token",
+    jsPsychModule
   );
 }
