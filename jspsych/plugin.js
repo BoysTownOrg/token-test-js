@@ -30,7 +30,7 @@ function viewportMinString(a) {
 
 const smallTokenWidthViewportMin = 8;
 const tokenWidthViewportMin = 14;
-const tokenBorderViewportMin = 0.5;
+const tokenBorderViewportMin = 0.3;
 
 function tokenBorderFromViewportMin(borderWidthPixels) {
   return `${viewportMinString(borderWidthPixels)} solid black`;
@@ -202,7 +202,7 @@ function tokenGridWithRows(n) {
   grid.style.display = "grid";
   grid.style.gridTemplateColumns = "repeat(5, 1fr)";
   grid.style.gridTemplateRows = `repeat(${n}, 1fr)`;
-  grid.style.gap = `${viewportMinString(1)} ${viewportMinString(1)}`;
+  grid.style.gap = `${viewportMinString(2)} ${viewportMinString(2)}`;
   return grid;
 }
 
@@ -220,6 +220,7 @@ function audioBufferSource(jsPsych, url) {
 function addProgressElement(parent, trialParameters) {
   const progressElement = document.createElement("div");
   progressElement.textContent = `trial ${trialParameters.currentTrial} of ${trialParameters.totalTrials}`;
+  progressElement.style.height = viewportMinString(12);
   adopt(parent, progressElement);
 }
 
@@ -252,7 +253,7 @@ class TokenControl {
     addProgressElement(parent, trialParameters);
     const boxImage = new Image();
     boxImage.src = trialParameters.boxUrl;
-    boxImage.style.border = `${viewportMinString(0.5)} solid black`;
+    boxImage.style.border = `${viewportMinString(0.3)} solid black`;
     boxImage.style.margin = "5% auto";
     boxImage.style.height = viewportMinString(30);
     boxImage.style.width = viewportMinString(30);
