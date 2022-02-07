@@ -516,6 +516,7 @@ function pluginClass(TokenControllerType, createTokenControl) {
               (beepSource) => {
                 beepSource.start();
                 this.jsPsych.pluginAPI.setTimeout(() => {
+                  // this.jsPsych.endCurrentTimeline();
                   model.concludeTrial();
                 }, trialParameters.timeoutMilliseconds);
               }
