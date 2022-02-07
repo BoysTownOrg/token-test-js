@@ -254,6 +254,8 @@ class TokenControl {
     boxImage.src = trialParameters.boxUrl;
     boxImage.style.border = `${viewportMinString(0.5)} solid black`;
     boxImage.style.margin = "5% auto";
+    boxImage.style.height = viewportMinString(30);
+    boxImage.style.width = viewportMinString(30);
     adopt(parent, boxImage);
     const grid = tokenGridWithRows(tokenRows.length);
     tokenRows.forEach((tokenRow, index) => {

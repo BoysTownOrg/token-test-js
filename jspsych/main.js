@@ -41,7 +41,7 @@ function tokenTrialWithFeedback(sentenceNumber, sentence, commandString) {
   return {
     type: tokenPlugin,
     ...commonTokenTrialWithFeedback(sentenceNumber, sentence, commandString),
-    boxUrl: `${tokenResourcePath}/box.jpg`,
+    boxUrl: `${tokenResourcePath}/nicubunu_Open_box.svg`,
   };
 }
 
