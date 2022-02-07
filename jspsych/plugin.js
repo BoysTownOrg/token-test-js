@@ -24,16 +24,16 @@ function divElement() {
   return document.createElement("div");
 }
 
-function pixelsString(a) {
-  return `${a}px`;
+function viewportMinString(a) {
+  return `${a}vmin`;
 }
 
-const tokenWidthPixels = 100;
-const smallTokenWidthPixels = 60;
-const tokenBorderWidthPixels = 2;
+const smallTokenWidthViewportMin = 8;
+const tokenWidthViewportMin = 14;
+const tokenBorderViewportMin = 0.5;
 
-function tokenBorder(borderWidthPixels) {
-  return `${pixelsString(borderWidthPixels)} solid black`;
+function tokenBorderFromViewportMin(borderWidthPixels) {
+  return `${viewportMinString(borderWidthPixels)} solid black`;
 }
 
 function cssColorString(color) {
@@ -59,44 +59,59 @@ function cssColorString(color) {
   }
 }
 
-function circleElementWithColorAndDiameterPixels(color, diameterPixels) {
+function circleElementWithColorAndDiameterViewportMin(
+  color,
+  diameterViewportMin
+) {
   const circle = divElement();
-  circle.style.height = pixelsString(diameterPixels);
-  circle.style.width = pixelsString(diameterPixels);
-  const borderWidthPixels = tokenBorderWidthPixels;
-  circle.style.borderRadius = pixelsString(
-    diameterPixels / 2 + borderWidthPixels
+  circle.style.height = viewportMinString(diameterViewportMin);
+  circle.style.width = viewportMinString(diameterViewportMin);
+  const borderViewportMin = tokenBorderViewportMin;
+  circle.style.borderRadius = viewportMinString(
+    diameterViewportMin / 2 + borderViewportMin
   );
-  circle.style.border = tokenBorder(borderWidthPixels);
+  circle.style.border = tokenBorderFromViewportMin(borderViewportMin);
   circle.style.margin = "auto";
   circle.style.backgroundColor = cssColorString(color);
   return circle;
 }
 
 function circleElementWithColor(color) {
-  return circleElementWithColorAndDiameterPixels(color, tokenWidthPixels);
+  return circleElementWithColorAndDiameterViewportMin(
+    color,
+    tokenWidthViewportMin
+  );
 }
 
 function smallCircleElementWithColor(color) {
-  return circleElementWithColorAndDiameterPixels(color, smallTokenWidthPixels);
+  return circleElementWithColorAndDiameterViewportMin(
+    color,
+    smallTokenWidthViewportMin
+  );
 }
 
-function squareElementWithColorAndWidthPixels(color, widthPixels) {
+function squareElementWithColorAndWidthViewportMin(color, widthViewportMin) {
   const square = divElement();
-  square.style.height = pixelsString(widthPixels);
-  square.style.width = pixelsString(widthPixels);
-  square.style.border = tokenBorder(tokenBorderWidthPixels);
+  square.style.height = viewportMinString(widthViewportMin);
+  square.style.width = viewportMinString(widthViewportMin);
+  square.style.border = tokenBorderFromViewportMin(tokenBorderViewportMin);
   square.style.margin = "auto";
   square.style.backgroundColor = cssColorString(color);
   return square;
 }
 
 function squareElementWithColor(color) {
-  return squareElementWithColorAndWidthPixels(color, tokenWidthPixels);
+  return squareElementWithColorAndWidthViewportMin(
+    color,
+    tokenWidthViewportMin
+  );
 }
 
 function smallSquareElementWithColor(color) {
-  return squareElementWithColorAndWidthPixels(color, smallTokenWidthPixels);
+  return squareElementWithColorAndWidthViewportMin(
+    color,
+    smallTokenWidthViewportMin
+  );
 }
 
 function adopt(parent, child) {
@@ -187,7 +202,7 @@ function tokenGridWithRows(n) {
   grid.style.display = "grid";
   grid.style.gridTemplateColumns = "repeat(5, 1fr)";
   grid.style.gridTemplateRows = `repeat(${n}, 1fr)`;
-  grid.style.gridGap = `${pixelsString(20)} ${pixelsString(20)}`;
+  grid.style.gap = `${viewportMinString(1)} ${viewportMinString(1)}`;
   return grid;
 }
 
@@ -237,7 +252,7 @@ class TokenControl {
     addProgressElement(parent, trialParameters);
     const boxImage = new Image();
     boxImage.src = trialParameters.boxUrl;
-    boxImage.style.border = `${pixelsString(2)} solid black`;
+    boxImage.style.border = `${viewportMinString(0.5)} solid black`;
     boxImage.style.margin = "5% auto";
     adopt(parent, boxImage);
     const grid = tokenGridWithRows(tokenRows.length);
