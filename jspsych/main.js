@@ -3,7 +3,8 @@ import { plugin, twoSizesPlugin } from "./plugin.js";
 
 const jsPsych = initJsPsych({
   on_finish() {
-    window.close();
+    const subjectID = jsPsych.data.get().first(2).values()[1].response.Q0;
+    window.location = `http://boystownhospital.org/Pages/ResearchStudies/real-e-study.aspx?subjectID=${subjectID}&step=9`;
   },
 });
 
