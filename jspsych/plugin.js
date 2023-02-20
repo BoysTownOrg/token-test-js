@@ -10,7 +10,10 @@ import {
   TokenController,
 } from "../lib/TokenController.js";
 import { parseTokenInteractionRule } from "../lib/TokenTrialConfigurationParser.js";
-import interact from "https://cdn.interactjs.io/v1.10.11/interactjs/index.js";
+
+import interact from "interactjs";
+
+import { ParameterType } from "jspsych";
 
 function addEventListener(element, event, f) {
   element.addEventListener(event, f);
@@ -533,7 +536,6 @@ function pluginUsingControllerAndControlFactories(
   TokenControllerType,
   createTokenControl,
   name,
-  jsPsychModule,
   additionalParameters = {}
 ) {
   const Plugin = pluginClass(TokenControllerType, createTokenControl);
@@ -541,31 +543,31 @@ function pluginUsingControllerAndControlFactories(
     name,
     parameters: {
       sentenceNumber: {
-        type: jsPsychModule.ParameterType.INT,
+        type: ParameterType.INT,
         default: 1,
       },
       sentenceUrl: {
-        type: jsPsychModule.ParameterType.AUDIO,
+        type: ParameterType.AUDIO,
         default: undefined,
       },
       sentence: {
-        type: jsPsychModule.ParameterType.STRING,
+        type: ParameterType.STRING,
         default: "",
       },
       commandString: {
-        type: jsPsychModule.ParameterType.STRING,
+        type: ParameterType.STRING,
         default: "nothing",
       },
       timeoutMilliseconds: {
-        type: jsPsychModule.ParameterType.INT,
+        type: ParameterType.INT,
         default: 10000,
       },
       beepUrl: {
-        type: jsPsychModule.ParameterType.AUDIO,
+        type: ParameterType.AUDIO,
         default: undefined,
       },
       tokenDropUrl: {
-        type: jsPsychModule.ParameterType.AUDIO,
+        type: ParameterType.AUDIO,
         default: undefined,
       },
       ...additionalParameters,
@@ -575,7 +577,7 @@ function pluginUsingControllerAndControlFactories(
   return Plugin;
 }
 
-export function plugin(jsPsychModule) {
+export function plugin() {
   return pluginUsingControllerAndControlFactories(
     TokenController,
     (jsPsych, parent, trial, trialParameters) =>
@@ -596,17 +598,16 @@ export function plugin(jsPsychModule) {
         ],
       ]),
     "Token",
-    jsPsychModule,
     {
       boxUrl: {
-        type: jsPsychModule.ParameterType.IMAGE,
+        type: ParameterType.IMAGE,
         default: undefined,
       },
     }
   );
 }
 
-export function twoSizesPlugin(jsPsychModule) {
+export function twoSizesPlugin() {
   return pluginUsingControllerAndControlFactories(
     SizedTokenController,
     (jsPsych, parent, trial, trialParameters) =>
@@ -640,7 +641,6 @@ export function twoSizesPlugin(jsPsychModule) {
           { color: Color.white, shape: Shape.square, size: Size.small },
         ],
       ]),
-    "Sized Token",
-    jsPsychModule
+    "Sized Token"
   );
 }
