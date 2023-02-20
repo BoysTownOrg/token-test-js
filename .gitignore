@@ -2,3 +2,4 @@
 /.vscode/
 /yarn.lock
 /.eslintrc.*
+/package-lock.json

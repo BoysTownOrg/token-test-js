@@ -1,6 +1,12 @@
 import { trialsWithProgress } from "../lib/progress.js";
 import { plugin, twoSizesPlugin } from "./plugin.js";
 
+import { initJsPsych } from "jspsych";
+import jsPsychHtmlButtonResponse from "@jspsych/plugin-html-button-response";
+import jsPsychPreload from "@jspsych/plugin-preload";
+import jsPsychSurveyText from "@jspsych/plugin-survey-text";
+import "jspsych/css/jspsych.css";
+
 const jsPsych = initJsPsych({
   on_finish() {
     const subjectID = jsPsych.data.get().first(2).values()[1].response.Q0;
