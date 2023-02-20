@@ -14,8 +14,8 @@ const jsPsych = initJsPsych({
   },
 });
 
-const tokenPlugin = plugin(jsPsychModule);
-const sizedTokenPlugin = twoSizesPlugin(jsPsychModule);
+const tokenPlugin = plugin();
+const sizedTokenPlugin = twoSizesPlugin();
 
 function audioResourcePath(stem) {
   return `${tokenResourcePath}/${stem}.wav`;
