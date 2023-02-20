@@ -1,7 +1,7 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-  entry: "jspsych/main.js",
+  entry: "./jspsych/main.js",
   plugins: [
     new HtmlWebpackPlugin({
       template: "jatos-template.html",
