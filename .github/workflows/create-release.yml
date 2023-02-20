@@ -1,0 +1,24 @@
+on:
+  push:
+    tags:
+      - v[0-9]+.[0-9]+.[0-9]+
+
+jobs:
+  release:
+    name: create release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\/v/}
+      - name: webpack
+        run: |
+          npm install
+          npx webpack
+      - name: create GitHub release
+        run: |
+          zip following-directions dist/*
+          gh release create v${{ steps.get_version.outputs.VERSION }} following-directions.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
