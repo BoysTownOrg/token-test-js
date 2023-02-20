@@ -56,7 +56,7 @@ function arrayToHtml(lines) {
 jatos.onLoad(() => {
   const jsPsych = initJsPsych({
     on_finish() {
-      jatos.endStudy(jsPsych.data.get().csv());
+      jatos.startNextComponent(jsPsych.data.get().csv());
     },
   });
   jsPsych.run([
@@ -69,11 +69,14 @@ jatos.onLoad(() => {
       questions: [
         {
           prompt: "If the ID displayed is not correct, please enter it now.",
-          placeholder: jsPsych.data.urlVariables().subjectID,
+          placeholder: jatos.studySessionData.subjectID,
         },
       ],
       preamble: "",
       button_label: "Click to enter ID",
+      on_finish: function (data) {
+        jatos.studySessionData["subjectID"] = data.response;
+      },
     },
     {
       type: jsPsychHtmlButtonResponse,
