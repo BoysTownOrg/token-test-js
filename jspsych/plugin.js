@@ -290,6 +290,7 @@ class TokenControl {
         doneButton.classList.add("jspsych-btn");
         doneButton.textContent = "Done";
         doneButton.style.fontSize = "20px";
+        doneButton.style.margin = "20px";
         adopt(parent, doneButton);
         doneButton.addEventListener("click", (e) => { onDoneButtonClicked(this) });
         this.parent = parent;
@@ -377,6 +378,7 @@ class SizedTokenControl {
         doneButton.classList.add("jspsych-btn");
         doneButton.textContent = "Done";
         doneButton.style.fontSize = "20px";
+        doneButton.style.margin = "20px";
         adopt(parent, doneButton);
         doneButton.addEventListener("click", (e) => { onDoneButtonClicked(this) });
         this.parent = parent;
