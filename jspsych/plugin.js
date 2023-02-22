@@ -251,6 +251,15 @@ function onDoneButtonClicked(control) {
     control.observer.notifyThatDoneButtonHasBeenClicked();
 }
 
+function initializeDoneButton(control) {
+    control.doneButton.classList.add("jspsych-btn");
+    control.doneButton.textContent = "Done";
+    control.doneButton.style.fontSize = "20px";
+    control.doneButton.style.margin = "20px";
+    control.doneButton.style.visibility = "hidden";
+    control.doneButton.addEventListener("click", (e) => { onDoneButtonClicked(control) });
+}
+
 class TokenControl {
     constructor(jsPsych, parent, trial, trialParameters, tokenRows) {
         this.jsPsych = jsPsych;
@@ -286,14 +295,14 @@ class TokenControl {
             },
         });
         adopt(parent, grid);
-        const doneButton = document.createElement("button");
-        doneButton.classList.add("jspsych-btn");
-        doneButton.textContent = "Done";
-        doneButton.style.fontSize = "20px";
-        doneButton.style.margin = "20px";
-        adopt(parent, doneButton);
-        doneButton.addEventListener("click", (e) => { onDoneButtonClicked(this) });
+        this.doneButton = document.createElement("button");
+        initializeDoneButton(this);
+        adopt(parent, this.doneButton);
         this.parent = parent;
+    }
+
+    showDoneButton() {
+        this.doneButton.style.visibility = "visible";
     }
 
     addTokenRow(grid, row, tokens) {
@@ -374,14 +383,14 @@ class SizedTokenControl {
             this.addTokenRow(grid, index + 1, tokenRow);
         });
         adopt(parent, grid);
-        const doneButton = document.createElement("button");
-        doneButton.classList.add("jspsych-btn");
-        doneButton.textContent = "Done";
-        doneButton.style.fontSize = "20px";
-        doneButton.style.margin = "20px";
-        adopt(parent, doneButton);
-        doneButton.addEventListener("click", (e) => { onDoneButtonClicked(this) });
+        this.doneButton = document.createElement("button");
+        initializeDoneButton(this);
+        adopt(parent, this.doneButton);
         this.parent = parent;
+    }
+
+    showDoneButton() {
+        this.doneButton.style.visibility = "visible";
     }
 
     addTokenRow(grid, row, tokens) {
@@ -522,13 +531,14 @@ function pluginClass(TokenControllerType, createTokenControl) {
                 new PerformanceTimer(),
                 parseTokenInteractionRule(trialParameters.commandString)
             );
+            const control = createTokenControl(
+                this.jsPsych,
+                display_element,
+                jsPsychTrial,
+                trialParameters
+            );
             const controller = new TokenControllerType(
-                createTokenControl(
-                    this.jsPsych,
-                    display_element,
-                    jsPsychTrial,
-                    trialParameters
-                ),
+                control,
                 model
             );
             audioBufferSource(this.jsPsych, trialParameters.sentenceUrl).then(
@@ -537,6 +547,7 @@ function pluginClass(TokenControllerType, createTokenControl) {
                         audioBufferSource(this.jsPsych, trialParameters.beepUrl).then(
                             (beepSource) => {
                                 beepSource.start();
+                                control.showDoneButton();
                                 this.jsPsych.pluginAPI.setTimeout(() => {
                                     model.concludeTrial();
                                 }, trialParameters.timeoutMilliseconds);
