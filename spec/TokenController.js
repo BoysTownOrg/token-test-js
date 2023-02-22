@@ -107,6 +107,10 @@ class TokenControlStub {
 }
 
 class SizedTokenControlStub {
+    clickDoneButton() {
+        this.observer.notifyThatDoneButtonHasBeenClicked();
+    }
+
     releaseSmallRedSquare() {
         this.tokenReleasedColor_ = Color.red;
         this.tokenReleasedIsCircle_ = false;
@@ -617,6 +621,11 @@ describe("SizedTokenController", () => {
         this.control = new SizedTokenControlStub();
         this.model = new TokenModelStub();
         const controller = new SizedTokenController(this.control, this.model);
+    });
+
+    it("should conclude trial when done button pressed", function() {
+        this.control.clickDoneButton();
+        expect(this.model.trialConcluded()).toBe(true);
     });
 
     it("should submit touch action when user releases small red square", function() {

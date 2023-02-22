@@ -247,6 +247,10 @@ function onTokenDroppedOnto(control, token) {
     control.observer.notifyThatTokenHasBeenDroppedOnto();
 }
 
+function onDoneButtonClicked(control) {
+    control.observer.notifyThatDoneButtonHasBeenClicked();
+}
+
 class TokenControl {
     constructor(jsPsych, parent, trial, trialParameters, tokenRows) {
         this.jsPsych = jsPsych;
@@ -287,7 +291,7 @@ class TokenControl {
         doneButton.textContent = "Done";
         doneButton.style.fontSize = "20px";
         adopt(parent, doneButton);
-        doneButton.addEventListener("click", (e) => { this.observer.notifyThatDoneButtonHasBeenClicked() });
+        doneButton.addEventListener("click", (e) => { onDoneButtonClicked(this) });
         this.parent = parent;
     }
 
@@ -374,7 +378,7 @@ class SizedTokenControl {
         doneButton.textContent = "Done";
         doneButton.style.fontSize = "20px";
         adopt(parent, doneButton);
-        doneButton.addEventListener("click", (e) => { this.observer.notifyThatDoneButtonHasBeenClicked() });
+        doneButton.addEventListener("click", (e) => { onDoneButtonClicked(this) });
         this.parent = parent;
     }
 
