@@ -74,8 +74,8 @@ jatos.onLoad(() => {
       ],
       preamble: "",
       button_label: "Click to enter ID",
-      on_finish: function (data) {
-        jatos.studySessionData["subjectID"] = data.response;
+      on_finish(data) {
+        jatos.studySessionData.subjectID = data.response.Q0;
       },
     },
     {
