@@ -1,5 +1,6 @@
 import {
   Color,
+  hashSizedToken,
   hashToken,
   Shape,
   Size,
@@ -140,24 +141,16 @@ function isSmall(token) {
   return token.size === Size.small;
 }
 
-function addTokenRow(
-  grid,
-  row,
+function addTokenInteractivity(
   tokens,
-  createElement,
   elementFromToken,
   onReleased,
   onDragged,
   onDroppedOnto,
   onDraggedReleased
 ) {
-  tokens.forEach((token, index) => {
-    const tokenElement = createElement(token);
-    elementFromToken.set(hashToken(token), tokenElement);
-    tokenElement.style.gridRow = row;
-    tokenElement.style.gridColumn = index + 1;
-    tokenElement.style.touchAction = "none";
-    adopt(grid, tokenElement);
+  tokens.forEach((token) => {
+    const tokenElement = elementFromToken(token);
     addClickEventListener(tokenElement, () => {
       onReleased(token);
     });
@@ -197,6 +190,17 @@ function addTokenRow(
           tokenElement.style.borderColor = "black";
         },
       });
+  });
+}
+
+function addTokenRow(grid, row, tokens, createElement, forEachTokenAndElement) {
+  tokens.forEach((token, index) => {
+    const tokenElement = createElement(token);
+    forEachTokenAndElement(token, tokenElement);
+    tokenElement.style.gridRow = row;
+    tokenElement.style.gridColumn = index + 1;
+    tokenElement.style.touchAction = "none";
+    adopt(grid, tokenElement);
   });
 }
 
@@ -276,12 +280,26 @@ class TokenControl {
     boxImage.style.width = viewportMinString(30);
     adopt(parent, boxImage);
     const grid = tokenGridWithRows(tokenRows.length);
+    this.tokens = [];
     tokenRows.forEach((tokenRow, index) => {
       this.addTokenRow(grid, index + 1, tokenRow);
+      tokenRow.forEach((token) => {
+        this.tokens.push(token);
+      });
     });
+    adopt(parent, grid);
+    this.doneButton = document.createElement("button");
+    initializeDoneButton(this);
+    adopt(parent, this.doneButton);
+    this.parent = parent;
+    this.boxImage = boxImage;
+  }
+
+  addInteractivity() {
     const onHoldingAreaDrop = () => {
       this.observer.notifyThatHoldingAreaHasBeenDroppedOnto();
     };
+    const boxImage = this.boxImage;
     interact(boxImage).dropzone({
       ondrop(event) {
         onHoldingAreaDrop();
@@ -295,11 +313,22 @@ class TokenControl {
         boxImage.style.borderColor = "black";
       },
     });
-    adopt(parent, grid);
-    this.doneButton = document.createElement("button");
-    initializeDoneButton(this);
-    adopt(parent, this.doneButton);
-    this.parent = parent;
+    addTokenInteractivity(
+      this.tokens,
+      (token) => this.elementFromToken.get(hashToken(token)),
+      (token) => {
+        onTokenReleased(this.jsPsych, this, token);
+      },
+      (token) => {
+        onTokenDragged(this, token);
+      },
+      (token) => {
+        onTokenDroppedOnto(this, token);
+      },
+      (token, positions) => {
+        this.trial.recordTokenDragPath(token, positions);
+      }
+    );
   }
 
   showDoneButton() {
@@ -315,18 +344,8 @@ class TokenControl {
         token.shape === Shape.circle
           ? circleElementWithColor(token.color)
           : squareElementWithColor(token.color),
-      this.elementFromToken,
-      (token) => {
-        onTokenReleased(this.jsPsych, this, token);
-      },
-      (token) => {
-        onTokenDragged(this, token);
-      },
-      (token) => {
-        onTokenDroppedOnto(this, token);
-      },
-      (token, positions) => {
-        this.trial.recordTokenDragPath(token, positions);
+      (token, tokenElement) => {
+        this.elementFromToken.set(hashToken(token), tokenElement);
       }
     );
   }
@@ -379,14 +398,37 @@ class SizedTokenControl {
     this.trialParameters = trialParameters;
     this.elementFromToken = new Map();
     const grid = tokenGridWithRows(tokenRows.length);
+    this.tokens = [];
     tokenRows.forEach((tokenRow, index) => {
       this.addTokenRow(grid, index + 1, tokenRow);
+      tokenRow.forEach((token) => {
+        this.tokens.push(token);
+      });
     });
     adopt(parent, grid);
     this.doneButton = document.createElement("button");
     initializeDoneButton(this);
     adopt(parent, this.doneButton);
     this.parent = parent;
+  }
+
+  addInteractivity() {
+    addTokenInteractivity(
+      this.tokens,
+      (token) => this.elementFromToken.get(hashSizedToken(token)),
+      (token) => {
+        onTokenReleased(this.jsPsych, this, token);
+      },
+      (token) => {
+        onTokenDragged(this, token);
+      },
+      (token) => {
+        onTokenDroppedOnto(this, token);
+      },
+      (token, positions) => {
+        this.trial.recordSizedTokenDragPath(token, positions);
+      }
+    );
   }
 
   showDoneButton() {
@@ -406,18 +448,8 @@ class SizedTokenControl {
           : token.size === Size.large
           ? squareElementWithColor(token.color)
           : smallSquareElementWithColor(token.color),
-      this.elementFromToken,
-      (token) => {
-        onTokenReleased(this.jsPsych, this, token);
-      },
-      (token) => {
-        onTokenDragged(this, token);
-      },
-      (token) => {
-        onTokenDroppedOnto(this, token);
-      },
-      (token, positions) => {
-        this.trial.recordSizedTokenDragPath(token, positions);
+      (token, tokenElement) => {
+        this.elementFromToken.set(hashSizedToken(token), tokenElement);
       }
     );
   }
@@ -538,9 +570,12 @@ function pluginClass(TokenControllerType, createTokenControl) {
         trialParameters
       );
       const controller = new TokenControllerType(control, model);
+      document.body.style.cursor = "none";
       audioBufferSource(this.jsPsych, trialParameters.sentenceUrl).then(
         (sentenceSource) => {
           sentenceSource.onended = () => {
+            document.body.style.cursor = "";
+            control.addInteractivity();
             control.showDoneButton();
             this.jsPsych.pluginAPI.setTimeout(() => {
               model.concludeTrial();
