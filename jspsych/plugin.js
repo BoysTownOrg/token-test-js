@@ -268,7 +268,6 @@ class TokenControl {
     this.trial = trial;
     this.trialParameters = trialParameters;
     this.elementFromToken = new Map();
-    addProgressElement(parent, trialParameters);
     const boxImage = new Image();
     boxImage.src = trialParameters.boxUrl;
     boxImage.style.border = `${viewportMinString(0.3)} solid black`;
@@ -379,7 +378,6 @@ class SizedTokenControl {
     this.trial = trial;
     this.trialParameters = trialParameters;
     this.elementFromToken = new Map();
-    addProgressElement(parent, trialParameters);
     const grid = tokenGridWithRows(tokenRows.length);
     tokenRows.forEach((tokenRow, index) => {
       this.addTokenRow(grid, index + 1, tokenRow);
