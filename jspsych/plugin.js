@@ -541,15 +541,10 @@ function pluginClass(TokenControllerType, createTokenControl) {
       audioBufferSource(this.jsPsych, trialParameters.sentenceUrl).then(
         (sentenceSource) => {
           sentenceSource.onended = () => {
-            audioBufferSource(this.jsPsych, trialParameters.beepUrl).then(
-              (beepSource) => {
-                beepSource.start();
-                control.showDoneButton();
-                this.jsPsych.pluginAPI.setTimeout(() => {
-                  model.concludeTrial();
-                }, trialParameters.timeoutMilliseconds);
-              }
-            );
+            control.showDoneButton();
+            this.jsPsych.pluginAPI.setTimeout(() => {
+              model.concludeTrial();
+            }, trialParameters.timeoutMilliseconds);
           };
           sentenceSource.start();
         }
