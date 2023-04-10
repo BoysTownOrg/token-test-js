@@ -253,7 +253,7 @@ function onDoneButtonClicked(control) {
 
 function initializeDoneButton(control) {
   control.doneButton.classList.add("jspsych-btn");
-  control.doneButton.textContent = "Done";
+  control.doneButton.textContent = "Continue";
   control.doneButton.style.fontSize = "20px";
   control.doneButton.style.margin = "20px";
   control.doneButton.style.visibility = "hidden";
