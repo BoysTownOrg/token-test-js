@@ -224,13 +224,6 @@ function audioBufferSource(jsPsych, url) {
   });
 }
 
-function addProgressElement(parent, trialParameters) {
-  const progressElement = document.createElement("div");
-  progressElement.textContent = `trial ${trialParameters.currentTrial} of ${trialParameters.totalTrials}`;
-  progressElement.style.height = viewportMinString(12);
-  adopt(parent, progressElement);
-}
-
 function onTokenReleased(jsPsych, control, token) {
   control.tokenReleased = token;
   audioBufferSource(jsPsych, control.trialParameters.tokenDropUrl).then(
