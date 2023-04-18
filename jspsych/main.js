@@ -292,20 +292,6 @@ jatos.onLoad(() => {
       auto_preload: true,
     },
     {
-      type: jsPsychSurveyText,
-      questions: [
-        {
-          prompt: "If the ID displayed is not correct, please enter it now.",
-          placeholder: jatos.studySessionData.subjectID,
-        },
-      ],
-      preamble: "",
-      button_label: "Click to enter ID",
-      on_finish(data) {
-        jatos.studySessionData.subjectID = data.response.Q0;
-      },
-    },
-    {
       type: jsPsychHtmlButtonResponse,
       stimulus: arrayToHtml(
         jatos.componentJsonInput.instructionsText.split("\n")
