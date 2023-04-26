@@ -4,8 +4,9 @@ import { plugin, twoSizesPlugin } from "./plugin.js";
 import { initJsPsych } from "jspsych";
 import jsPsychHtmlButtonResponse from "@jspsych/plugin-html-button-response";
 import jsPsychPreload from "@jspsych/plugin-preload";
-import jsPsychSurveyText from "@jspsych/plugin-survey-text";
+
 import "jspsych/css/jspsych.css";
+import "./realE.css";
 
 const tokenPlugin = plugin();
 const sizedTokenPlugin = twoSizesPlugin();
@@ -45,11 +46,21 @@ function tokenTrialWithFeedback(sentenceNumber, sentence, commandString) {
   };
 }
 
-function arrayToHtml(lines) {
+function convertInstructionsToHtml(lines) {
   let html = "";
+  html +=
+    '<p style="text-align: center;font-size: 240%; font-weight: bold; background-color: #fdb913;width:100%;">Task 8 of 8</p>';
+  html +=
+    '<p style="text-align: center; text-decoration: underline; font-weight: bold; padding-top: 8%; font-size: 240%; color: #0075a7;">Following Directions</p>';
+  html +=
+    '<h1 style="text-align: left;margin-left: 20%;margin-right: 20%;font-weight: normal;font-size: 175%;">';
+  let first = true;
   for (const line of lines) {
-    html += `<p style="line-height:normal">${line}</p>`;
+    if (!first) html += "<br><br>";
+    html += line;
+    first = false;
   }
+  html += "</h1>";
   return html;
 }
 
@@ -293,9 +304,14 @@ jatos.onLoad(() => {
     },
     {
       type: jsPsychHtmlButtonResponse,
-      stimulus: arrayToHtml(
+      stimulus: convertInstructionsToHtml(
         jatos.componentJsonInput.instructionsText.split("\n")
       ),
+      css_classes: ["realEcss"],
+      on_start(trial) {
+        const jde = document.querySelector(".jspsych-display-element");
+        jde.style.display = "block";
+      },
       choices: ["Start"],
     },
     {
@@ -303,9 +319,14 @@ jatos.onLoad(() => {
     },
     {
       type: jsPsychHtmlButtonResponse,
-      stimulus: arrayToHtml(
+      stimulus: convertInstructionsToHtml(
         jatos.componentJsonInput.secondInstructionsText.split("\n")
       ),
+      css_classes: ["realEcss"],
+      on_start(trial) {
+        const jde = document.querySelector(".jspsych-display-element");
+        jde.style.display = "block";
+      },
       choices: ["Continue"],
     },
     {
