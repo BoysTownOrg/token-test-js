@@ -72,6 +72,19 @@ jatos.onLoad(() => {
       jatos.startNextComponent(jsPsych.data.get().csv());
     },
   });
+  if ("subjectID" in jatos.studySessionData) {
+    jsPsych.data.addProperties({
+      subject_id: jatos.studySessionData.subjectID,
+      subject_type: "plain",
+    });
+  } else if ("PROLIFIC_PID" in jatos.studySessionData) {
+    jsPsych.data.addProperties({
+      subject_id: jatos.studySessionData.PROLIFIC_PID,
+      subject_type: "prolific",
+    });
+  } else {
+    console.log("session data missing!");
+  }
   const tokenTrials = trialsWithProgress(
     [
       sizedTokenTrialWithFeedback(
