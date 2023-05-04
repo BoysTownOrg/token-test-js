@@ -347,7 +347,9 @@ jatos.onLoad(() => {
     },
     {
       type: jsPsychHtmlButtonResponse,
-      stimulus: "Thanks for participating! Press Done to finish.",
+      stimulus: convertInstructionsToHtml(
+        "Thanks for participating! Press Done to finish."
+      ),
       choices: ["Done"],
     },
   ]);
