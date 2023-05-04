@@ -64,6 +64,22 @@ function convertInstructionsToHtml(lines) {
   return html;
 }
 
+function instructionsTrial(instructions, choices) {
+  return {
+    type: jsPsychHtmlButtonResponse,
+    stimulus: convertInstructionsToHtml(instructions.split("\n")),
+    css_classes: ["realEcss"],
+    on_start(trial) {
+      const jde = document.querySelector(".jspsych-display-element");
+      jde.style.display = "block";
+    },
+    choices,
+    save_trial_parameters: {
+      stimulus: false,
+    },
+  };
+}
+
 jatos.onLoad(() => {
   const jsPsych = initJsPsych({
     show_progress_bar: true,
@@ -315,42 +331,18 @@ jatos.onLoad(() => {
       type: jsPsychPreload,
       auto_preload: true,
     },
-    {
-      type: jsPsychHtmlButtonResponse,
-      stimulus: convertInstructionsToHtml(
-        jatos.componentJsonInput.instructionsText.split("\n")
-      ),
-      css_classes: ["realEcss"],
-      on_start(trial) {
-        const jde = document.querySelector(".jspsych-display-element");
-        jde.style.display = "block";
-      },
-      choices: ["Start"],
-    },
+    instructionsTrial(jatos.componentJsonInput.instructionsText, ["Start"]),
     {
       timeline: tokenTrials.slice(0, 4),
     },
-    {
-      type: jsPsychHtmlButtonResponse,
-      stimulus: convertInstructionsToHtml(
-        jatos.componentJsonInput.secondInstructionsText.split("\n")
-      ),
-      css_classes: ["realEcss"],
-      on_start(trial) {
-        const jde = document.querySelector(".jspsych-display-element");
-        jde.style.display = "block";
-      },
-      choices: ["Continue"],
-    },
+    instructionsTrial(jatos.componentJsonInput.secondInstructionsText, [
+      "Continue",
+    ]),
     {
       timeline: tokenTrials.slice(4),
     },
-    {
-      type: jsPsychHtmlButtonResponse,
-      stimulus: convertInstructionsToHtml(
-        "Thanks for participating! Press Done to finish."
-      ),
-      choices: ["Done"],
-    },
+    instructionsTrial("Thanks for participating! Press Done to finish.", [
+      "Done",
+    ]),
   ]);
 });
