@@ -4,6 +4,7 @@ import { plugin, twoSizesPlugin } from "./plugin.js";
 import { initJsPsych } from "jspsych";
 import jsPsychHtmlButtonResponse from "@jspsych/plugin-html-button-response";
 import jsPsychPreload from "@jspsych/plugin-preload";
+import audioButtonResponse from "@jspsych/plugin-audio-button-response";
 
 import "jspsych/css/jspsych.css";
 import "./realE.css";
@@ -62,6 +63,30 @@ function convertInstructionsToHtml(lines) {
   }
   html += "</h1>";
   return html;
+}
+
+function instructionsWithAudioTrial(audioUrl, instructions, choices) {
+  return {
+    type: audioButtonResponse,
+    stimulus: audioUrl,
+    prompt: convertInstructionsToHtml(instructions.split("\n")),
+    css_classes: ["realEcss"],
+    on_start(trial) {
+      const jde = document.querySelector(".jspsych-display-element");
+      jde.style.display = "block";
+    },
+    choices,
+    save_trial_parameters: {
+      stimulus: false,
+    },
+    response_allowed_while_playing: false,
+    on_load() {
+      const buttonGroup = document.getElementById(
+        "jspsych-audio-button-response-btngroup"
+      );
+      buttonGroup.parentElement.appendChild(buttonGroup);
+    },
+  };
 }
 
 function instructionsTrial(instructions, choices) {
@@ -331,13 +356,20 @@ jatos.onLoad(() => {
       type: jsPsychPreload,
       auto_preload: true,
     },
-    instructionsTrial(jatos.componentJsonInput.instructionsText, ["Start"]),
+    instructionsTrial('Press "Start" to begin.', ["Start"]),
+    instructionsWithAudioTrial(
+      `${tokenResourcePath}/Task 8 - 1.wav`,
+      jatos.componentJsonInput.instructionsText,
+      ["Continue"]
+    ),
     {
       timeline: tokenTrials.slice(0, 4),
     },
-    instructionsTrial(jatos.componentJsonInput.secondInstructionsText, [
-      "Continue",
-    ]),
+    instructionsWithAudioTrial(
+      `${tokenResourcePath}/Task 8 - 2.wav`,
+      jatos.componentJsonInput.secondInstructionsText,
+      ["Continue"]
+    ),
     {
       timeline: tokenTrials.slice(4),
     },
