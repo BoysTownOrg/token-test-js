@@ -373,8 +373,25 @@ jatos.onLoad(() => {
     {
       timeline: tokenTrials.slice(4),
     },
-    instructionsTrial("Thanks for participating! Press Done to finish.", [
-      "Done",
-    ]),
+    {
+      type: audioButtonResponse,
+      choices: ["Continue"],
+      css_classes: ["realEcss"],
+      stimulus: "Assets/Thank You.wav",
+      on_load() {
+        const buttonGroup = document.getElementById(
+          "jspsych-audio-button-response-btngroup"
+        );
+        buttonGroup.parentElement.appendChild(buttonGroup);
+      },
+      trial_ends_after_audio: false,
+      response_allowed_while_playing: false,
+      prompt: convertInstructionsToHtml([
+        'Thank you for completing this task! Press "Continue" to progress to the next task.',
+      ]),
+      save_trial_parameters: {
+        stimulus: false,
+      },
+    },
   ]);
 });
