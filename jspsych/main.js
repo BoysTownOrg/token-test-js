@@ -5,6 +5,7 @@ import { initJsPsych } from "jspsych";
 import jsPsychHtmlButtonResponse from "@jspsych/plugin-html-button-response";
 import jsPsychPreload from "@jspsych/plugin-preload";
 import audioButtonResponse from "@jspsych/plugin-audio-button-response";
+import initializeMicrophone from "@jspsych/plugin-initialize-microphone";
 
 import "jspsych/css/jspsych.css";
 import "./realE.css";
@@ -356,7 +357,12 @@ jatos.onLoad(() => {
       type: jsPsychPreload,
       auto_preload: true,
     },
-    instructionsTrial('Press "Start" to begin.', ["Start"]),
+    {
+      type: initializeMicrophone,
+      device_select_message:
+        "Please check that the microphone below is the one you chose in the audio check.<br>",
+      button_label: "Use this microphone",
+    },
     instructionsWithAudioTrial(
       `${tokenResourcePath}/Task 8 - 1.wav`,
       jatos.componentJsonInput.instructionsText,
