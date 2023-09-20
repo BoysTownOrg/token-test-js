@@ -342,10 +342,16 @@ jatos.onLoad(() => {
       auto_preload: true,
     },
     {
-      type: initializeMicrophone,
-      device_select_message:
-        "Please check that the microphone below is the one you chose in the audio check.<br>",
-      button_label: "Use this microphone",
+      type: jsPsychHtmlButtonResponse,
+      css_classes: ["realEcss"],
+      on_start(trial) {
+        const jde = document.querySelector(".jspsych-display-element");
+        jde.style.display = "block";
+      },
+      choices: ["Continue"],
+      save_trial_parameters: {
+        stimulus: false,
+      },
     },
     instructionsWithAudioTrial(
       `${tokenResourcePath}/Task 8 - 1.wav`,
