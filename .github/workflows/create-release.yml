@@ -18,7 +18,8 @@ jobs:
           npx webpack
       - name: create GitHub release
         run: |
-          zip following-directions dist/*
-          gh release create v${{ steps.get_version.outputs.VERSION }} following-directions-${{ steps.get_version.outputs.VERSION }}.zip
+          zip $ZIP_FILE dist/*
+          gh release create v${{ steps.get_version.outputs.VERSION }} $ZIP_FILE
         env:
+          ZIP_FILE: following-directions-${{ steps.get_version.outputs.VERSION }}.zip
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
