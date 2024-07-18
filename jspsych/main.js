@@ -97,19 +97,26 @@ jatos.onLoad(() => {
       jatos.startNextComponent(jsPsych.data.get().csv());
     },
   });
-  if ("subjectID" in jatos.studySessionData) {
-    jsPsych.data.addProperties({
-      subject_id: jatos.studySessionData.subjectID,
-      subject_type: "plain",
-    });
-  } else if ("PROLIFIC_PID" in jatos.studySessionData) {
-    jsPsych.data.addProperties({
-      subject_id: jatos.studySessionData.PROLIFIC_PID,
-      subject_type: "prolific",
-    });
+
+  if ("PROLIFIC_PID" in jatos.urlQueryParameters) {
+    jatos.studySessionData["PROLIFIC_PID"] =
+      jatos.urlQueryParameters.PROLIFIC_PID;
+    jatos.studySessionData["subject_type"] = "prolific";
+  } else if ("PARTIC_ID" in jatos.urlQueryParameters) {
+    jatos.studySessionData["PARTIC_ID"] = jatos.urlQueryParameters.PARTIC_ID;
+    jatos.studySessionData["subject_type"] = "PARTIC_ID";
+    jatos.studySessionData["PROLIFIC_PID"] = "None";
   } else {
-    console.log("session data missing!");
+    jatos.studySessionData["PARTIC_ID"] = "None";
+    jatos.studySessionData["subject_type"] = "test";
+    alert("Note: No PARTIC_ID provided.");
   }
+  jatos.studySessionData["subject_id"] = jatos.studySessionData["PARTIC_ID"];
+  jsPsych.data.addProperties({
+    subject_id: jatos.studySessionData.PARTIC_ID,
+    subject_type: jatos.studySessionData.subject_type,
+  });
+
   const tokenTrials = trialsWithProgress(
     [
       sizedTokenTrialWithFeedback(
